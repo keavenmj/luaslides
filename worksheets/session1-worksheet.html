@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 1 Worksheet — Variables &amp; Data Types</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e0dbd0;
+    --border-dark: #c0b8a8;
+    --accent: #2d2d3a;
+    --accent2: #5b4fcf;
+    --accent3: #1a8f7a;
+    --text: #1a1a24;
+    --text-dim: #666677;
+    --code-bg: #f0ede6;
+    --yellow: #f5c842;
+    --yellow-light: #fdf6d8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .ws-header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .ws-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .ws-meta {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .section-num {
+    background: var(--accent);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .section-type {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  /* EXERCISE BLOCKS */
+  .exercise {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .exercise p {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .exercise p strong { color: var(--text); }
+
+  /* CODE */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  .kw { color: #5b4fcf; font-weight: 500; }
+  .str { color: #1a8f7a; }
+  .num { color: #b87300; }
+  .cmt { color: #999; font-style: italic; }
+  .blank { 
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px solid var(--accent);
+    margin: 0 4px;
+  }
+  .wrong { color: #cc3333; }
+
+  /* ANSWER LINES */
+  .answer-line {
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border-dark);
+    background: transparent;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    padding: 8px 4px;
+    margin: 8px 0;
+    outline: none;
+  }
+
+  .answer-area {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    min-height: 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--surface);
+    margin-top: 8px;
+    resize: vertical;
+    width: 100%;
+    color: var(--text);
+    outline: none;
+  }
+
+  .q-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+
+  /* MULTIPLE CHOICE */
+  .choices {
+    list-style: none;
+    margin-top: 12px;
+  }
+
+  .choices li {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .choices li:hover { background: var(--yellow-light); border-color: var(--yellow); }
+
+  /* ANSWER KEY */
+  .answer-key {
+    margin-top: 64px;
+    border-top: 2px dashed var(--border-dark);
+    padding-top: 40px;
+  }
+
+  .ak-header {
+    background: var(--accent);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .ak-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .ak-q {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .ak-answer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .ak-explain {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .ak-explain strong { color: var(--text); }
+
+  .correct { color: var(--accent3); font-weight: 700; }
+  .incorrect { color: #cc3333; font-weight: 700; }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 1 Worksheet</div>
+  <h1>Variables &amp; Data Types</h1>
+  <div class="ws-meta">Complete all exercises before checking the answer key. Don't run the code — trace through it in your head.</div>
+</div>
+
+<!-- SECTION A: IDENTIFY THE TYPE -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Identify the Data Type</h2>
+  <span class="section-type">Recognition</span>
+</div>
+
+<div class="exercise">
+  <p>For each variable below, write the data type on the line provided. Choose from: <strong>number, string, boolean, nil</strong></p>
+  <pre><span class="kw">local</span> questName      = <span class="str">"The Sunken Temple"</span>
+<span class="kw">local</span> playerLevel    = <span class="num">34</span>
+<span class="kw">local</span> isInCombat     = <span class="kw">true</span>
+<span class="kw">local</span> pendingReward  = <span class="kw">nil</span>
+<span class="kw">local</span> critMultiplier = <span class="num">2.5</span>
+<span class="kw">local</span> zoneUnlocked   = <span class="kw">false</span>
+<span class="kw">local</span> npcGreeting    = <span class="str">"Greetings, traveler."</span>
+<span class="kw">local</span> goldAmount     = <span class="num">0</span></pre>
+
+  <div class="q-label">Your answers:</div>
+  <input type="text" class="answer-line" placeholder="questName →">
+  <input type="text" class="answer-line" placeholder="playerLevel →">
+  <input type="text" class="answer-line" placeholder="isInCombat →">
+  <input type="text" class="answer-line" placeholder="pendingReward →">
+  <input type="text" class="answer-line" placeholder="critMultiplier →">
+  <input type="text" class="answer-line" placeholder="zoneUnlocked →">
+  <input type="text" class="answer-line" placeholder="npcGreeting →">
+  <input type="text" class="answer-line" placeholder="goldAmount →">
+</div>
+
+<!-- SECTION B: SPOT THE BUG -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
+</div>
+
+<div class="exercise">
+  <p>Each snippet below contains one error. Identify what's wrong and write the corrected line.</p>
+
+  <p><strong>B1.</strong> The variable name won't work in Lua:</p>
+  <pre><span class="kw">local</span> <span class="wrong">player level</span> = <span class="num">10</span></pre>
+  <div class="q-label">What's wrong?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Fixed version:">
+</div>
+
+<div class="exercise">
+  <p><strong>B2.</strong> This boolean has a problem:</p>
+  <pre><span class="kw">local</span> <span class="var">hasMount</span> = <span class="wrong">"true"</span></pre>
+  <div class="q-label">What's wrong?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Fixed version:">
+</div>
+
+<div class="exercise">
+  <p><strong>B3.</strong> Something is off about how this variable gets updated:</p>
+  <pre><span class="kw">local</span> <span class="var">armorRating</span> = <span class="num">120</span>
+<span class="kw">local</span> <span class="var">armorRating</span> = <span class="num">145</span>   <span class="cmt">-- player equipped better gear</span></pre>
+  <div class="q-label">What's wrong?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Fixed version of line 2:">
+</div>
+
+<!-- SECTION C: PREDICT THE VALUE -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Predict the Value</h2>
+  <span class="section-type">Trace &amp; Reason</span>
+</div>
+
+<div class="exercise">
+  <p>Read through this function step by step. At the end, what is the value of each variable? Write your answers below — don't guess, trace it line by line.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnQuestReward</span>()
+  <span class="kw">local</span> <span class="var">gold</span>       = <span class="num">50</span>
+  <span class="kw">local</span> <span class="var">bonusGold</span>  = <span class="num">25</span>
+  <span class="kw">local</span> <span class="var">totalGold</span>  = <span class="num">0</span>
+
+  <span class="var">totalGold</span>  = <span class="var">gold</span> + <span class="var">bonusGold</span>
+  <span class="var">gold</span>       = <span class="var">gold</span> - <span class="num">10</span>
+  <span class="var">bonusGold</span>  = <span class="num">0</span>
+<span class="kw">end</span></pre>
+
+  <div class="q-label">Final values:</div>
+  <input type="text" class="answer-line" placeholder="gold =">
+  <input type="text" class="answer-line" placeholder="bonusGold =">
+  <input type="text" class="answer-line" placeholder="totalGold =">
+</div>
+
+<!-- SECTION D: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Application</span>
+</div>
+
+<div class="exercise">
+  <p><strong>D1.</strong> Declare four variables to describe an enemy NPC in your game. Include at least one of each type: number, string, and boolean. Use meaningful names.</p>
+  <textarea class="answer-area" rows="6" placeholder="Write your variables here..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>D2.</strong> A player starts with 100 health. They take 35 damage, then receive a 20 health heal. Write the three lines that track this correctly using only one variable.</p>
+  <textarea class="answer-area" rows="5" placeholder="Write your solution here..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>D3.</strong> Why should you almost always use <code style="font-family: 'JetBrains Mono'; background: #f0ede6; padding: 1px 6px; border-radius:3px;">local</code> instead of a global variable inside a function? Write your answer in plain language.</p>
+  <textarea class="answer-area" rows="4" placeholder="Your explanation..."></textarea>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 1</div>
+
+  <p style="font-size:0.85rem; color: var(--text-dim); margin-bottom: 20px;">Review your answers against the explanations below. Focus on understanding <em>why</em> each answer is correct, not just whether you got it right.</p>
+
+  <div class="ak-item">
+    <div class="ak-q">Section A — Data Types</div>
+    <div class="ak-answer">string, number, boolean, nil, number, boolean, string, number</div>
+    <div class="ak-explain">
+      <strong>Key things to notice:</strong> <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">goldAmount = 0</code> is still a <strong>number</strong> even though it's zero. The value <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">true</code> without quotes is a <strong>boolean</strong>. If it had quotes (<code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">"true"</code>), it would be a <strong>string</strong> — which is a common mistake.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section B1 — Variable Name with a Space</div>
+    <div class="ak-answer">local playerLevel = 10</div>
+    <div class="ak-explain">
+      Variable names cannot contain spaces. Lua would read <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">player level</code> as two separate tokens and throw a syntax error. Use camelCase: <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">playerLevel</code>.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section B2 — Boolean in Quotes</div>
+    <div class="ak-answer">local hasMount = true</div>
+    <div class="ak-explain">
+      Wrapping <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">true</code> in quotes makes it the string <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">"true"</code>, not the boolean <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">true</code>. These behave completely differently in logic checks. Always write boolean values without quotes.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section B3 — Re-declaring with local</div>
+    <div class="ak-answer">armorRating = 145</div>
+    <div class="ak-explain">
+      You only use <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">local</code> when declaring a variable for the first time. Using it again creates a new, separate variable that shadows the original. To update the value, just write the name and assign the new value — no <code style="font-family: 'JetBrains Mono'; font-size:0.82rem;">local</code> keyword.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section C — Trace the Values</div>
+    <div class="ak-answer">gold = 40 &nbsp;|&nbsp; bonusGold = 0 &nbsp;|&nbsp; totalGold = 75</div>
+    <div class="ak-explain">
+      Step by step: <code style="font-family:'JetBrains Mono';font-size:0.82rem;">totalGold</code> is set to <code style="font-family:'JetBrains Mono';font-size:0.82rem;">50 + 25 = 75</code> first. Then <code style="font-family:'JetBrains Mono';font-size:0.82rem;">gold</code> is updated to <code style="font-family:'JetBrains Mono';font-size:0.82rem;">50 - 10 = 40</code>. Finally <code style="font-family:'JetBrains Mono';font-size:0.82rem;">bonusGold</code> is set to <code style="font-family:'JetBrains Mono';font-size:0.82rem;">0</code>. Notice that changing <code style="font-family:'JetBrains Mono';font-size:0.82rem;">gold</code> and <code style="font-family:'JetBrains Mono';font-size:0.82rem;">bonusGold</code> after the fact does NOT change <code style="font-family:'JetBrains Mono';font-size:0.82rem;">totalGold</code> — it was already calculated.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section D1 — Sample Answer</div>
+    <div class="ak-answer">Many valid answers. Here's one example:</div>
+    <div class="ak-explain">
+      <pre style="margin-top:8px; font-family:'JetBrains Mono'; font-size:0.8rem; background:var(--code-bg); padding:12px; border-radius:4px; border:1px solid var(--border);">local enemyName   = "Stoneclaw Shaman"
+local enemyHealth = 450
+local isBoss      = false
+local dropRate    = 0.08</pre>
+      Look for: descriptive names, correct syntax, correct types (no boolean in quotes, numbers without quotes).
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section D2 — Health Tracking</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono'; font-size:0.8rem; background:var(--code-bg); padding:12px; border-radius:4px; border:1px solid var(--border); margin-top:8px;">local health = 100
+health = health - 35    -- takes damage: now 65
+health = health + 20    -- heals: now 85</pre>
+    </div>
+    <div class="ak-explain">The key here is updating the same variable using its own current value. Declaring a new variable each time would be incorrect — the problem specifically asks for one variable.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section D3 — Why Use Local?</div>
+    <div class="ak-answer">Sample answer:</div>
+    <div class="ak-explain">
+      Local variables only exist inside the function where they're created. This means they can't accidentally interfere with other scripts or functions that might use the same name. Global variables linger and can be changed from anywhere, which makes bugs much harder to track down — especially in a game engine where many scripts may be running at once.
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
