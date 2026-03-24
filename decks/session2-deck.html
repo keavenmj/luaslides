@@ -1,10 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Lua for Game Designers — Session 3: Conditional Logic</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lua for Game Designers — Session 2: Operators &amp; Expressions</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
-  --accent:#3fb950;--accent2:#79c0ff;--accent3:#ffa657;
-  --text:#e6edf3;--text-dim:#8b949e;--code-bg:#0d1117;--panel-w:220px;}
+:root{--bg:#0f0f14;--surface:#17171f;--surface2:#1e1e2a;--border:#2a2a38;--accent:#ff7eb3;--accent2:#7b6cff;--accent3:#4ecdc4;--text:#e8e8f0;--text-dim:#888899;--code-bg:#12121a;--panel-w:220px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
@@ -42,181 +40,179 @@ p{font-size:1.05rem;line-height:1.7;color:var(--text-dim);margin-bottom:14px;}
 p strong{color:var(--text);font-weight:600;}
 .subtitle{font-size:1.15rem;color:var(--text-dim);max-width:520px;line-height:1.6;}
 pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:.86rem;line-height:1.7;overflow-x:auto;margin:14px 0;}
+.kw{color:#7b6cff;}.str{color:#4ecdc4;}.num{color:#e8c547;}.cmt{color:#555566;font-style:italic;}.fn{color:#ff7eb3;}.var{color:#e8e8f0;}.op{color:#ff7eb3;}
 .callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
 .callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .callout p{margin:0;font-size:.97rem;}
-.callout.warn{border-color:var(--accent2);}.callout.warn .callout-label{color:var(--accent2);}
 ul.styled{list-style:none;margin-top:8px;}
 ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
 ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
 .big-number{font-size:7rem;font-weight:800;color:var(--surface2);position:absolute;right:50px;bottom:50px;line-height:1;user-select:none;}
 .accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
 .ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
-.inline-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
-.tag{display:inline-block;background:var(--accent);color:var(--bg);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-right:8px;}
-.tag.purple{background:var(--accent2);color:white;}.tag.teal{background:var(--accent3);color:var(--bg);}
+.recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
+.recap-box strong{color:var(--accent);}
 table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
 th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
 td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
 td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
-.recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
-.recap-box strong{color:var(--accent);}
-.array-vis{display:flex;gap:0;margin:16px 0;font-family:'JetBrains Mono',monospace;}
-.array-cell{border:1px solid var(--border);padding:10px 16px;text-align:center;background:var(--surface2);}
-.array-cell:first-child{border-radius:6px 0 0 6px;}.array-cell:last-child{border-radius:0 6px 6px 0;}
-.array-cell .idx-label{font-size:.68rem;color:var(--accent2);display:block;margin-bottom:4px;}
-.array-cell .val{font-size:.88rem;color:var(--accent3);}
-.flow-row{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap;}
-.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-size:.88rem;font-weight:600;text-align:center;}
-.flow-arrow{color:var(--accent);font-size:1.2rem;}
-.flow-yes{border-color:var(--accent);color:var(--accent);}.flow-no{border-color:#ff7b72;color:#ff7b72;}
-.kw{color:#ff7b72;}.str{color:#a5d6ff;}.num{color:#ffa657;}.cmt{color:#484f58;font-style:italic;}.fn{color:#d2a8ff;}.var{color:#e6edf3;}.op{color:#3fb950;}
 </style></head><body>
 <div id="progress-bar"></div>
 <div id="layout">
 <nav id="slide-panel">
-  <div id="panel-header"><div id="panel-session">Session 3 of 8</div><div id="panel-title">Conditional<br>Logic</div></div>
+  <div id="panel-header"><div id="panel-session">Session 2 of 8</div><div id="panel-title">Operators &amp;<br>Expressions</div></div>
   <div id="slide-list"></div>
-  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &rarr;</button></div>
+  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button></div>
 </nav>
 <div id="deck">
 
-<div class="slide slide-title active" data-label="Intro" data-subtitle="Conditional Logic">
-  <div class="session-label">Session 3 of 8</div><h1>Conditional<br>Logic</h1>
-  <p class="subtitle">Giving your scripts the ability to make decisions and respond to different situations.</p>
+<div class="slide slide-title active" data-index="0" data-label="Intro" data-subtitle="Operators &amp; Expressions">
+  <div class="session-label">Session 2 of 8</div>
+  <h1>Operators &amp;<br>Expressions</h1>
+  <p class="subtitle">Teaching your scripts how to calculate, compare, and combine values.</p>
   <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">⏱</span> ~45 minutes</span>
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">📄</span> Worksheet included</span>
-  </div><div class="big-number">03</div>
+  </div>
+  <div class="big-number">02</div>
 </div>
-<div class="slide slide-content" data-label="Recap" data-subtitle="Sessions 1 &amp; 2 review">
-  <h3>Quick Recap — Sessions 1 &amp; 2</h3><h2>What we've built so far</h2>
-  <div class="recap-box"><strong>Session 1:</strong> Variables store values. Types: number, string, boolean, nil. Always use <code style="font-family:'JetBrains Mono'">local</code>.<br><br><strong>Session 2:</strong> Operators let you calculate, compare, and combine logic. Comparisons return booleans.</div>
+
+<div class="slide slide-content" data-index="1" data-label="Recap" data-subtitle="Session 1 review">
+  <h3>Quick Recap — Session 1</h3><h2>Before we move on</h2>
+  <div class="recap-box"><strong>From last session:</strong> Variables are named containers. They hold a value of a specific type — number, string, boolean, or nil. Always use <code style="font-family:'JetBrains Mono'">local</code>, and name variables descriptively using camelCase.</div>
   <h3 style="margin-top:8px;">This Session</h3>
   <ul class="styled">
-    <li>The <strong>if / then / end</strong> structure</li>
-    <li>Adding <strong>else</strong> for the fallback case</li>
-    <li>Using <strong>elseif</strong> to test multiple conditions</li>
-    <li>Nested conditionals and when to use them</li>
-    <li>Boolean shortcuts for cleaner code</li>
-  </ul><div class="big-number">03</div>
+    <li><strong>Arithmetic operators</strong> — do math with numbers</li>
+    <li><strong>Comparison operators</strong> — ask yes/no questions about values</li>
+    <li><strong>Logical operators</strong> — combine multiple conditions</li>
+    <li><strong>String concatenation</strong> — join text together</li>
+    <li><strong>Operator precedence</strong> — understanding what runs first</li>
+  </ul>
+  <div class="big-number">02</div>
 </div>
-<div class="slide slide-content" data-label="if statement" data-subtitle="The basic decision block">
-  <h3>The Foundation</h3><h2>The if statement</h2>
-  <p>An <span class="ic">if</span> block runs code <em>only</em> when a condition is true. If false, the block is skipped entirely.</p>
-  <pre><span class="kw">if</span> condition <span class="kw">then</span>
-  <span class="cmt">-- code that runs when condition is true</span>
-<span class="kw">end</span></pre>
-  <pre><span class="kw">local</span> <span class="var">enemyHealth</span> = <span class="num">0</span>
-<span class="kw">if</span> <span class="var">enemyHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
-  <span class="cmt">-- Award loot, play death animation, remove from world</span>
-<span class="kw">end</span></pre>
-  <div class="callout"><div class="callout-label">Structure Rule</div><p>Every <span class="ic">if</span> must close with <span class="ic">end</span>. Forgetting this is one of the most common Lua syntax errors.</p></div>
-</div>
-<div class="slide slide-content" data-label="if / else" data-subtitle="Adding the fallback">
-  <h3>The Fallback</h3><h2>Adding else</h2>
-  <p>The <span class="ic">else</span> block runs when the condition is false. One or the other always runs — never both, never neither.</p>
-  <pre><span class="kw">local</span> <span class="var">playerHealth</span> = <span class="num">45</span>
-<span class="kw">if</span> <span class="var">playerHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
-  <span class="cmt">-- Player is dead</span>
-<span class="kw">else</span>
-  <span class="cmt">-- Player is still alive</span>
-<span class="kw">end</span></pre>
-  <div class="flow-row">
-    <div class="flow-box">playerHealth &lt;= 0</div><div class="flow-arrow">→</div>
-    <div class="flow-box flow-yes">TRUE → death logic</div><div class="flow-arrow" style="color:var(--text-dim)">|</div>
-    <div class="flow-box flow-no">FALSE → alive logic</div>
-  </div>
-</div>
-<div class="slide slide-content" data-label="elseif" data-subtitle="Multiple conditions">
-  <h3>Multiple Conditions</h3><h2>Using elseif</h2>
-  <p>Chain conditions with <span class="ic">elseif</span>. Lua checks them <em>in order</em> and stops at the first true one.</p>
-  <pre><span class="kw">local</span> <span class="var">health</span> = <span class="num">60</span>
-<span class="kw">if</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
-  <span class="cmt">-- Dead</span>
-<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">25</span> <span class="kw">then</span>
-  <span class="cmt">-- Critical</span>
-<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">50</span> <span class="kw">then</span>
-  <span class="cmt">-- Hurt</span>
-<span class="kw">else</span>
-  <span class="cmt">-- Healthy</span>
-<span class="kw">end</span></pre>
-  <p>With <span class="ic">health = 60</span>, only the <span class="ic">else</span> block runs. The first three conditions are all false.</p>
-</div>
-<div class="slide slide-content" data-label="Order Matters" data-subtitle="Specific before broad">
-  <h3>A Common Pitfall</h3><h2>Order matters with elseif</h2>
-  <p>Lua stops at the first true condition. <strong>More specific checks must come before broader ones.</strong></p>
-  <div class="two-col">
-    <div><h3 style="color:#ff7b72;font-size:.8rem;">✗ Wrong Order</h3>
-    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
-  <span class="cmt">-- catches everything</span>
-<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
-  <span class="cmt">-- NEVER REACHED</span>
-<span class="kw">end</span></pre></div>
-    <div><h3 style="color:var(--accent);font-size:.8rem;">✓ Correct Order</h3>
-    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
-  <span class="cmt">-- Critical</span>
-<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
-  <span class="cmt">-- Damaged</span>
-<span class="kw">else</span>
-  <span class="cmt">-- Full health</span>
-<span class="kw">end</span></pre></div>
-  </div>
-</div>
-<div class="slide slide-content" data-label="Nested" data-subtitle="if inside if">
-  <h3>Going Deeper</h3><h2>Nested conditionals</h2>
-  <p>You can place an <span class="ic">if</span> inside another <span class="ic">if</span> to check a secondary condition only after confirming the first.</p>
-  <pre><span class="kw">local</span> <span class="var">enemyLevel</span> = <span class="num">30</span>
-<span class="kw">local</span> <span class="var">isBoss</span>     = <span class="kw">true</span>
-<span class="kw">if</span> <span class="var">enemyLevel</span> <span class="op">>=</span> <span class="num">25</span> <span class="kw">then</span>
-  <span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>
-    <span class="cmt">-- High-level AND a boss — raid warning</span>
-  <span class="kw">else</span>
-    <span class="cmt">-- High-level but not a boss — elite behavior</span>
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <div class="callout"><div class="callout-label">Keep It Readable</div><p>Avoid nesting more than two or three levels deep. Deeply nested code is hard to scan quickly.</p></div>
-</div>
-<div class="slide slide-content" data-label="Full Example" data-subtitle="Zone entry gate check">
-  <h3>Full Example</h3><h2>Zone entry gate check</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnPlayerEnterZone</span>()
-  <span class="kw">local</span> <span class="var">playerLevel</span>  = <span class="num">18</span>
-  <span class="kw">local</span> <span class="var">hasQuestItem</span> = <span class="kw">true</span>
-  <span class="kw">local</span> <span class="var">zoneMinLevel</span> = <span class="num">20</span>
-  <span class="kw">if</span> <span class="var">playerLevel</span> <span class="op">>=</span> <span class="var">zoneMinLevel</span> <span class="kw">then</span>
-    <span class="cmt">-- Level requirement met</span>
-  <span class="kw">elseif</span> <span class="var">hasQuestItem</span> <span class="kw">then</span>
-    <span class="cmt">-- Under-leveled but has the pass</span>
-  <span class="kw">else</span>
-    <span class="cmt">-- Block entry</span>
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <p>With <span class="ic">playerLevel = 18</span> and <span class="ic">hasQuestItem = true</span>: first condition fails, second succeeds — entry allowed via quest item.</p>
-</div>
-<div class="slide slide-content" data-label="Boolean Shortcuts" data-subtitle="Cleaner conditions">
-  <h3>Cleaner Code</h3><h2>Boolean shortcuts</h2>
-  <p>When your variable is already a boolean, skip <span class="ic">== true</span>. These are identical:</p>
-  <pre><span class="kw">if</span> <span class="var">isBoss</span> <span class="op">==</span> <span class="kw">true</span> <span class="kw">then</span>   <span class="cmt">-- verbose</span>
-<span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>             <span class="cmt">-- preferred</span>
 
-<span class="kw">if</span> <span class="var">isAlive</span> <span class="op">==</span> <span class="kw">false</span> <span class="kw">then</span>  <span class="cmt">-- verbose</span>
-<span class="kw">if</span> <span class="op">not</span> <span class="var">isAlive</span> <span class="kw">then</span>        <span class="cmt">-- preferred</span></pre>
+<div class="slide slide-content" data-index="2" data-label="Arithmetic" data-subtitle="Math operators">
+  <h3>Math in Lua</h3><h2>Arithmetic operators</h2>
+  <table>
+    <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
+    <tr><td>+</td><td>Addition</td><td>100 + 50</td><td>150</td></tr>
+    <tr><td>-</td><td>Subtraction</td><td>200 - 75</td><td>125</td></tr>
+    <tr><td>*</td><td>Multiplication</td><td>10 * 2.5</td><td>25</td></tr>
+    <tr><td>/</td><td>Division</td><td>100 / 4</td><td>25</td></tr>
+    <tr><td>%</td><td>Modulo (remainder)</td><td>10 % 3</td><td>1</td></tr>
+    <tr><td>^</td><td>Exponent (power)</td><td>2 ^ 8</td><td>256</td></tr>
+  </table>
+  <div class="callout"><div class="callout-label">Modulo — What's it good for?</div><p>Modulo gives you the remainder after division. In game design: "every 5th kill triggers a bonus" — use <span class="ic">killCount % 5 == 0</span></p></div>
 </div>
-<div class="slide slide-title" data-label="Recap" data-subtitle="What you covered">
-  <div class="accent-line"></div><h3>Session 3 Complete</h3>
+
+<div class="slide slide-content" data-index="3" data-label="In Practice" data-subtitle="Arithmetic in context">
+  <h3>In Practice</h3><h2>Arithmetic in a game context</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnAttack</span>()
+  <span class="kw">local</span> <span class="var">baseDamage</span>    = <span class="num">80</span>
+  <span class="kw">local</span> <span class="var">critMultiplier</span> = <span class="num">1.5</span>
+  <span class="kw">local</span> <span class="var">armor</span>          = <span class="num">20</span>
+
+  <span class="kw">local</span> <span class="var">critDamage</span>  = <span class="var">baseDamage</span> <span class="op">*</span> <span class="var">critMultiplier</span>
+  <span class="kw">local</span> <span class="var">finalDamage</span> = <span class="var">critDamage</span> <span class="op">-</span> <span class="var">armor</span>
+  <span class="cmt">-- finalDamage = (80 * 1.5) - 20 = 100</span>
+<span class="kw">end</span></pre>
+  <p>Reading complex expressions gets easier when you break them into steps. Use intermediate variables to make calculations self-documenting.</p>
+</div>
+
+<div class="slide slide-content" data-index="4" data-label="Comparisons" data-subtitle="True or false operators">
+  <h3>Asking Questions</h3><h2>Comparison operators</h2>
+  <p>Comparisons always produce a <strong>boolean result</strong> — either <span class="ic">true</span> or <span class="ic">false</span>.</p>
+  <table>
+    <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
+    <tr><td>==</td><td>Equal to</td><td>5 == 5</td><td>true</td></tr>
+    <tr><td>~=</td><td>Not equal to</td><td>5 ~= 3</td><td>true</td></tr>
+    <tr><td>&lt;</td><td>Less than</td><td>3 &lt; 10</td><td>true</td></tr>
+    <tr><td>&gt;</td><td>Greater than</td><td>10 &gt; 20</td><td>false</td></tr>
+    <tr><td>&lt;=</td><td>Less than or equal</td><td>5 &lt;= 5</td><td>true</td></tr>
+    <tr><td>&gt;=</td><td>Greater than or equal</td><td>8 &gt;= 10</td><td>false</td></tr>
+  </table>
+  <div class="callout"><div class="callout-label">Common Mistake</div><p>Don't confuse <span class="ic">==</span> (comparison) with <span class="ic">=</span> (assignment). <span class="ic">health == 0</span> asks "is health zero?" while <span class="ic">health = 0</span> sets health to zero.</p></div>
+</div>
+
+<div class="slide slide-content" data-index="5" data-label="Logic" data-subtitle="and / or / not">
+  <h3>Combining Conditions</h3><h2>Logical operators</h2>
+  <table>
+    <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td>and</td><td>Both must be true</td><td>level >= 10 and hasKey == true</td></tr>
+    <tr><td>or</td><td>At least one must be true</td><td>isAdmin or hasPermit</td></tr>
+    <tr><td>not</td><td>Flips true to false</td><td>not isDefeated</td></tr>
+  </table>
+  <pre><span class="kw">local</span> <span class="var">playerLevel</span> = <span class="num">15</span>
+<span class="kw">local</span> <span class="var">hasRaidKey</span>  = <span class="kw">true</span>
+
+<span class="kw">local</span> <span class="var">canEnter</span> = (<span class="var">playerLevel</span> <span class="op">>=</span> <span class="num">10</span>) <span class="op">and</span> (<span class="var">hasRaidKey</span> <span class="op">==</span> <span class="kw">true</span>)
+<span class="cmt">-- canEnter = true</span></pre>
+</div>
+
+<div class="slide slide-content" data-index="6" data-label="Concatenation" data-subtitle="Joining text with ..">
+  <h3>Joining Text</h3><h2>String concatenation</h2>
+  <p>The <span class="ic">..</span> operator joins strings together. This is how you build dynamic messages in your scripts.</p>
+  <pre><span class="kw">local</span> <span class="var">playerName</span> = <span class="str">"Varek"</span>
+<span class="kw">local</span> <span class="var">zone</span>        = <span class="str">"Thornwood"</span>
+
+<span class="kw">local</span> <span class="var">message</span> = <span class="var">playerName</span> <span class="op">..</span> <span class="str">" has entered "</span> <span class="op">..</span> <span class="var">zone</span>
+<span class="cmt">-- "Varek has entered Thornwood"</span>
+
+<span class="kw">local</span> <span class="var">level</span>   = <span class="num">24</span>
+<span class="kw">local</span> <span class="var">display</span> = <span class="str">"Level: "</span> <span class="op">..</span> <span class="var">level</span>
+<span class="cmt">-- "Level: 24"</span></pre>
+</div>
+
+<div class="slide slide-content" data-index="7" data-label="Precedence" data-subtitle="Order of operations">
+  <h3>Order of Operations</h3><h2>Operator precedence</h2>
+  <p>When multiple operators appear in one expression, Lua follows a specific order. Use <strong>parentheses to be explicit</strong> when in doubt.</p>
+  <table>
+    <tr><th>Priority</th><th>Operators</th></tr>
+    <tr><td>1 (highest)</td><td>^ (exponent)</td></tr>
+    <tr><td>2</td><td>not, unary minus</td></tr>
+    <tr><td>3</td><td>*, /, %</td></tr>
+    <tr><td>4</td><td>+, -</td></tr>
+    <tr><td>5</td><td>.. (concat)</td></tr>
+    <tr><td>6</td><td>&lt;, &gt;, &lt;=, &gt;=, ==, ~=</td></tr>
+    <tr><td>7</td><td>and</td></tr>
+    <tr><td>8 (lowest)</td><td>or</td></tr>
+  </table>
+  <p>When in doubt: <strong>use parentheses.</strong> <span class="ic">(a + b) * c</span> is always clearer.</p>
+</div>
+
+<div class="slide slide-content" data-index="8" data-label="Full Example" data-subtitle="Damage formula">
+  <h3>Bringing It Together</h3><h2>A realistic damage formula</h2>
+  <pre><span class="kw">function</span> <span class="fn">CalculateDamage</span>()
+  <span class="kw">local</span> <span class="var">base</span>       = <span class="num">100</span>
+  <span class="kw">local</span> <span class="var">spellPower</span>  = <span class="num">40</span>
+  <span class="kw">local</span> <span class="var">resistance</span> = <span class="num">0.2</span>
+  <span class="kw">local</span> <span class="var">isCrit</span>      = <span class="kw">true</span>
+
+  <span class="kw">local</span> <span class="var">raw</span>   = <span class="var">base</span> <span class="op">+</span> <span class="var">spellPower</span>           <span class="cmt">-- 140</span>
+  <span class="kw">local</span> <span class="var">after</span> = <span class="var">raw</span> <span class="op">*</span> (<span class="num">1</span> <span class="op">-</span> <span class="var">resistance</span>)       <span class="cmt">-- 112</span>
+
+  <span class="kw">local</span> <span class="var">isBigHit</span> = <span class="var">isCrit</span> <span class="op">and</span> (<span class="var">after</span> <span class="op">></span> <span class="num">100</span>) <span class="cmt">-- true</span>
+  <span class="kw">local</span> <span class="var">logMsg</span>   = <span class="str">"Damage dealt: "</span> <span class="op">..</span> <span class="var">after</span>
+<span class="kw">end</span></pre>
+</div>
+
+<div class="slide slide-title" data-index="9" data-label="Recap" data-subtitle="What you covered">
+  <div class="accent-line"></div>
+  <h3>Session 2 Complete</h3>
   <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
   <ul class="styled" style="max-width:480px;text-align:left;">
-    <li><strong>if / then / end</strong> — the basic decision block</li>
-    <li><strong>else</strong> handles the "otherwise" case</li>
-    <li><strong>elseif</strong> chains multiple checks in order</li>
-    <li>Order matters — specific checks before broad ones</li>
-    <li><strong>if isBoss then</strong> is cleaner than <strong>if isBoss == true then</strong></li>
+    <li>Arithmetic operators: <strong>+, -, *, /, %, ^</strong></li>
+    <li>Comparison operators return <strong>true or false</strong></li>
+    <li><strong>and / or / not</strong> combine conditions logically</li>
+    <li><span class="ic">..</span> joins strings together</li>
+    <li>When in doubt about order, <strong>use parentheses</strong></li>
   </ul>
   <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
-    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 3 Worksheet</strong> before moving to Session 4.</p>
-  </div><div class="big-number">03</div>
+    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 2 Worksheet</strong> before moving to Session 3.</p>
+  </div>
+  <div class="big-number">02</div>
 </div>
+
 </div></div>
 <script>
 let current=0;const slides=document.querySelectorAll('.slide');const total=slides.length;

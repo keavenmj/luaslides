@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Lua for Game Designers — Session 5: Functions</title>
+<title>Lua for Game Designers &#8212; Session 6: Reading External Data</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#080c14;--surface:#0e1420;--surface2:#141c2c;--border:#1e2840;--accent:#60a5fa;--accent2:#a78bfa;--accent3:#34d399;--text:#e2e8f0;--text-dim:#7b8fa8;--code-bg:#060a12;--panel-w:220px;}
+:root{--bg:#0a0a12;--surface:#10101e;--surface2:#16162a;--border:#252540;--accent:#c084fc;--accent2:#f0abfc;--accent3:#6ee7b7;--text:#f8fafc;--text-dim:#94a3b8;--code-bg:#080810;--panel-w:220px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
@@ -43,7 +43,6 @@ pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px sol
 .callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
 .callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .callout p{margin:0;font-size:.97rem;}
-.callout.warn{border-color:var(--accent2);}.callout.warn .callout-label{color:var(--accent2);}
 ul.styled{list-style:none;margin-top:8px;}
 ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
 ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
@@ -51,13 +50,8 @@ ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';c
 .accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
 .ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
-.inline-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
 .tag{display:inline-block;background:var(--accent);color:var(--bg);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-right:8px;}
-.tag.purple{background:var(--accent2);color:white;}.tag.teal{background:var(--accent3);color:var(--bg);}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
-th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
-td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
-td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
+.tag.teal{background:var(--accent3);color:var(--bg);}
 .recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
 .recap-box strong{color:var(--accent);}
 .array-vis{display:flex;gap:0;margin:16px 0;font-family:'JetBrains Mono',monospace;}
@@ -65,141 +59,151 @@ td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bott
 .array-cell:first-child{border-radius:6px 0 0 6px;}.array-cell:last-child{border-radius:0 6px 6px 0;}
 .array-cell .idx-label{font-size:.68rem;color:var(--accent2);display:block;margin-bottom:4px;}
 .array-cell .val{font-size:.88rem;color:var(--accent3);}
-.flow-row{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap;}
-.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-size:.88rem;font-weight:600;text-align:center;}
-.flow-arrow{color:var(--accent);font-size:1.2rem;}
-.flow-yes{border-color:var(--accent);color:var(--accent);}.flow-no{border-color:#ff7b72;color:#ff7b72;}
-.kw{color:#60a5fa;}.str{color:#34d399;}.num{color:#fbbf24;}.cmt{color:#2a3c5a;font-style:italic;}.fn{color:#a78bfa;}.var{color:#e2e8f0;}.param{color:#f472b6;}
+.kw{color:#c084fc;}.str{color:#6ee7b7;}.num{color:#fcd34d;}.cmt{color:#30304a;font-style:italic;}.fn{color:#f0abfc;}.var{color:#f8fafc;}.prop{color:#93c5fd;}.ext{color:#fbbf24;font-weight:700;}
 </style></head><body>
 <div id="progress-bar"></div>
 <div id="layout">
 <nav id="slide-panel">
-  <div id="panel-header"><div id="panel-session">Session 5 of 8</div><div id="panel-title">Functions</div></div>
+  <div id="panel-header"><div id="panel-session">Session 6 of 8</div><div id="panel-title">Reading External<br>Data Objects</div></div>
   <div id="slide-list"></div>
   <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &#8594;</button></div>
 </nav>
 <div id="deck">
 
-<div class="slide slide-title active" data-label="Intro" data-subtitle="Functions">
-  <div class="session-label">Session 5 of 8</div><h1>Functions</h1>
-  <p class="subtitle">Packaging logic into reusable, named blocks &#8212; and understanding how information flows in and out.</p>
+<div class="slide slide-title active" data-label="Intro" data-subtitle="Reading External Data">
+  <div class="session-label">Session 6 of 8</div><h1>Reading External<br>Data Objects</h1>
+  <p class="subtitle">How your script receives and uses information that lives outside of it &#8212; from the game world, not hardcoded inside the function.</p>
   <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#9203;</span> ~45 minutes</span>
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#128196;</span> Worksheet included</span>
-  </div><div class="big-number">05</div>
+  </div><div class="big-number">06</div>
 </div>
-<div class="slide slide-content" data-label="Recap" data-subtitle="Session 4 review">
-  <h3>Quick Recap &#8212; Session 4</h3><h2>Loops in review</h2>
-  <div class="recap-box"><strong>From last session:</strong> <code style="font-family:'JetBrains Mono'">for</code> loops repeat a known number of times. <code style="font-family:'JetBrains Mono'">while</code> loops run until a condition becomes false. Always make sure a <code style="font-family:'JetBrains Mono'">while</code> loop can terminate.</div>
+<div class="slide slide-content" data-label="Recap" data-subtitle="Session 5 review">
+  <h3>Quick Recap &#8212; Session 5</h3><h2>Functions in review</h2>
+  <div class="recap-box"><strong>From last session:</strong> Functions are named blocks of code called on demand. Parameters pass data in; <code style="font-family:'JetBrains Mono'">return</code> sends results out. Local variables inside functions don&#39;t exist outside them.</div>
   <h3 style="margin-top:8px;">This Session</h3>
   <ul class="styled">
-    <li>What functions are and why they matter</li>
-    <li>The anatomy of a function definition</li>
-    <li>Passing information in with <strong>parameters</strong></li>
-    <li>Getting information out with <strong>return</strong></li>
-    <li>How functions and scope interact</li>
-  </ul><div class="big-number">05</div>
+    <li>What &#34;external data objects&#34; means in your engine</li>
+    <li>How data gets passed into your script as parameters</li>
+    <li>Reading properties from an object using dot notation</li>
+    <li>Using conditional logic to respond to object state</li>
+    <li>Putting the whole course together in one scenario</li>
+  </ul><div class="big-number">06</div>
 </div>
-<div class="slide slide-content" data-label="What is a Function?" data-subtitle="The core concept">
-  <h3>The Core Concept</h3><h2>What is a function?</h2>
-  <p>A function is a named block of code that doesn&#39;t run until you call it. Think of it like a recipe card &#8212; writing it down doesn&#39;t cook the food.</p>
-  <pre><span class="cmt">-- DEFINING the function (nothing runs yet)</span>
-<span class="kw">function</span> <span class="fn">ShowDamageText</span>()
-  <span class="cmt">-- logic goes here</span>
-<span class="kw">end</span>
+<div class="slide slide-content" data-label="Where Data Comes From" data-subtitle="Hardcoded vs. external">
+  <h3>The Core Concept</h3><h2>Where data comes from</h2>
+  <p>So far, all data in your scripts has been hardcoded. In a real engine, your script receives data from <strong>outside</strong> &#8212; from game objects the engine manages.</p>
+  <div class="two-col" style="margin-top:14px;">
+    <div><h3 style="font-size:.8rem;"><span class="tag">Hardcoded</span></h3>
+    <pre style="font-size:.8rem;"><span class="kw">function</span> <span class="fn">OnHit</span>()
+  <span class="kw">local</span> <span class="var">hp</span>   = <span class="num">500</span>
+  <span class="kw">local</span> <span class="var">name</span> = <span class="str">"Boss"</span>
+<span class="kw">end</span></pre></div>
+    <div><h3 style="font-size:.8rem;"><span class="tag teal">From outside</span></h3>
+    <pre style="font-size:.8rem;"><span class="kw">function</span> <span class="fn">OnHit</span>(<span class="ext">target</span>)
+  <span class="kw">local</span> <span class="var">hp</span>   = <span class="ext">target</span>.<span class="prop">health</span>
+  <span class="kw">local</span> <span class="var">name</span> = <span class="ext">target</span>.<span class="prop">name</span>
+<span class="kw">end</span></pre></div>
+  </div>
+  <p style="margin-top:12px;">The engine calls your function and hands it a reference to a real game object. Your script reads from that object to make decisions.</p>
+</div>
+<div class="slide slide-content" data-label="Dot Notation" data-subtitle="Reading object properties">
+  <h3>Accessing Properties</h3><h2>Dot notation</h2>
+  <p>Properties on an object are accessed with a dot: <span class="ic">object.property</span>.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnEnemyDeath</span>(<span class="ext">enemy</span>)
+  <span class="kw">local</span> <span class="var">enemyName</span> = <span class="ext">enemy</span>.<span class="prop">name</span>
+  <span class="kw">local</span> <span class="var">xpValue</span>   = <span class="ext">enemy</span>.<span class="prop">xpReward</span>
+  <span class="kw">local</span> <span class="var">wasBoss</span>   = <span class="ext">enemy</span>.<span class="prop">isBoss</span>
 
-<span class="cmt">-- CALLING the function (now it runs)</span>
-<span class="fn">ShowDamageText</span>()</pre>
-  <div class="callout"><div class="callout-label">Why They Matter</div><p>In a proprietary engine, your script <em>is</em> a function. The engine calls it when an event happens &#8212; on spawn, on hit, on death, on trigger. Understanding functions means understanding how your work gets executed.</p></div>
-</div>
-<div class="slide slide-content" data-label="Anatomy" data-subtitle="Parts of a function">
-  <h3>Breaking It Down</h3><h2>Anatomy of a function</h2>
-  <pre><span class="kw">function</span> <span class="fn">ApplyDamage</span>(<span class="param">target</span>, <span class="param">amount</span>)
-  <span class="kw">local</span> <span class="var">finalDamage</span> = <span class="var">amount</span> * <span class="num">0.9</span>
-  <span class="kw">return</span> <span class="var">finalDamage</span>
-<span class="kw">end</span></pre>
-  <ul class="styled" style="margin-top:8px;">
-    <li><span class="ic" style="color:var(--accent)">function</span> &#8212; keyword that starts the definition</li>
-    <li><span class="ic" style="color:var(--accent2)">ApplyDamage</span> &#8212; the name you use to call it</li>
-    <li><span class="ic" style="color:#f472b6">target, amount</span> &#8212; parameters: information passed in from outside</li>
-    <li><span class="ic">local finalDamage...</span> &#8212; the body: logic that runs when called</li>
-    <li><span class="ic" style="color:var(--accent3)">return</span> &#8212; sends a value back to the caller</li>
-    <li><span class="ic" style="color:var(--accent)">end</span> &#8212; closes the function</li>
-  </ul>
-</div>
-<div class="slide slide-content" data-label="Parameters" data-subtitle="Passing information in">
-  <h3>Passing Information In</h3><h2>Parameters</h2>
-  <p>Parameters are placeholders in the definition. When you call the function, you fill them with real values (called <strong>arguments</strong>).</p>
-  <pre><span class="kw">function</span> <span class="fn">GrantXP</span>(<span class="param">playerName</span>, <span class="param">xpAmount</span>)
-  <span class="kw">local</span> <span class="var">message</span> = <span class="var">playerName</span> .. <span class="str">" gained "</span> .. <span class="var">xpAmount</span> .. <span class="str">" XP"</span>
-<span class="kw">end</span>
-
-<span class="cmt">-- Calling with real values</span>
-<span class="fn">GrantXP</span>(<span class="str">"Varek"</span>, <span class="num">250</span>)
-<span class="cmt">-- Inside: playerName = "Varek", xpAmount = 250</span></pre>
-</div>
-<div class="slide slide-content" data-label="Return Values" data-subtitle="Getting information out">
-  <h3>Getting Information Out</h3><h2>Return values</h2>
-  <p>A function sends a result back with <span class="ic">return</span>. The caller can store that result in a variable.</p>
-  <pre><span class="kw">function</span> <span class="fn">CalculateFinalDamage</span>(<span class="param">base</span>, <span class="param">multiplier</span>, <span class="param">armor</span>)
-  <span class="kw">local</span> <span class="var">result</span> = (base * multiplier) - armor
-  <span class="kw">return</span> <span class="var">result</span>
-<span class="kw">end</span>
-
-<span class="kw">local</span> <span class="var">damage</span> = <span class="fn">CalculateFinalDamage</span>(<span class="num">100</span>, <span class="num">1.5</span>, <span class="num">20</span>)
-<span class="cmt">-- damage = 130</span></pre>
-  <div class="callout"><div class="callout-label">No Return is Fine Too</div><p>Not every function needs to return something. Functions that trigger effects, display text, or modify game state often just do the work.</p></div>
-</div>
-<div class="slide slide-content" data-label="Scope" data-subtitle="Variables inside functions">
-  <h3>Variables and Scope</h3><h2>What lives inside, stays inside</h2>
-  <p>Variables declared with <span class="ic">local</span> inside a function only exist while that function is running.</p>
-  <pre><span class="kw">function</span> <span class="fn">OnCombatStart</span>()
-  <span class="kw">local</span> <span class="var">combatTimer</span> = <span class="num">0</span>  <span class="cmt">-- only exists inside</span>
-  <span class="var">combatTimer</span> = <span class="var">combatTimer</span> + <span class="num">1</span>
-<span class="kw">end</span>
-<span class="cmt">-- combatTimer does not exist here</span></pre>
-  <p>Parameters work the same way &#8212; local to the function, created when it&#39;s called, gone when it ends.</p>
-</div>
-<div class="slide slide-content" data-label="Multiple Returns" data-subtitle="Return more than one value">
-  <h3>Advanced Technique</h3><h2>Returning multiple values</h2>
-  <p>Lua lets a function return more than one value at once.</p>
-  <pre><span class="kw">function</span> <span class="fn">GetCombatResult</span>(<span class="param">attackPower</span>, <span class="param">defense</span>)
-  <span class="kw">local</span> <span class="var">damage</span> = attackPower - defense
-  <span class="kw">local</span> <span class="var">isCrit</span> = (damage > <span class="num">50</span>)
-  <span class="kw">return</span> <span class="var">damage</span>, <span class="var">isCrit</span>
-<span class="kw">end</span>
-
-<span class="kw">local</span> <span class="var">dmg</span>, <span class="var">wasCrit</span> = <span class="fn">GetCombatResult</span>(<span class="num">80</span>, <span class="num">20</span>)
-<span class="cmt">-- dmg = 60, wasCrit = true</span></pre>
-</div>
-<div class="slide slide-content" data-label="Full Example" data-subtitle="Attack function">
-  <h3>Everything Together</h3><h2>A complete function example</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnPlayerAttack</span>(<span class="param">weaponDamage</span>, <span class="param">targetArmor</span>, <span class="param">isCritical</span>)
-  <span class="kw">local</span> <span class="var">base</span> = <span class="var">weaponDamage</span>
-  <span class="kw">if</span> <span class="var">isCritical</span> <span class="kw">then</span>
-    <span class="var">base</span> = <span class="var">base</span> * <span class="num">2</span>
+  <span class="kw">if</span> <span class="var">wasBoss</span> <span class="kw">then</span>
+    <span class="kw">local</span> <span class="var">bonusXP</span> = <span class="var">xpValue</span> * <span class="num">2</span>
   <span class="kw">end</span>
-  <span class="kw">local</span> <span class="var">final</span> = <span class="var">base</span> - <span class="var">targetArmor</span>
-  <span class="kw">if</span> <span class="var">final</span> < <span class="num">0</span> <span class="kw">then</span> <span class="var">final</span> = <span class="num">0</span> <span class="kw">end</span>
-  <span class="kw">return</span> <span class="var">final</span>
-<span class="kw">end</span>
-
-<span class="kw">local</span> <span class="var">dealt</span> = <span class="fn">OnPlayerAttack</span>(<span class="num">50</span>, <span class="num">15</span>, <span class="kw">false</span>)
-<span class="cmt">-- dealt = 35</span></pre>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Key Idea</div><p>The property names are defined by your engine&#39;s data schema. Your job is to know what properties exist on the objects your script receives &#8212; and read them correctly.</p></div>
 </div>
-<div class="slide slide-title" data-label="Recap" data-subtitle="What you covered">
-  <div class="accent-line"></div><h3>Session 5 Complete</h3>
-  <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
+<div class="slide slide-content" data-label="Multiple Objects" data-subtitle="Attacker and defender">
+  <h3>More Than One</h3><h2>Scripts often receive multiple objects</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnPlayerAttackEnemy</span>(<span class="ext">attacker</span>, <span class="ext">defender</span>)
+  <span class="kw">local</span> <span class="var">atkPower</span>  = <span class="ext">attacker</span>.<span class="prop">attackPower</span>
+  <span class="kw">local</span> <span class="var">defArmor</span>  = <span class="ext">defender</span>.<span class="prop">armor</span>
+  <span class="kw">local</span> <span class="var">defHealth</span> = <span class="ext">defender</span>.<span class="prop">health</span>
+  <span class="kw">local</span> <span class="var">defName</span>   = <span class="ext">defender</span>.<span class="prop">name</span>
+
+  <span class="kw">local</span> <span class="var">damage</span>    = atkPower - defArmor
+  <span class="kw">if</span> <span class="var">damage</span> &lt; <span class="num">0</span> <span class="kw">then</span> <span class="var">damage</span> = <span class="num">0</span> <span class="kw">end</span>
+  <span class="kw">local</span> <span class="var">newHealth</span> = <span class="var">defHealth</span> - <span class="var">damage</span>
+<span class="kw">end</span></pre>
+  <p>Each object is independent. <span class="ic">attacker.armor</span> and <span class="ic">defender.armor</span> are different values on different objects.</p>
+</div>
+<div class="slide slide-content" data-label="Defensive Reads" data-subtitle="Checking for nil first">
+  <h3>Defensive Reading</h3><h2>Checking before using</h2>
+  <p>Not every object will have every property set. If a property is <span class="ic">nil</span>, using it in arithmetic or concatenation will error. Check first.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnQuestTurnIn</span>(<span class="ext">player</span>)
+  <span class="kw">local</span> <span class="var">bonus</span> = <span class="ext">player</span>.<span class="prop">questBonusMultiplier</span>
+
+  <span class="kw">if</span> <span class="var">bonus</span> == <span class="kw">nil</span> <span class="kw">then</span>
+    <span class="var">bonus</span> = <span class="num">1.0</span>   <span class="cmt">-- default fallback</span>
+  <span class="kw">end</span>
+
+  <span class="kw">local</span> <span class="var">reward</span> = <span class="num">100</span> * <span class="var">bonus</span>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Good Habit</div><p>When reading an optional property, always provide a sensible fallback. This prevents a missing value from breaking your whole script.</p></div>
+</div>
+<div class="slide slide-content" data-label="Full Scenario" data-subtitle="Spawn zone gate check">
+  <h3>Everything Together</h3><h2>A full scenario: spawn gate check</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnPlayerEnterSpawnZone</span>(<span class="ext">player</span>, <span class="ext">zone</span>)
+  <span class="kw">local</span> <span class="var">pLevel</span>    = <span class="ext">player</span>.<span class="prop">level</span>
+  <span class="kw">local</span> <span class="var">pHasPass</span>  = <span class="ext">player</span>.<span class="prop">hasZonePass</span>
+  <span class="kw">local</span> <span class="var">zMinLevel</span> = <span class="ext">zone</span>.<span class="prop">minimumLevel</span>
+  <span class="kw">local</span> <span class="var">zName</span>     = <span class="ext">zone</span>.<span class="prop">name</span>
+
+  <span class="kw">if</span> <span class="var">pLevel</span> >= <span class="var">zMinLevel</span> <span class="kw">or</span> <span class="var">pHasPass</span> <span class="kw">then</span>
+    <span class="kw">local</span> <span class="var">msg</span> = <span class="str">"Welcome to "</span> .. <span class="var">zName</span>
+  <span class="kw">else</span>
+    <span class="kw">local</span> <span class="var">needed</span> = <span class="var">zMinLevel</span> - <span class="var">pLevel</span>
+    <span class="kw">local</span> <span class="var">msg</span>    = <span class="str">"Need "</span> .. <span class="var">needed</span> .. <span class="str">" more levels."</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+</div>
+<div class="slide slide-content" data-label="Loops + Data" data-subtitle="Looping with object counts">
+  <h3>Looping with External Data</h3><h2>Using a count from an object</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnWaveSpawn</span>(<span class="ext">wave</span>)
+  <span class="kw">local</span> <span class="var">count</span>      = <span class="ext">wave</span>.<span class="prop">enemyCount</span>
+  <span class="kw">local</span> <span class="var">difficulty</span> = <span class="ext">wave</span>.<span class="prop">difficultyMultiplier</span>
+  <span class="kw">local</span> <span class="var">baseHP</span>     = <span class="num">100</span>
+  <span class="kw">local</span> <span class="var">spawnedHP</span>  = <span class="num">0</span>
+
+  <span class="kw">for</span> <span class="var">i</span> = <span class="num">1</span>, <span class="var">count</span> <span class="kw">do</span>
+    <span class="var">spawnedHP</span> = <span class="var">spawnedHP</span> + (baseHP * difficulty)
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  <p>The loop count comes from the wave object &#8212; not hardcoded. Change the data object, the script adapts automatically.</p>
+</div>
+<div class="slide slide-content" data-label="In Your Engine" data-subtitle="What to customize">
+  <h3>In Your Engine</h3><h2>What you&#39;ll need to customize</h2>
+  <p>Every proprietary engine has its own naming conventions. The Lua concepts are the same &#8212; only the property names change.</p>
+  <ul class="styled">
+    <li><strong>Find out what objects your scripts receive</strong> &#8212; player, enemy, zone, trigger, item, etc.</li>
+    <li><strong>Learn what properties each object exposes</strong> &#8212; your engine&#39;s schema or documentation</li>
+    <li><strong>Understand the property types</strong> &#8212; is <span class="ic">health</span> a number? Is <span class="ic">isBoss</span> a boolean?</li>
+    <li><strong>Ask: what can I read vs. write?</strong> &#8212; some properties are read-only</li>
+  </ul>
+  <div class="callout"><div class="callout-label">The Transferable Skill</div><p>The logic you&#39;ve learned &#8212; variables, operators, conditionals, loops, functions &#8212; transfers directly. Engine-specific details are just vocabulary. The grammar is the same.</p></div>
+</div>
+<div class="slide slide-title" data-label="Recap" data-subtitle="Course Sessions 1&#8211;6">
+  <div class="accent-line"></div><h3>Session 6 Complete</h3>
+  <h2 style="font-size:1.8rem;margin-bottom:20px;">Sessions 1&#8211;6 complete</h2>
   <ul class="styled" style="max-width:480px;text-align:left;">
-    <li>Functions are defined once and <strong>called</strong> to execute</li>
-    <li><strong>Parameters</strong> pass information into the function</li>
-    <li><strong>return</strong> sends a result back to the caller</li>
-    <li>Local variables inside functions don&#39;t exist outside</li>
-    <li>Lua functions can return <strong>multiple values</strong></li>
+    <li><strong>Session 1:</strong> Variables and data types</li>
+    <li><strong>Session 2:</strong> Operators and expressions</li>
+    <li><strong>Session 3:</strong> Conditional logic</li>
+    <li><strong>Session 4:</strong> Loops</li>
+    <li><strong>Session 5:</strong> Functions</li>
+    <li><strong>Session 6:</strong> Reading external data objects</li>
   </ul>
   <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
-    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 5 Worksheet</strong> before the final session.</p>
-  </div><div class="big-number">05</div>
+    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 6 Worksheet</strong>, then continue to Session 7: Tables.</p>
+  </div><div class="big-number">06</div>
 </div>
 </div></div>
 <script>

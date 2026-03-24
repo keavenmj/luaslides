@@ -1,8 +1,10 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Lua for Game Designers &#8212; Session 6: Reading External Data</title>
+<title>Lua for Game Designers — Session 3: Conditional Logic</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#0a0a12;--surface:#10101e;--surface2:#16162a;--border:#252540;--accent:#c084fc;--accent2:#f0abfc;--accent3:#6ee7b7;--text:#f8fafc;--text-dim:#94a3b8;--code-bg:#080810;--panel-w:220px;}
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --accent:#3fb950;--accent2:#79c0ff;--accent3:#ffa657;
+  --text:#e6edf3;--text-dim:#8b949e;--code-bg:#0d1117;--panel-w:220px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
@@ -43,6 +45,7 @@ pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px sol
 .callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
 .callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .callout p{margin:0;font-size:.97rem;}
+.callout.warn{border-color:var(--accent2);}.callout.warn .callout-label{color:var(--accent2);}
 ul.styled{list-style:none;margin-top:8px;}
 ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
 ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
@@ -50,8 +53,13 @@ ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';c
 .accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
 .ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
+.inline-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
 .tag{display:inline-block;background:var(--accent);color:var(--bg);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-right:8px;}
-.tag.teal{background:var(--accent3);color:var(--bg);}
+.tag.purple{background:var(--accent2);color:white;}.tag.teal{background:var(--accent3);color:var(--bg);}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
+th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
+td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
 .recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
 .recap-box strong{color:var(--accent);}
 .array-vis{display:flex;gap:0;margin:16px 0;font-family:'JetBrains Mono',monospace;}
@@ -59,151 +67,155 @@ ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';c
 .array-cell:first-child{border-radius:6px 0 0 6px;}.array-cell:last-child{border-radius:0 6px 6px 0;}
 .array-cell .idx-label{font-size:.68rem;color:var(--accent2);display:block;margin-bottom:4px;}
 .array-cell .val{font-size:.88rem;color:var(--accent3);}
-.kw{color:#c084fc;}.str{color:#6ee7b7;}.num{color:#fcd34d;}.cmt{color:#30304a;font-style:italic;}.fn{color:#f0abfc;}.var{color:#f8fafc;}.prop{color:#93c5fd;}.ext{color:#fbbf24;font-weight:700;}
+.flow-row{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap;}
+.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-size:.88rem;font-weight:600;text-align:center;}
+.flow-arrow{color:var(--accent);font-size:1.2rem;}
+.flow-yes{border-color:var(--accent);color:var(--accent);}.flow-no{border-color:#ff7b72;color:#ff7b72;}
+.kw{color:#ff7b72;}.str{color:#a5d6ff;}.num{color:#ffa657;}.cmt{color:#484f58;font-style:italic;}.fn{color:#d2a8ff;}.var{color:#e6edf3;}.op{color:#3fb950;}
 </style></head><body>
 <div id="progress-bar"></div>
 <div id="layout">
 <nav id="slide-panel">
-  <div id="panel-header"><div id="panel-session">Session 6 of 8</div><div id="panel-title">Reading External<br>Data Objects</div></div>
+  <div id="panel-header"><div id="panel-session">Session 3 of 8</div><div id="panel-title">Conditional<br>Logic</div></div>
   <div id="slide-list"></div>
-  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &#8594;</button></div>
+  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &rarr;</button></div>
 </nav>
 <div id="deck">
 
-<div class="slide slide-title active" data-label="Intro" data-subtitle="Reading External Data">
-  <div class="session-label">Session 6 of 8</div><h1>Reading External<br>Data Objects</h1>
-  <p class="subtitle">How your script receives and uses information that lives outside of it &#8212; from the game world, not hardcoded inside the function.</p>
+<div class="slide slide-title active" data-label="Intro" data-subtitle="Conditional Logic">
+  <div class="session-label">Session 3 of 8</div><h1>Conditional<br>Logic</h1>
+  <p class="subtitle">Giving your scripts the ability to make decisions and respond to different situations.</p>
   <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
-    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#9203;</span> ~45 minutes</span>
-    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#128196;</span> Worksheet included</span>
-  </div><div class="big-number">06</div>
+    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">⏱</span> ~45 minutes</span>
+    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">📄</span> Worksheet included</span>
+  </div><div class="big-number">03</div>
 </div>
-<div class="slide slide-content" data-label="Recap" data-subtitle="Session 5 review">
-  <h3>Quick Recap &#8212; Session 5</h3><h2>Functions in review</h2>
-  <div class="recap-box"><strong>From last session:</strong> Functions are named blocks of code called on demand. Parameters pass data in; <code style="font-family:'JetBrains Mono'">return</code> sends results out. Local variables inside functions don&#39;t exist outside them.</div>
+<div class="slide slide-content" data-label="Recap" data-subtitle="Sessions 1 &amp; 2 review">
+  <h3>Quick Recap — Sessions 1 &amp; 2</h3><h2>What we've built so far</h2>
+  <div class="recap-box"><strong>Session 1:</strong> Variables store values. Types: number, string, boolean, nil. Always use <code style="font-family:'JetBrains Mono'">local</code>.<br><br><strong>Session 2:</strong> Operators let you calculate, compare, and combine logic. Comparisons return booleans.</div>
   <h3 style="margin-top:8px;">This Session</h3>
   <ul class="styled">
-    <li>What &#34;external data objects&#34; means in your engine</li>
-    <li>How data gets passed into your script as parameters</li>
-    <li>Reading properties from an object using dot notation</li>
-    <li>Using conditional logic to respond to object state</li>
-    <li>Putting the whole course together in one scenario</li>
-  </ul><div class="big-number">06</div>
+    <li>The <strong>if / then / end</strong> structure</li>
+    <li>Adding <strong>else</strong> for the fallback case</li>
+    <li>Using <strong>elseif</strong> to test multiple conditions</li>
+    <li>Nested conditionals and when to use them</li>
+    <li>Boolean shortcuts for cleaner code</li>
+  </ul><div class="big-number">03</div>
 </div>
-<div class="slide slide-content" data-label="Where Data Comes From" data-subtitle="Hardcoded vs. external">
-  <h3>The Core Concept</h3><h2>Where data comes from</h2>
-  <p>So far, all data in your scripts has been hardcoded. In a real engine, your script receives data from <strong>outside</strong> &#8212; from game objects the engine manages.</p>
-  <div class="two-col" style="margin-top:14px;">
-    <div><h3 style="font-size:.8rem;"><span class="tag">Hardcoded</span></h3>
-    <pre style="font-size:.8rem;"><span class="kw">function</span> <span class="fn">OnHit</span>()
-  <span class="kw">local</span> <span class="var">hp</span>   = <span class="num">500</span>
-  <span class="kw">local</span> <span class="var">name</span> = <span class="str">"Boss"</span>
+<div class="slide slide-content" data-label="if statement" data-subtitle="The basic decision block">
+  <h3>The Foundation</h3><h2>The if statement</h2>
+  <p>An <span class="ic">if</span> block runs code <em>only</em> when a condition is true. If false, the block is skipped entirely.</p>
+  <pre><span class="kw">if</span> condition <span class="kw">then</span>
+  <span class="cmt">-- code that runs when condition is true</span>
+<span class="kw">end</span></pre>
+  <pre><span class="kw">local</span> <span class="var">enemyHealth</span> = <span class="num">0</span>
+<span class="kw">if</span> <span class="var">enemyHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Award loot, play death animation, remove from world</span>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Structure Rule</div><p>Every <span class="ic">if</span> must close with <span class="ic">end</span>. Forgetting this is one of the most common Lua syntax errors.</p></div>
+</div>
+<div class="slide slide-content" data-label="if / else" data-subtitle="Adding the fallback">
+  <h3>The Fallback</h3><h2>Adding else</h2>
+  <p>The <span class="ic">else</span> block runs when the condition is false. One or the other always runs — never both, never neither.</p>
+  <pre><span class="kw">local</span> <span class="var">playerHealth</span> = <span class="num">45</span>
+<span class="kw">if</span> <span class="var">playerHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Player is dead</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Player is still alive</span>
+<span class="kw">end</span></pre>
+  <div class="flow-row">
+    <div class="flow-box">playerHealth &lt;= 0</div><div class="flow-arrow">→</div>
+    <div class="flow-box flow-yes">TRUE → death logic</div><div class="flow-arrow" style="color:var(--text-dim)">|</div>
+    <div class="flow-box flow-no">FALSE → alive logic</div>
+  </div>
+</div>
+<div class="slide slide-content" data-label="elseif" data-subtitle="Multiple conditions">
+  <h3>Multiple Conditions</h3><h2>Using elseif</h2>
+  <p>Chain conditions with <span class="ic">elseif</span>. Lua checks them <em>in order</em> and stops at the first true one.</p>
+  <pre><span class="kw">local</span> <span class="var">health</span> = <span class="num">60</span>
+<span class="kw">if</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Dead</span>
+<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- Critical</span>
+<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">50</span> <span class="kw">then</span>
+  <span class="cmt">-- Hurt</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Healthy</span>
+<span class="kw">end</span></pre>
+  <p>With <span class="ic">health = 60</span>, only the <span class="ic">else</span> block runs. The first three conditions are all false.</p>
+</div>
+<div class="slide slide-content" data-label="Order Matters" data-subtitle="Specific before broad">
+  <h3>A Common Pitfall</h3><h2>Order matters with elseif</h2>
+  <p>Lua stops at the first true condition. <strong>More specific checks must come before broader ones.</strong></p>
+  <div class="two-col">
+    <div><h3 style="color:#ff7b72;font-size:.8rem;">✗ Wrong Order</h3>
+    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- catches everything</span>
+<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- NEVER REACHED</span>
 <span class="kw">end</span></pre></div>
-    <div><h3 style="font-size:.8rem;"><span class="tag teal">From outside</span></h3>
-    <pre style="font-size:.8rem;"><span class="kw">function</span> <span class="fn">OnHit</span>(<span class="ext">target</span>)
-  <span class="kw">local</span> <span class="var">hp</span>   = <span class="ext">target</span>.<span class="prop">health</span>
-  <span class="kw">local</span> <span class="var">name</span> = <span class="ext">target</span>.<span class="prop">name</span>
+    <div><h3 style="color:var(--accent);font-size:.8rem;">✓ Correct Order</h3>
+    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- Critical</span>
+<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- Damaged</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Full health</span>
 <span class="kw">end</span></pre></div>
   </div>
-  <p style="margin-top:12px;">The engine calls your function and hands it a reference to a real game object. Your script reads from that object to make decisions.</p>
 </div>
-<div class="slide slide-content" data-label="Dot Notation" data-subtitle="Reading object properties">
-  <h3>Accessing Properties</h3><h2>Dot notation</h2>
-  <p>Properties on an object are accessed with a dot: <span class="ic">object.property</span>.</p>
-  <pre><span class="kw">function</span> <span class="fn">OnEnemyDeath</span>(<span class="ext">enemy</span>)
-  <span class="kw">local</span> <span class="var">enemyName</span> = <span class="ext">enemy</span>.<span class="prop">name</span>
-  <span class="kw">local</span> <span class="var">xpValue</span>   = <span class="ext">enemy</span>.<span class="prop">xpReward</span>
-  <span class="kw">local</span> <span class="var">wasBoss</span>   = <span class="ext">enemy</span>.<span class="prop">isBoss</span>
-
-  <span class="kw">if</span> <span class="var">wasBoss</span> <span class="kw">then</span>
-    <span class="kw">local</span> <span class="var">bonusXP</span> = <span class="var">xpValue</span> * <span class="num">2</span>
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <div class="callout"><div class="callout-label">Key Idea</div><p>The property names are defined by your engine&#39;s data schema. Your job is to know what properties exist on the objects your script receives &#8212; and read them correctly.</p></div>
-</div>
-<div class="slide slide-content" data-label="Multiple Objects" data-subtitle="Attacker and defender">
-  <h3>More Than One</h3><h2>Scripts often receive multiple objects</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnPlayerAttackEnemy</span>(<span class="ext">attacker</span>, <span class="ext">defender</span>)
-  <span class="kw">local</span> <span class="var">atkPower</span>  = <span class="ext">attacker</span>.<span class="prop">attackPower</span>
-  <span class="kw">local</span> <span class="var">defArmor</span>  = <span class="ext">defender</span>.<span class="prop">armor</span>
-  <span class="kw">local</span> <span class="var">defHealth</span> = <span class="ext">defender</span>.<span class="prop">health</span>
-  <span class="kw">local</span> <span class="var">defName</span>   = <span class="ext">defender</span>.<span class="prop">name</span>
-
-  <span class="kw">local</span> <span class="var">damage</span>    = atkPower - defArmor
-  <span class="kw">if</span> <span class="var">damage</span> &lt; <span class="num">0</span> <span class="kw">then</span> <span class="var">damage</span> = <span class="num">0</span> <span class="kw">end</span>
-  <span class="kw">local</span> <span class="var">newHealth</span> = <span class="var">defHealth</span> - <span class="var">damage</span>
-<span class="kw">end</span></pre>
-  <p>Each object is independent. <span class="ic">attacker.armor</span> and <span class="ic">defender.armor</span> are different values on different objects.</p>
-</div>
-<div class="slide slide-content" data-label="Defensive Reads" data-subtitle="Checking for nil first">
-  <h3>Defensive Reading</h3><h2>Checking before using</h2>
-  <p>Not every object will have every property set. If a property is <span class="ic">nil</span>, using it in arithmetic or concatenation will error. Check first.</p>
-  <pre><span class="kw">function</span> <span class="fn">OnQuestTurnIn</span>(<span class="ext">player</span>)
-  <span class="kw">local</span> <span class="var">bonus</span> = <span class="ext">player</span>.<span class="prop">questBonusMultiplier</span>
-
-  <span class="kw">if</span> <span class="var">bonus</span> == <span class="kw">nil</span> <span class="kw">then</span>
-    <span class="var">bonus</span> = <span class="num">1.0</span>   <span class="cmt">-- default fallback</span>
-  <span class="kw">end</span>
-
-  <span class="kw">local</span> <span class="var">reward</span> = <span class="num">100</span> * <span class="var">bonus</span>
-<span class="kw">end</span></pre>
-  <div class="callout"><div class="callout-label">Good Habit</div><p>When reading an optional property, always provide a sensible fallback. This prevents a missing value from breaking your whole script.</p></div>
-</div>
-<div class="slide slide-content" data-label="Full Scenario" data-subtitle="Spawn zone gate check">
-  <h3>Everything Together</h3><h2>A full scenario: spawn gate check</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnPlayerEnterSpawnZone</span>(<span class="ext">player</span>, <span class="ext">zone</span>)
-  <span class="kw">local</span> <span class="var">pLevel</span>    = <span class="ext">player</span>.<span class="prop">level</span>
-  <span class="kw">local</span> <span class="var">pHasPass</span>  = <span class="ext">player</span>.<span class="prop">hasZonePass</span>
-  <span class="kw">local</span> <span class="var">zMinLevel</span> = <span class="ext">zone</span>.<span class="prop">minimumLevel</span>
-  <span class="kw">local</span> <span class="var">zName</span>     = <span class="ext">zone</span>.<span class="prop">name</span>
-
-  <span class="kw">if</span> <span class="var">pLevel</span> >= <span class="var">zMinLevel</span> <span class="kw">or</span> <span class="var">pHasPass</span> <span class="kw">then</span>
-    <span class="kw">local</span> <span class="var">msg</span> = <span class="str">"Welcome to "</span> .. <span class="var">zName</span>
+<div class="slide slide-content" data-label="Nested" data-subtitle="if inside if">
+  <h3>Going Deeper</h3><h2>Nested conditionals</h2>
+  <p>You can place an <span class="ic">if</span> inside another <span class="ic">if</span> to check a secondary condition only after confirming the first.</p>
+  <pre><span class="kw">local</span> <span class="var">enemyLevel</span> = <span class="num">30</span>
+<span class="kw">local</span> <span class="var">isBoss</span>     = <span class="kw">true</span>
+<span class="kw">if</span> <span class="var">enemyLevel</span> <span class="op">>=</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>
+    <span class="cmt">-- High-level AND a boss — raid warning</span>
   <span class="kw">else</span>
-    <span class="kw">local</span> <span class="var">needed</span> = <span class="var">zMinLevel</span> - <span class="var">pLevel</span>
-    <span class="kw">local</span> <span class="var">msg</span>    = <span class="str">"Need "</span> .. <span class="var">needed</span> .. <span class="str">" more levels."</span>
+    <span class="cmt">-- High-level but not a boss — elite behavior</span>
   <span class="kw">end</span>
 <span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Keep It Readable</div><p>Avoid nesting more than two or three levels deep. Deeply nested code is hard to scan quickly.</p></div>
 </div>
-<div class="slide slide-content" data-label="Loops + Data" data-subtitle="Looping with object counts">
-  <h3>Looping with External Data</h3><h2>Using a count from an object</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnWaveSpawn</span>(<span class="ext">wave</span>)
-  <span class="kw">local</span> <span class="var">count</span>      = <span class="ext">wave</span>.<span class="prop">enemyCount</span>
-  <span class="kw">local</span> <span class="var">difficulty</span> = <span class="ext">wave</span>.<span class="prop">difficultyMultiplier</span>
-  <span class="kw">local</span> <span class="var">baseHP</span>     = <span class="num">100</span>
-  <span class="kw">local</span> <span class="var">spawnedHP</span>  = <span class="num">0</span>
+<div class="slide slide-content" data-label="Full Example" data-subtitle="Zone entry gate check">
+  <h3>Full Example</h3><h2>Zone entry gate check</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnPlayerEnterZone</span>()
+  <span class="kw">local</span> <span class="var">playerLevel</span>  = <span class="num">18</span>
+  <span class="kw">local</span> <span class="var">hasQuestItem</span> = <span class="kw">true</span>
+  <span class="kw">local</span> <span class="var">zoneMinLevel</span> = <span class="num">20</span>
+  <span class="kw">if</span> <span class="var">playerLevel</span> <span class="op">>=</span> <span class="var">zoneMinLevel</span> <span class="kw">then</span>
+    <span class="cmt">-- Level requirement met</span>
+  <span class="kw">elseif</span> <span class="var">hasQuestItem</span> <span class="kw">then</span>
+    <span class="cmt">-- Under-leveled but has the pass</span>
+  <span class="kw">else</span>
+    <span class="cmt">-- Block entry</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  <p>With <span class="ic">playerLevel = 18</span> and <span class="ic">hasQuestItem = true</span>: first condition fails, second succeeds — entry allowed via quest item.</p>
+</div>
+<div class="slide slide-content" data-label="Boolean Shortcuts" data-subtitle="Cleaner conditions">
+  <h3>Cleaner Code</h3><h2>Boolean shortcuts</h2>
+  <p>When your variable is already a boolean, skip <span class="ic">== true</span>. These are identical:</p>
+  <pre><span class="kw">if</span> <span class="var">isBoss</span> <span class="op">==</span> <span class="kw">true</span> <span class="kw">then</span>   <span class="cmt">-- verbose</span>
+<span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>             <span class="cmt">-- preferred</span>
 
-  <span class="kw">for</span> <span class="var">i</span> = <span class="num">1</span>, <span class="var">count</span> <span class="kw">do</span>
-    <span class="var">spawnedHP</span> = <span class="var">spawnedHP</span> + (baseHP * difficulty)
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <p>The loop count comes from the wave object &#8212; not hardcoded. Change the data object, the script adapts automatically.</p>
+<span class="kw">if</span> <span class="var">isAlive</span> <span class="op">==</span> <span class="kw">false</span> <span class="kw">then</span>  <span class="cmt">-- verbose</span>
+<span class="kw">if</span> <span class="op">not</span> <span class="var">isAlive</span> <span class="kw">then</span>        <span class="cmt">-- preferred</span></pre>
 </div>
-<div class="slide slide-content" data-label="In Your Engine" data-subtitle="What to customize">
-  <h3>In Your Engine</h3><h2>What you&#39;ll need to customize</h2>
-  <p>Every proprietary engine has its own naming conventions. The Lua concepts are the same &#8212; only the property names change.</p>
-  <ul class="styled">
-    <li><strong>Find out what objects your scripts receive</strong> &#8212; player, enemy, zone, trigger, item, etc.</li>
-    <li><strong>Learn what properties each object exposes</strong> &#8212; your engine&#39;s schema or documentation</li>
-    <li><strong>Understand the property types</strong> &#8212; is <span class="ic">health</span> a number? Is <span class="ic">isBoss</span> a boolean?</li>
-    <li><strong>Ask: what can I read vs. write?</strong> &#8212; some properties are read-only</li>
-  </ul>
-  <div class="callout"><div class="callout-label">The Transferable Skill</div><p>The logic you&#39;ve learned &#8212; variables, operators, conditionals, loops, functions &#8212; transfers directly. Engine-specific details are just vocabulary. The grammar is the same.</p></div>
-</div>
-<div class="slide slide-title" data-label="Recap" data-subtitle="Course Sessions 1&#8211;6">
-  <div class="accent-line"></div><h3>Session 6 Complete</h3>
-  <h2 style="font-size:1.8rem;margin-bottom:20px;">Sessions 1&#8211;6 complete</h2>
+<div class="slide slide-title" data-label="Recap" data-subtitle="What you covered">
+  <div class="accent-line"></div><h3>Session 3 Complete</h3>
+  <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
   <ul class="styled" style="max-width:480px;text-align:left;">
-    <li><strong>Session 1:</strong> Variables and data types</li>
-    <li><strong>Session 2:</strong> Operators and expressions</li>
-    <li><strong>Session 3:</strong> Conditional logic</li>
-    <li><strong>Session 4:</strong> Loops</li>
-    <li><strong>Session 5:</strong> Functions</li>
-    <li><strong>Session 6:</strong> Reading external data objects</li>
+    <li><strong>if / then / end</strong> — the basic decision block</li>
+    <li><strong>else</strong> handles the "otherwise" case</li>
+    <li><strong>elseif</strong> chains multiple checks in order</li>
+    <li>Order matters — specific checks before broad ones</li>
+    <li><strong>if isBoss then</strong> is cleaner than <strong>if isBoss == true then</strong></li>
   </ul>
   <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
-    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 6 Worksheet</strong>, then continue to Session 7: Tables.</p>
-  </div><div class="big-number">06</div>
+    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 3 Worksheet</strong> before moving to Session 4.</p>
+  </div><div class="big-number">03</div>
 </div>
 </div></div>
 <script>

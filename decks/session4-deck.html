@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Lua for Game Designers &#8212; Session 7: Tables as Arrays</title>
+<title>Lua for Game Designers — Session 4: Loops</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#0b1018;--surface:#111820;--surface2:#182030;--border:#22334a;--accent:#38bdf8;--accent2:#fb923c;--accent3:#4ade80;--text:#e8f4fc;--text-dim:#7a9ab8;--code-bg:#080e16;--panel-w:220px;}
+:root{--bg:#12100e;--surface:#1a1714;--surface2:#22201c;--border:#3a3530;--accent:#f4a225;--accent2:#e05c2a;--accent3:#7ec8a0;--text:#f0ebe3;--text-dim:#9a9088;--code-bg:#0e0c0a;--panel-w:220px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
@@ -43,6 +43,7 @@ pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px sol
 .callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
 .callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .callout p{margin:0;font-size:.97rem;}
+.callout.warn{border-color:var(--accent2);}.callout.warn .callout-label{color:var(--accent2);}
 ul.styled{list-style:none;margin-top:8px;}
 ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
 ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
@@ -50,8 +51,13 @@ ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';c
 .accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
 .ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
+.inline-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
 .tag{display:inline-block;background:var(--accent);color:var(--bg);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-right:8px;}
-.tag.teal{background:var(--accent3);color:var(--bg);}
+.tag.purple{background:var(--accent2);color:white;}.tag.teal{background:var(--accent3);color:var(--bg);}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
+th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
+td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
 .recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
 .recap-box strong{color:var(--accent);}
 .array-vis{display:flex;gap:0;margin:16px 0;font-family:'JetBrains Mono',monospace;}
@@ -59,142 +65,147 @@ ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';c
 .array-cell:first-child{border-radius:6px 0 0 6px;}.array-cell:last-child{border-radius:0 6px 6px 0;}
 .array-cell .idx-label{font-size:.68rem;color:var(--accent2);display:block;margin-bottom:4px;}
 .array-cell .val{font-size:.88rem;color:var(--accent3);}
-.kw{color:#38bdf8;}.str{color:#4ade80;}.num{color:#fbbf24;}.cmt{color:#2a3f58;font-style:italic;}.fn{color:#c084fc;}.var{color:#e8f4fc;}.idx{color:#fb923c;font-weight:700;}
+.flow-row{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap;}
+.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-size:.88rem;font-weight:600;text-align:center;}
+.flow-arrow{color:var(--accent);font-size:1.2rem;}
+.flow-yes{border-color:var(--accent);color:var(--accent);}.flow-no{border-color:#ff7b72;color:#ff7b72;}
+.kw{color:#e05c2a;}.str{color:#7ec8a0;}.num{color:#f4a225;}.cmt{color:#5a5248;font-style:italic;}.fn{color:#c9a0ff;}.var{color:#f0ebe3;}.op{color:#f4a225;}
 </style></head><body>
 <div id="progress-bar"></div>
 <div id="layout">
 <nav id="slide-panel">
-  <div id="panel-header"><div id="panel-session">Session 7 of 8</div><div id="panel-title">Tables<br>as Arrays</div></div>
+  <div id="panel-header"><div id="panel-session">Session 4 of 8</div><div id="panel-title">Loops</div></div>
   <div id="slide-list"></div>
   <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &#8594;</button></div>
 </nav>
 <div id="deck">
 
-<div class="slide slide-title active" data-label="Intro" data-subtitle="Tables as Arrays">
-  <div class="session-label">Session 7 of 8</div><h1>Tables<br>as Arrays</h1>
-  <p class="subtitle">Storing ordered lists of values &#8212; and working with them efficiently.</p>
+<div class="slide slide-title active" data-label="Intro" data-subtitle="Loops">
+  <div class="session-label">Session 4 of 8</div><h1>Loops</h1>
+  <p class="subtitle">Repeating actions efficiently — because games do the same thing thousands of times.</p>
   <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#9203;</span> ~45 minutes</span>
     <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">&#128196;</span> Worksheet included</span>
-  </div><div class="big-number">07</div>
+  </div><div class="big-number">04</div>
 </div>
-<div class="slide slide-content" data-label="What is a Table?" data-subtitle="Ordered list container">
-  <h3>The Core Concept</h3><h2>What is a table?</h2>
-  <p>A table is Lua&#39;s one container type. Used as an <strong>array</strong>, it&#39;s an ordered list where each item has a numbered position.</p>
-  <pre><span class="cmt">-- A single variable holding one value</span>
-<span class="kw">local</span> <span class="var">enemyName</span> = <span class="str">"Razorfang"</span>
-
-<span class="cmt">-- A table holding many values</span>
-<span class="kw">local</span> <span class="var">enemyNames</span> = { <span class="str">"Razorfang"</span>, <span class="str">"Grimtusk"</span>, <span class="str">"Voidwalker"</span> }</pre>
-  <div class="callout"><div class="callout-label">Lua is 1-indexed</div><p>Most languages start counting at 0. Lua starts at <strong>1</strong>. The first item in a table is always at position 1.</p></div>
+<div class="slide slide-content" data-label="Recap" data-subtitle="Session 3 review">
+  <h3>Quick Recap &#8212; Session 3</h3><h2>Conditionals in review</h2>
+  <div class="recap-box"><strong>From last session:</strong> <code style="font-family:'JetBrains Mono'">if / elseif / else / end</code> lets your script take different paths based on conditions. Order matters &#8212; more specific conditions go first. Always close with <code style="font-family:'JetBrains Mono'">end</code>.</div>
+  <h3 style="margin-top:8px;">This Session</h3>
+  <ul class="styled">
+    <li>What a loop is and why we need them</li>
+    <li>The <strong>for loop</strong> &#8212; running a known number of times</li>
+    <li>The <strong>while loop</strong> &#8212; running until a condition changes</li>
+    <li>The <strong>repeat / until</strong> loop &#8212; running at least once</li>
+    <li>Combining loops with conditionals</li>
+  </ul><div class="big-number">04</div>
 </div>
-<div class="slide slide-content" data-label="Reading by Index" data-subtitle="Accessing items with [ ]">
-  <h3>Getting Values Out</h3><h2>Reading by index</h2>
-  <p>Access a specific item using square brackets and its position number.</p>
-  <pre><span class="kw">local</span> <span class="var">spawnList</span> = { <span class="str">"Razorfang"</span>, <span class="str">"Grimtusk"</span>, <span class="str">"Voidwalker"</span> }
-
-<span class="kw">local</span> <span class="var">first</span>  = <span class="var">spawnList</span>[<span class="idx">1</span>]   <span class="cmt">-- "Razorfang"</span>
-<span class="kw">local</span> <span class="var">second</span> = <span class="var">spawnList</span>[<span class="idx">2</span>]   <span class="cmt">-- "Grimtusk"</span>
-<span class="kw">local</span> <span class="var">third</span>  = <span class="var">spawnList</span>[<span class="idx">3</span>]   <span class="cmt">-- "Voidwalker"</span></pre>
-  <div class="array-vis">
-    <div class="array-cell"><span class="idx-label">[1]</span><span class="val">"Razorfang"</span></div>
-    <div class="array-cell"><span class="idx-label">[2]</span><span class="val">"Grimtusk"</span></div>
-    <div class="array-cell"><span class="idx-label">[3]</span><span class="val">"Voidwalker"</span></div>
-  </div>
-  <p>Reading an index that doesn&#39;t exist returns <span class="ic">nil</span> &#8212; not an error.</p>
+<div class="slide slide-content" data-label="What is a Loop?" data-subtitle="The core concept">
+  <h3>The Core Concept</h3><h2>What is a loop?</h2>
+  <p>A loop runs the same block of code multiple times. Without loops, repetitive work requires writing the same code over and over:</p>
+  <pre><span class="cmt">-- Without loops: applying damage to 5 enemies manually</span>
+<span class="var">enemy1Health</span> = <span class="var">enemy1Health</span> - <span class="num">20</span>
+<span class="var">enemy2Health</span> = <span class="var">enemy2Health</span> - <span class="num">20</span>
+<span class="var">enemy3Health</span> = <span class="var">enemy3Health</span> - <span class="num">20</span>
+<span class="cmt">-- ...doesn&#39;t scale.</span></pre>
+  <div class="callout"><div class="callout-label">Game Design Relevance</div><p>Loops power: spawning enemy waves, checking inventory, applying damage over time, running countdown timers, and much more.</p></div>
 </div>
-<div class="slide slide-content" data-label="# Length Operator" data-subtitle="Counting table items">
-  <h3>How Many Items?</h3><h2>The length operator: #</h2>
-  <p>The <span class="ic">#</span> operator returns the number of items in a table.</p>
-  <pre><span class="kw">local</span> <span class="var">buffList</span> = { <span class="str">"Strength"</span>, <span class="str">"Haste"</span>, <span class="str">"Regeneration"</span> }
-<span class="kw">local</span> <span class="var">count</span> = <span class="idx">#</span><span class="var">buffList</span>   <span class="cmt">-- 3</span></pre>
-  <p>Combine with a for loop to process every item:</p>
-  <pre><span class="kw">for</span> <span class="var">i</span> = <span class="num">1</span>, <span class="idx">#</span><span class="var">buffList</span> <span class="kw">do</span>
-  <span class="kw">local</span> <span class="var">currentBuff</span> = <span class="var">buffList</span>[<span class="var">i</span>]
-  <span class="cmt">-- Apply currentBuff to player</span>
+<div class="slide slide-content" data-label="for loop" data-subtitle="Known number of repeats">
+  <h3>Known Repetitions</h3><h2>The numeric for loop</h2>
+  <p>Use a <span class="ic">for</span> loop when you know exactly how many times something should repeat.</p>
+  <pre><span class="kw">for</span> i = start, stop, step <span class="kw">do</span>
+  <span class="cmt">-- code runs each iteration</span>
 <span class="kw">end</span></pre>
-</div>
-<div class="slide slide-content" data-label="table.insert" data-subtitle="Adding items">
-  <h3>Growing the List</h3><h2>Adding items with table.insert</h2>
-  <pre><span class="kw">local</span> <span class="var">inventory</span> = { <span class="str">"Sword"</span>, <span class="str">"Shield"</span> }
-
-<span class="cmt">-- Append to the end</span>
-<span class="fn">table.insert</span>(<span class="var">inventory</span>, <span class="str">"Potion"</span>)
-<span class="cmt">-- { "Sword", "Shield", "Potion" }</span>
-
-<span class="cmt">-- Insert at position 2 (shifts everything right)</span>
-<span class="fn">table.insert</span>(<span class="var">inventory</span>, <span class="num">2</span>, <span class="str">"Ring"</span>)
-<span class="cmt">-- { "Sword", "Ring", "Shield", "Potion" }</span></pre>
-  <div class="callout"><div class="callout-label">Most Common Pattern</div><p>In game scripting you&#39;ll almost always append to the end &#8212; adding a kill to a log, pushing a buff onto a stack, queuing a spawn event.</p></div>
-</div>
-<div class="slide slide-content" data-label="table.remove" data-subtitle="Removing items">
-  <h3>Shrinking the List</h3><h2>Removing items with table.remove</h2>
-  <p><span class="ic">table.remove</span> removes an item by its position and <strong>returns the removed value</strong>.</p>
-  <pre><span class="kw">local</span> <span class="var">queue</span> = { <span class="str">"Spawn A"</span>, <span class="str">"Spawn B"</span>, <span class="str">"Spawn C"</span> }
-
-<span class="cmt">-- Remove the first item (and get it back)</span>
-<span class="kw">local</span> <span class="var">next</span> = <span class="fn">table.remove</span>(<span class="var">queue</span>, <span class="num">1</span>)
-<span class="cmt">-- next  = "Spawn A"</span>
-<span class="cmt">-- queue = { "Spawn B", "Spawn C" }</span>
-
-<span class="cmt">-- No position = removes the last item</span>
-<span class="fn">table.remove</span>(<span class="var">queue</span>)
-<span class="cmt">-- queue = { "Spawn B" }</span></pre>
-</div>
-<div class="slide slide-content" data-label="Writing to Index" data-subtitle="Updating values">
-  <h3>Updating Values</h3><h2>Writing directly to an index</h2>
-  <pre><span class="kw">local</span> <span class="var">waveEnemies</span> = { <span class="str">"Grunt"</span>, <span class="str">"Grunt"</span>, <span class="str">"Grunt"</span> }
-
-<span class="cmt">-- Upgrade the third enemy</span>
-<span class="var">waveEnemies</span>[<span class="idx">3</span>] = <span class="str">"Elite Grunt"</span>
-<span class="cmt">-- { "Grunt", "Grunt", "Elite Grunt" }</span>
-
-<span class="cmt">-- Add beyond the current end</span>
-<span class="var">waveEnemies</span>[<span class="idx">4</span>] = <span class="str">"Boss"</span>
-<span class="cmt">-- { "Grunt", "Grunt", "Elite Grunt", "Boss" }</span></pre>
-  <div class="callout" style="border-color:var(--accent2);"><div class="callout-label" style="color:var(--accent2);">Watch Out</div><p>Writing to a non-sequential index (e.g. position 10 in a 3-item table) creates a &#34;hole.&#34; The <span class="ic">#</span> operator behaves unpredictably with holes. Stick to sequential writes.</p></div>
-</div>
-<div class="slide slide-content" data-label="ipairs loop" data-subtitle="Iterating arrays">
-  <h3>Processing Every Item</h3><h2>The ipairs loop</h2>
-  <p><span class="ic">ipairs</span> gives you both the index and the value on each iteration.</p>
-  <pre><span class="kw">local</span> <span class="var">lootTable</span> = { <span class="str">"Gold Coin"</span>, <span class="str">"Iron Ore"</span>, <span class="str">"Health Potion"</span> }
-
-<span class="kw">for</span> <span class="var">i</span>, <span class="var">item</span> <span class="kw">in</span> <span class="fn">ipairs</span>(<span class="var">lootTable</span>) <span class="kw">do</span>
-  <span class="kw">local</span> <span class="var">msg</span> = <span class="str">"Drop "</span> .. <span class="var">i</span> .. <span class="str">": "</span> .. <span class="var">item</span>
-<span class="kw">end</span>
-
-<span class="cmt">-- If you only need the value, use _ for the index</span>
-<span class="kw">for</span> <span class="var">_</span>, <span class="var">item</span> <span class="kw">in</span> <span class="fn">ipairs</span>(<span class="var">lootTable</span>) <span class="kw">do</span>
-<span class="kw">end</span></pre>
-</div>
-<div class="slide slide-content" data-label="Full Example" data-subtitle="Spawn queue">
-  <h3>Putting It Together</h3><h2>A spawn queue with add and remove</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnWaveSetup</span>()
-  <span class="kw">local</span> <span class="var">spawnQueue</span> = { <span class="str">"Scout"</span>, <span class="str">"Scout"</span>, <span class="str">"Warrior"</span> }
-
-  <span class="cmt">-- Add a boss to the end</span>
-  <span class="fn">table.insert</span>(<span class="var">spawnQueue</span>, <span class="str">"Warchief"</span>)
-
-  <span class="kw">local</span> <span class="var">totalSpawned</span> = <span class="num">0</span>
-  <span class="kw">for</span> <span class="var">_</span>, <span class="var">enemyType</span> <span class="kw">in</span> <span class="fn">ipairs</span>(<span class="var">spawnQueue</span>) <span class="kw">do</span>
-    <span class="var">totalSpawned</span> = <span class="var">totalSpawned</span> + <span class="num">1</span>
+  <pre><span class="kw">function</span> <span class="fn">OnAoEAttack</span>()
+  <span class="kw">local</span> <span class="var">damage</span>     = <span class="num">30</span>
+  <span class="kw">local</span> <span class="var">enemyCount</span> = <span class="num">5</span>
+  <span class="kw">for</span> <span class="var">i</span> = <span class="num">1</span>, <span class="var">enemyCount</span> <span class="kw">do</span>
+    <span class="cmt">-- Runs 5 times. i = 1, 2, 3, 4, 5</span>
   <span class="kw">end</span>
-  <span class="cmt">-- totalSpawned = 4</span>
+<span class="kw">end</span></pre>
+  <p>The <span class="ic">step</span> argument is optional &#8212; if omitted, it defaults to 1.</p>
+</div>
+<div class="slide slide-content" data-label="Step Values" data-subtitle="Counting up, down, by 2s">
+  <h3>Controlling the Step</h3><h2>Custom step values</h2>
+  <pre><span class="cmt">-- Count up by 2: 0, 2, 4, 6, 8, 10</span>
+<span class="kw">for</span> <span class="var">i</span> = <span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span> <span class="kw">do</span> <span class="kw">end</span>
+
+<span class="cmt">-- Countdown: 10, 9, 8 ... 1</span>
+<span class="kw">for</span> <span class="var">seconds</span> = <span class="num">10</span>, <span class="num">1</span>, -<span class="num">1</span> <span class="kw">do</span>
+  <span class="cmt">-- Display seconds remaining</span>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">The Loop Variable</div><p>The variable <span class="ic">i</span> is automatically managed by the loop. You can read it inside the block, but don&#39;t manually change it &#8212; let Lua handle the incrementing.</p></div>
+</div>
+<div class="slide slide-content" data-label="while loop" data-subtitle="Unknown number of repeats">
+  <h3>Unknown Repetitions</h3><h2>The while loop</h2>
+  <p>Use <span class="ic">while</span> when you don&#39;t know in advance how many times to repeat &#8212; only the stopping condition.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnChanneledSpell</span>()
+  <span class="kw">local</span> <span class="var">mana</span>     = <span class="num">100</span>
+  <span class="kw">local</span> <span class="var">manaCost</span> = <span class="num">15</span>
+  <span class="kw">while</span> <span class="var">mana</span> >= <span class="var">manaCost</span> <span class="kw">do</span>
+    <span class="var">mana</span> = <span class="var">mana</span> - <span class="var">manaCost</span>
+    <span class="cmt">-- Trigger spell tick</span>
+  <span class="kw">end</span>
+  <span class="cmt">-- Loop ends when mana drops below manaCost</span>
+<span class="kw">end</span></pre>
+</div>
+<div class="slide slide-content" data-label="Infinite Loop Trap" data-subtitle="The while loop danger">
+  <h3>Watch Out</h3><h2>The infinite loop trap</h2>
+  <p>A <span class="ic">while</span> loop that never becomes false will run forever and freeze your engine.</p>
+  <div class="two-col">
+    <div><h3 style="color:#e05c2a;font-size:.8rem;">&#10007; Infinite loop</h3>
+    <pre style="font-size:.8rem;"><span class="kw">local</span> health = <span class="num">100</span>
+<span class="kw">while</span> health > <span class="num">0</span> <span class="kw">do</span>
+  <span class="cmt">-- health never changes!</span>
+<span class="kw">end</span></pre></div>
+    <div><h3 style="color:var(--accent3);font-size:.8rem;">&#10003; Correctly terminating</h3>
+    <pre style="font-size:.8rem;"><span class="kw">local</span> health = <span class="num">100</span>
+<span class="kw">while</span> health > <span class="num">0</span> <span class="kw">do</span>
+  health = health - <span class="num">10</span>
+<span class="kw">end</span></pre></div>
+  </div>
+  <div class="callout" style="margin-top:14px;"><div class="callout-label">Rule</div><p>Always ask: "what changes to make this condition false?" Every <span class="ic">while</span> loop must contain code that eventually makes that happen.</p></div>
+</div>
+<div class="slide slide-content" data-label="repeat / until" data-subtitle="Run at least once">
+  <h3>Run At Least Once</h3><h2>The repeat / until loop</h2>
+  <p>Like a <span class="ic">while</span> loop, but the condition is checked <em>at the end</em>, so the block always runs at least once.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnLootRoll</span>()
+  <span class="kw">local</span> <span class="var">roll</span>      = <span class="num">0</span>
+  <span class="kw">local</span> <span class="var">threshold</span> = <span class="num">80</span>
+  <span class="kw">repeat</span>
+    <span class="var">roll</span> = <span class="var">roll</span> + <span class="num">1</span>
+    <span class="cmt">-- Check for drop...</span>
+  <span class="kw">until</span> <span class="var">roll</span> >= <span class="var">threshold</span>
+<span class="kw">end</span></pre>
+  <p>Note: the condition is the <strong>exit</strong> condition &#8212; the loop runs until it becomes true.</p>
+</div>
+<div class="slide slide-content" data-label="Loops + Conditionals" data-subtitle="Combining both">
+  <h3>Combining Concepts</h3><h2>Loops with conditionals inside</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnWaveStart</span>()
+  <span class="kw">local</span> <span class="var">waveSize</span>   = <span class="num">8</span>
+  <span class="kw">local</span> <span class="var">spawnCount</span> = <span class="num">0</span>
+  <span class="kw">for</span> <span class="var">i</span> = <span class="num">1</span>, <span class="var">waveSize</span> <span class="kw">do</span>
+    <span class="kw">local</span> <span class="var">slotIsEmpty</span> = (i % <span class="num">3</span> ~= <span class="num">0</span>)
+    <span class="kw">if</span> <span class="var">slotIsEmpty</span> <span class="kw">then</span>
+      <span class="var">spawnCount</span> = <span class="var">spawnCount</span> + <span class="num">1</span>
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+  <span class="cmt">-- spawnCount = 6 (slots 3 and 6 skipped)</span>
 <span class="kw">end</span></pre>
 </div>
 <div class="slide slide-title" data-label="Recap" data-subtitle="What you covered">
-  <div class="accent-line"></div><h3>Session 7 Complete</h3>
+  <div class="accent-line"></div><h3>Session 4 Complete</h3>
   <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
   <ul class="styled" style="max-width:480px;text-align:left;">
-    <li>Tables store ordered lists using <strong>{ }</strong></li>
-    <li>Items accessed by position with <strong>[ ]</strong> &#8212; starting at 1</li>
-    <li><strong>#table</strong> returns the number of items</li>
-    <li><strong>table.insert</strong> adds; <strong>table.remove</strong> removes</li>
-    <li><strong>ipairs</strong> loops over every item with its index</li>
+    <li><strong>for</strong> &#8212; repeat a known number of times</li>
+    <li><strong>while</strong> &#8212; repeat until a condition becomes false</li>
+    <li><strong>repeat/until</strong> &#8212; run at least once, then check</li>
+    <li>Always ensure a <strong>while</strong> loop can terminate</li>
+    <li>Loops and conditionals can be <strong>nested together</strong></li>
   </ul>
   <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
-    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 7 Worksheet</strong>, then move to Session 8: Dictionary Tables.</p>
-  </div><div class="big-number">07</div>
+    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 4 Worksheet</strong> before moving to Session 5.</p>
+  </div><div class="big-number">04</div>
 </div>
 </div></div>
 <script>
