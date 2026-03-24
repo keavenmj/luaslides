@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 8 Worksheet — Dictionary Tables</title>
+<title>Session 6 Worksheet — Reading External Data</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#200a40; --accent2:#7030b0; --accent3:#1a7a50; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+:root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#2a0a4a; --accent2:#7040bb; --accent3:#1a8060; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
 .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
@@ -20,8 +20,8 @@ h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
 .exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
 .exercise p { font-size:.95rem; color:var(--text-dim); margin-bottom:12px; }
 .exercise p strong { color:var(--text); }
-pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:1.75; margin:12px 0; overflow-x:auto; }
-.kw{color:#7030b0;font-weight:600} .str{color:#1a7a50} .num{color:#b87300} .cmt{color:#999;font-style:italic} .fn{color:#c03090} .key{color:#c06000} .prop{color:#0055bb}
+pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
+.kw{color:#7040bb;font-weight:600} .str{color:#1a8060} .num{color:#b87300} .cmt{color:#999;font-style:italic} .fn{color:#8b30cc} .ext{color:#c06000;font-weight:700} .prop{color:#0055bb}
 .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
 .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
 .q-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
@@ -33,14 +33,48 @@ pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px
 .ak-explain { font-size:.88rem; color:var(--text-dim); line-height:1.6; }
 .ak-explain strong { color:var(--text); }
 code { font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+.schema-box { background:var(--code-bg); border:1px solid var(--border); border-radius:6px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:2; margin:12px 0; }
+.schema-obj { color:var(--accent2); font-weight:700; }
+.schema-prop { color:#0055bb; padding-left:20px; display:block; }
+.schema-type { color:#999; }
 </style>
 </head>
 <body>
 
 <div class="ws-header">
-  <div class="ws-label">Lua for Game Designers — Session 8 Worksheet</div>
-  <h1>Dictionary Tables</h1>
-  <div class="ws-meta">Trace key reads and writes carefully. Remember: dot notation and bracket notation access the same data.</div>
+  <div class="ws-label">Lua for Game Designers — Session 6 Worksheet</div>
+  <h1>Reading External Data Objects</h1>
+  <div class="ws-meta">Use the data schemas provided to answer each question. Treat them as your engine's documentation.</div>
+</div>
+
+<!-- REFERENCE SCHEMAS -->
+<div style="background:#f5f0ea;border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:32px;">
+  <div style="font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;">Reference — Object Schemas</div>
+  <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:12px;">These are the properties available on each object type in this exercise set. Treat this like your engine's documentation.</p>
+  <div class="schema-box">
+    <span class="schema-obj">player</span>
+    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
+    <span class="schema-prop">level         <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">health        <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">maxHealth     <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">gold          <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">isInCombat    <span class="schema-type">-- boolean</span></span>
+    <span class="schema-prop">guildName     <span class="schema-type">-- string (may be nil if no guild)</span></span>
+    <br>
+    <span class="schema-obj">enemy</span>
+    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
+    <span class="schema-prop">health        <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">maxHealth     <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">level         <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">isBoss        <span class="schema-type">-- boolean</span></span>
+    <span class="schema-prop">xpReward      <span class="schema-type">-- number</span></span>
+    <br>
+    <span class="schema-obj">zone</span>
+    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
+    <span class="schema-prop">minimumLevel  <span class="schema-type">-- number</span></span>
+    <span class="schema-prop">isHostile     <span class="schema-type">-- boolean</span></span>
+    <span class="schema-prop">spawnCount    <span class="schema-type">-- number</span></span>
+  </div>
 </div>
 
 <!-- SECTION A: READ THE PROPERTIES -->
@@ -51,54 +85,49 @@ code { font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(
 </div>
 
 <div class="exercise">
-  <p>Given this table, write the value each variable holds. If a key doesn't exist, write <strong>nil</strong>.</p>
-  <pre><span class="kw">local</span> armor = {
-  <span class="key">name</span>      = <span class="str">"Dragonscale Vest"</span>,
-  <span class="key">defense</span>   = <span class="num">85</span>,
-  <span class="key">isHeavy</span>   = <span class="kw">true</span>,
-  <span class="key">setBonus</span>  = <span class="kw">nil</span>
-}
-
-<span class="kw">local</span> a = armor.name
-<span class="kw">local</span> b = armor.defense * <span class="num">2</span>
-<span class="kw">local</span> c = armor.isHeavy
-<span class="kw">local</span> d = armor.setBonus
-<span class="kw">local</span> e = armor.rarity</pre>
-
-  <input type="text" class="answer-line" placeholder="a =">
-  <input type="text" class="answer-line" placeholder="b =">
-  <input type="text" class="answer-line" placeholder="c =">
-  <input type="text" class="answer-line" placeholder="d =">
-  <input type="text" class="answer-line" placeholder="e =">
+  <p>Given this function and the schemas above, write what each variable holds after the reads. Assume the following object state: <strong>player.name = "Lyria", player.level = 22, player.health = 80, player.maxHealth = 200, player.gold = 340, player.isInCombat = true, player.guildName = nil</strong></p>
+  <pre><span class="kw">function</span> <span class="fn">OnPlayerInspect</span>(<span class="ext">player</span>)
+  <span class="kw">local</span> <span class="var">pName</span>       = <span class="ext">player</span>.<span class="prop">name</span>
+  <span class="kw">local</span> <span class="var">pLevel</span>      = <span class="ext">player</span>.<span class="prop">level</span>
+  <span class="kw">local</span> <span class="var">pHealthPct</span>  = <span class="ext">player</span>.<span class="prop">health</span> / <span class="ext">player</span>.<span class="prop">maxHealth</span> * <span class="num">100</span>
+  <span class="kw">local</span> <span class="var">pGuild</span>      = <span class="ext">player</span>.<span class="prop">guildName</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="pName =">
+  <input type="text" class="answer-line" placeholder="pLevel =">
+  <input type="text" class="answer-line" placeholder="pHealthPct =  (show your calculation)">
+  <input type="text" class="answer-line" placeholder="pGuild =">
 </div>
 
-<!-- SECTION B: TRACE THE MUTATIONS -->
+<!-- SECTION B: TRACE THE LOGIC -->
 <div class="section-header">
   <div class="section-num">B</div>
-  <h2>Trace the Mutations</h2>
-  <span class="section-type">Write / Update / Remove</span>
+  <h2>Trace the Logic</h2>
+  <span class="section-type">Full trace</span>
 </div>
 
 <div class="exercise">
-  <p>Starting from the table below, trace what each key's value is after every operation. Write the full table state at the end.</p>
-  <pre><span class="kw">local</span> enemy = {
-  <span class="key">name</span>    = <span class="str">"Thornback"</span>,
-  <span class="key">health</span>  = <span class="num">300</span>,
-  <span class="key">isAlive</span> = <span class="kw">true</span>
-}
+  <p>Assume: <strong>enemy.name = "Vaultkeeper", enemy.level = 18, enemy.isBoss = true, enemy.xpReward = 400, enemy.health = 0</strong></p>
+  <p>Trace through the function and write the final values of all local variables.</p>
+  <pre><span class="kw">function</span> <span class="fn">OnEnemyDefeated</span>(<span class="ext">enemy</span>)
+  <span class="kw">local</span> <span class="var">name</span>       = <span class="ext">enemy</span>.<span class="prop">name</span>
+  <span class="kw">local</span> <span class="var">xp</span>         = <span class="ext">enemy</span>.<span class="prop">xpReward</span>
+  <span class="kw">local</span> <span class="var">isBoss</span>     = <span class="ext">enemy</span>.<span class="prop">isBoss</span>
+  <span class="kw">local</span> <span class="var">bonusXP</span>    = <span class="num">0</span>
+  <span class="kw">local</span> <span class="var">logMessage</span> = <span class="str">""</span>
 
-enemy.health   = enemy.health - <span class="num">120</span>
-enemy.isStunned = <span class="kw">true</span>
-enemy.stunTimer = <span class="num">3</span>
-enemy.isAlive  = (enemy.health > <span class="num">0</span>)
-enemy.name     = <span class="kw">nil</span></pre>
-
-  <div class="q-label">Final state of each key:</div>
+  <span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>
+    <span class="var">bonusXP</span>    = <span class="var">xp</span> * <span class="num">2</span>
+    <span class="var">logMessage</span> = <span class="str">"Boss defeated: "</span> .. <span class="var">name</span>
+  <span class="kw">else</span>
+    <span class="var">bonusXP</span>    = <span class="var">xp</span>
+    <span class="var">logMessage</span> = <span class="str">"Enemy defeated: "</span> .. <span class="var">name</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
   <input type="text" class="answer-line" placeholder="name =">
-  <input type="text" class="answer-line" placeholder="health =">
-  <input type="text" class="answer-line" placeholder="isAlive =">
-  <input type="text" class="answer-line" placeholder="isStunned =">
-  <input type="text" class="answer-line" placeholder="stunTimer =">
+  <input type="text" class="answer-line" placeholder="xp =">
+  <input type="text" class="answer-line" placeholder="isBoss =">
+  <input type="text" class="answer-line" placeholder="bonusXP =  (show reasoning)">
+  <input type="text" class="answer-line" placeholder="logMessage =">
 </div>
 
 <!-- SECTION C: SPOT THE BUG -->
@@ -109,280 +138,137 @@ enemy.name     = <span class="kw">nil</span></pre>
 </div>
 
 <div class="exercise">
-  <p><strong>C1.</strong> The designer is trying to read the enemy's name, but they'll get nil. Why?</p>
-  <pre><span class="kw">local</span> enemy = { <span class="key">Name</span> = <span class="str">"Voidclaw"</span>, <span class="key">health</span> = <span class="num">200</span> }
-<span class="kw">local</span> n = enemy.name</pre>
-  <input type="text" class="answer-line" placeholder="What's wrong?">
-  <input type="text" class="answer-line" placeholder="Fixed read:">
+  <p><strong>C1.</strong> This function is supposed to display a player's guild name. It will crash if the player has no guild. How do you fix it?</p>
+  <pre><span class="kw">function</span> <span class="fn">OnGuildCheck</span>(<span class="ext">player</span>)
+  <span class="kw">local</span> <span class="var">display</span> = <span class="str">"Guild: "</span> .. <span class="ext">player</span>.<span class="prop">guildName</span>
+<span class="kw">end</span></pre>
+  <div class="q-label">What's the risk and how do you fix it?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <textarea class="answer-area" rows="6" placeholder="Write the fixed version..."></textarea>
 </div>
 
 <div class="exercise">
-  <p><strong>C2.</strong> This pairs loop is supposed to total up all the stat values, but it will error on one of them. Identify which key causes the problem and explain why.</p>
-  <pre><span class="kw">local</span> stats = {
-  <span class="key">strength</span>  = <span class="num">14</span>,
-  <span class="key">agility</span>   = <span class="num">11</span>,
-  <span class="key">label</span>     = <span class="str">"Warrior Stats"</span>,
-  <span class="key">intellect</span> = <span class="num">8</span>
-}
+  <p><strong>C2.</strong> The designer mixed up two different objects' properties. What went wrong?</p>
+  <pre><span class="kw">function</span> <span class="fn">OnEncounter</span>(<span class="ext">player</span>, <span class="ext">enemy</span>)
+  <span class="kw">local</span> <span class="var">playerHP</span> = <span class="ext">enemy</span>.<span class="prop">health</span>
+  <span class="kw">local</span> <span class="var">enemyHP</span>  = <span class="ext">player</span>.<span class="prop">health</span>
 
-<span class="kw">local</span> total = <span class="num">0</span>
-<span class="kw">for</span> _, v <span class="kw">in</span> <span class="fn">pairs</span>(stats) <span class="kw">do</span>
-  total = total + v
+  <span class="kw">if</span> <span class="var">playerHP</span> > <span class="var">enemyHP</span> <span class="kw">then</span>
+    <span class="cmt">-- "Player has more health"</span>
+  <span class="kw">end</span>
 <span class="kw">end</span></pre>
-  <input type="text" class="answer-line" placeholder="Which key causes the error?">
-  <input type="text" class="answer-line" placeholder="Why does it error?">
-  <textarea class="answer-area" rows="7" placeholder="Write a fixed version that skips non-number values..."></textarea>
+  <input type="text" class="answer-line" placeholder="What went wrong?">
+  <textarea class="answer-area" rows="5" placeholder="Write the fixed version..."></textarea>
 </div>
 
-<!-- SECTION D: NESTED TABLE READ -->
+<!-- SECTION D: WRITE YOUR OWN -->
 <div class="section-header">
   <div class="section-num">D</div>
-  <h2>Nested Table Access</h2>
-  <span class="section-type">Chained access</span>
-</div>
-
-<div class="exercise">
-  <p>Given this nested structure, write the value each expression produces.</p>
-  <pre><span class="kw">local</span> quest = {
-  <span class="key">title</span>       = <span class="str">"The Sunken Keep"</span>,
-  <span class="key">isActive</span>    = <span class="kw">true</span>,
-  <span class="key">objectives</span>  = { <span class="str">"Find the key"</span>, <span class="str">"Defeat the warden"</span>, <span class="str">"Escape"</span> },
-  <span class="key">reward</span>      = { <span class="key">gold</span> = <span class="num">500</span>, <span class="key">xp</span> = <span class="num">1200</span> }
-}</pre>
-
-  <input type="text" class="answer-line" placeholder="quest.title =">
-  <input type="text" class="answer-line" placeholder="quest.objectives[2] =">
-  <input type="text" class="answer-line" placeholder="#quest.objectives =">
-  <input type="text" class="answer-line" placeholder="quest.reward.xp =">
-  <input type="text" class="answer-line" placeholder="quest.reward.gold + quest.reward.xp =">
-</div>
-
-<!-- SECTION E: WRITE YOUR OWN -->
-<div class="section-header">
-  <div class="section-num">E</div>
   <h2>Write Your Own</h2>
-  <span class="section-type">Full Course Integration</span>
+  <span class="section-type">Application — Full Course Integration</span>
 </div>
 
 <div class="exercise">
-  <p><strong>E1.</strong> Define a dictionary table called <code>spellData</code> for a spell called <code>"Frostbolt"</code>. It should have at least: a name, a mana cost (number), a damage value (number), a boolean for whether it slows the target, and a cooldown in seconds (number). Then write two lines: one that increases the damage by 20%, and one that sets the cooldown to nil (the spell is now passive).</p>
-  <textarea class="answer-area" rows="12" placeholder="Write your table and the two update lines..."></textarea>
+  <p><strong>D1.</strong> Write a function called <code>OnZoneEnter</code> that receives a <code>player</code> and a <code>zone</code> object. Using the schemas above, check whether the player meets the zone's minimum level. If yes, return <code>true</code> and a welcome message (include the zone name). If not, return <code>false</code> and a message telling the player how many levels they still need.</p>
+  <textarea class="answer-area" rows="14" placeholder="Write your function..."></textarea>
 </div>
 
 <div class="exercise">
-  <p><strong>E2.</strong> Write a function called <code>SummarizeItem</code> that receives a dictionary table called <code>item</code> with the properties <code>name</code> (string), <code>damage</code> (number), and <code>isMagic</code> (boolean). Return a string in this format:</p>
-  <p><strong><code>"[Magic] Thornblade — 75 dmg"</code></strong> if magic, or <strong><code>"Thornblade — 75 dmg"</code></strong> if not.</p>
-  <textarea class="answer-area" rows="10" placeholder="Write your function..."></textarea>
-</div>
-
-<div class="exercise">
-  <p><strong>E3.</strong> Write a function called <code>ApplyStatBuffs</code> that receives a <code>character</code> dictionary table and a <code>buffs</code> dictionary table. For every key in <code>buffs</code>, add its value to the matching key in <code>character</code>. For example, if <code>buffs = { strength = 5, agility = 3 }</code>, then <code>character.strength</code> should increase by 5 and <code>character.agility</code> by 3. Return the modified character table.</p>
-  <textarea class="answer-area" rows="12" placeholder="Write your function..."></textarea>
-</div>
-
-<!-- SECTION F: TABLE MANIPULATION FUNCTIONS -->
-<div class="section-header">
-  <div class="section-num">F</div>
-  <h2>Table Manipulation Functions</h2>
-  <span class="section-type">self / colon syntax / dynamic keys</span>
-</div>
-
-<div class="exercise">
-  <p><strong>F1.</strong> These two calls do the same thing. Rewrite the first as the second, filling in the blank to make them equivalent:</p>
-  <pre>-- Call A (colon syntax)
-RELICS_LABYRINTH:Register(thisUnit)
-
--- Call B (explicit, no colon)
-RELICS_LABYRINTH.Register( _______________, thisUnit )</pre>
-  <div class="q-label">Fill in the blank:</div>
-  <input type="text" class="answer-line" placeholder="RELICS_LABYRINTH.Register( ___ , thisUnit )">
-  <div class="q-label" style="margin-top:12px;">In your own words, what is "self" inside the Register function?</div>
-  <input type="text" class="answer-line" placeholder="self is ...">
-</div>
-
-<div class="exercise">
-  <p><strong>F2.</strong> A designer wrote this Edit function, but the property update line is wrong. Explain why, and write the correct version.</p>
-  <pre>Edit = function(self, relicName, propKey, newValue)
-  for _, relic in ipairs(self.relics) do
-    if relic.relicName == relicName then
-      relic.propKey = newValue    -- is this correct?
-      return
-    end
-  end
-end,</pre>
-  <div class="q-label">What's wrong with <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">relic.propKey = newValue</code>?</div>
-  <input type="text" class="answer-line" placeholder="Problem:">
-  <input type="text" class="answer-line" placeholder="Correct line:">
-</div>
-
-<div class="exercise">
-  <p><strong>F3.</strong> This Remove function has a subtle bug that will cause it to sometimes skip entries or behave unpredictably. Spot it and explain why it happens.</p>
-  <pre>Remove = function(self, relicName)
-  for i, relic in ipairs(self.relics) do
-    if relic.relicName == relicName then
-      table.remove(self.relics, i)
-    end
-  end
-end,</pre>
-  <div class="q-label">What's the bug?</div>
-  <input type="text" class="answer-line" placeholder="Problem:">
-  <input type="text" class="answer-line" placeholder="Fix:">
-</div>
-
-<div class="exercise">
-  <p><strong>F4.</strong> Build a self-managing table called <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">ACTIVE_BUFFS</code> that tracks buffs on a player. It should have:</p>
-  <ul style="font-size:.9rem;color:var(--text-dim);margin:10px 0 14px 20px;line-height:2.2;">
-    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffs</code> array to hold entries</li>
-    <li>An <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Add</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> (string) and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code> (number) and inserts a record</li>
-    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Remove</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> and removes the matching entry</li>
-  </ul>
-  <p>Each buff record should store <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">name</code> and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code>. Don't forget your commas.</p>
-  <textarea class="answer-area" rows="20" placeholder="Write your table..."></textarea>
+  <p><strong>D2.</strong> Write a function called <code>OnWaveComplete</code> that receives a <code>zone</code> object. Loop from 1 to <code>zone.spawnCount</code> and accumulate a total XP value, awarding 50 XP per enemy. If the zone is hostile (<code>zone.isHostile</code>), double the XP for every even-numbered enemy (i % 2 == 0). Return the total.</p>
+  <textarea class="answer-area" rows="16" placeholder="Write your function..."></textarea>
 </div>
 
 <!-- ANSWER KEY -->
 <div class="answer-key">
-  <div class="ak-header">✓ Answer Key — Session 8</div>
+  <div class="ak-header">✓ Answer Key — Session 6</div>
 
   <div class="ak-item">
     <div class="ak-q">A — Property Reads</div>
-    <div class="ak-answer">a = "Dragonscale Vest" | b = 170 | c = true | d = nil | e = nil</div>
-    <div class="ak-explain"><strong>b:</strong> <code>85 * 2 = 170</code> — arithmetic works directly on a read property. <strong>d:</strong> <code>setBonus</code> exists as a key but its value is <code>nil</code>. <strong>e:</strong> <code>rarity</code> doesn't exist at all — also returns <code>nil</code>. Both behave identically when read.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">B — Mutation Trace</div>
-    <div class="ak-answer">name = nil | health = 180 | isAlive = true | isStunned = true | stunTimer = 3</div>
+    <div class="ak-answer">pName = "Lyria" | pLevel = 22 | pHealthPct = 40 | pGuild = nil</div>
     <div class="ak-explain">
-      <strong>health:</strong> <code>300 - 120 = 180</code>.<br>
-      <strong>isAlive:</strong> <code>180 > 0</code> is <code>true</code> — the comparison result is stored directly.<br>
-      <strong>isStunned / stunTimer:</strong> These are new keys created by assignment — they didn't exist in the original table.<br>
-      <strong>name:</strong> Set to <code>nil</code>, so the key is effectively removed.
+      <strong>pHealthPct:</strong> <code>80 / 200 * 100 = 40</code>. The calculation chains directly on the property reads — no need to store them in separate variables first. <strong>pGuild:</strong> The schema says guildName may be nil; with our test data it is nil. Your code shouldn't crash from reading nil, but it will crash if you try to concatenate it into a string without checking first.
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">C1 — Key Case Mismatch</div>
-    <div class="ak-answer">Problem: the key is "Name" (capital N) but the read uses "name" (lowercase). Lua keys are case-sensitive.</div>
-    <div class="ak-explain">Fixed read: <code>local n = enemy.Name</code>. Better practice: standardize all your keys to camelCase (<code>name</code>, <code>health</code>) and be consistent.</div>
+    <div class="ak-q">B — Enemy Defeated Trace</div>
+    <div class="ak-answer">name = "Vaultkeeper" | xp = 400 | isBoss = true | bonusXP = 800 | logMessage = "Boss defeated: Vaultkeeper"</div>
+    <div class="ak-explain">Because <code>isBoss</code> is true, the first branch runs. <code>bonusXP = 400 * 2 = 800</code>. The log message is built by concatenating the literal string with the name variable. The <code>else</code> branch never runs.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">C2 — String in Numeric Loop</div>
-    <div class="ak-answer">The "label" key holds a string. Adding a string to a number with + causes an error.</div>
+    <div class="ak-q">C1 — Nil Concatenation</div>
+    <div class="ak-answer">Problem: if player.guildName is nil, concatenating it with ".." crashes.</div>
     <div class="ak-explain">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local total = 0
-for _, v in pairs(stats) do
-  if type(v) == "number" then
-    total = total + v
-  end
-end</pre>
-      The built-in <code>type()</code> function returns the type of a value as a string. Using it as a guard lets the loop safely skip non-numeric values.
-    </div>
-  </div>
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnGuildCheck(player)
+  local guildName = player.guildName
+  local display
 
-  <div class="ak-item">
-    <div class="ak-q">D — Nested Access</div>
-    <div class="ak-answer">title = "The Sunken Keep" | objectives[2] = "Defeat the warden" | #objectives = 3 | reward.xp = 1200 | gold + xp = 1700</div>
-    <div class="ak-explain">Chain notation drills into nested tables one level at a time. <code>quest.reward.gold</code> means: get the <code>quest</code> table, get its <code>reward</code> key (another table), then get <em>that</em> table's <code>gold</code> key.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">E1 — Sample Answer</div>
-    <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local spellData = {
-  name      = "Frostbolt",
-  manaCost  = 40,
-  damage    = 60,
-  slows     = true,
-  cooldown  = 8
-}
-
-spellData.damage   = spellData.damage * 1.2
-spellData.cooldown = nil</pre>
-    </div>
-    <div class="ak-explain">After the damage update: <code>60 * 1.2 = 72</code>. Setting <code>cooldown</code> to nil removes the key entirely — reading <code>spellData.cooldown</code> afterwards returns nil.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">E2 — Sample Answer</div>
-    <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function SummarizeItem(item)
-  local base = item.name .. " — " .. item.damage .. " dmg"
-  if item.isMagic then
-    return "[Magic] " .. base
+  if guildName == nil then
+    display = "No guild"
   else
-    return base
+    display = "Guild: " .. guildName
   end
 end</pre>
+      Always check for nil before using an optional property in string operations or arithmetic.
     </div>
-    <div class="ak-explain">Building <code>base</code> first and then conditionally prepending the tag keeps the two branches clean and avoids duplicating the damage string logic.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">E3 — Sample Answer</div>
-    <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function ApplyStatBuffs(character, buffs)
-  for statName, buffValue in pairs(buffs) do
-    if character[statName] ~= nil then
-      character[statName] = character[statName] + buffValue
-    end
-  end
-  return character
-end</pre>
-    </div>
+    <div class="ak-q">C2 — Swapped Objects</div>
+    <div class="ak-answer">playerHP reads from enemy.health, and enemyHP reads from player.health — they're backwards.</div>
     <div class="ak-explain">
-      Using <code>pairs</code> on the buffs table visits each buff key. Bracket notation — <code>character[statName]</code> — is required here because <code>statName</code> is a variable, not a literal key name. The nil check ensures we only buff stats that already exist on the character rather than creating new unexpected keys.
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnEncounter(player, enemy)
+  local playerHP = player.health   -- correct
+  local enemyHP  = enemy.health    -- correct
+  if playerHP > enemyHP then
+    -- "Player has more health"
+  end
+end</pre>
+      This is a very easy mistake to make with multiple objects. The fix is to always read carefully: <em>which object</em> does this property belong to?
     </div>
   </div>
-  <div class="ak-item">
-    <div class="ak-q">F1 — The colon syntax / self</div>
-    <div class="ak-answer">RELICS_LABYRINTH.Register( RELICS_LABYRINTH, thisUnit )</div>
-    <div class="ak-explain">The colon is shorthand that automatically passes the table itself as the first argument. So <code>self</code> inside <code>Register</code> is the <code>RELICS_LABYRINTH</code> table — not the unit, and not some special keyword. It's just a regular parameter that Lua fills in silently. That's how <code>self.relics</code> inside the function reaches back into the table's own data.</div>
-  </div>
 
   <div class="ak-item">
-    <div class="ak-q">F2 — Dot vs. bracket notation</div>
-    <div class="ak-answer">Correct line: relic[propKey] = newValue</div>
-    <div class="ak-explain"><code>relic.propKey</code> tells Lua to look for a key literally named <code>"propKey"</code> on the relic — which almost certainly doesn't exist. What we want is to use the <em>value</em> of the variable <code>propKey</code> as the key name. Bracket notation does exactly that: <code>relic[propKey]</code> reads the variable, gets its string value (e.g. <code>"altarPoint"</code>), and uses that as the key. This is the core reason bracket notation exists.</div>
-  </div>
+    <div class="ak-q">D1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnZoneEnter(player, zone)
+  local pLevel   = player.level
+  local zMinLvl  = zone.minimumLevel
+  local zName    = zone.name
 
-  <div class="ak-item">
-    <div class="ak-q">F3 — Missing return after remove</div>
-    <div class="ak-answer">Problem: after table.remove shifts all entries left, the loop continues with a stale index and may skip the entry that shifted into position i, or run off the end of the table.</div>
-    <div class="ak-explain">Fix: add <code>return</code> immediately after <code>table.remove</code>. Once you've found and removed the target, there's no reason to keep looping — and continuing is actively dangerous because the table's contents have just shifted.
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">if relic.relicName == relicName then
-  table.remove(self.relics, i)
-  return   -- stop immediately
+  if pLevel >= zMinLvl then
+    return true, "Welcome to " .. zName
+  else
+    local needed = zMinLvl - pLevel
+    return false, "Need " .. needed .. " more levels to enter " .. zName
+  end
 end</pre>
     </div>
+    <div class="ak-explain">Reading properties into local variables first keeps the logic clean. The function returns two values — a boolean and a string — so the caller can act on both.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">F4 — Sample Answer</div>
+    <div class="ak-q">D2 — Sample Answer</div>
     <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">ACTIVE_BUFFS = {
-  buffs = {},
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnWaveComplete(zone)
+  local count      = zone.spawnCount
+  local isHostile  = zone.isHostile
+  local baseXP     = 50
+  local totalXP    = 0
 
-  Add = function(self, buffName, duration)
-    local entry = {
-      name     = buffName,
-      duration = duration
-    }
-    table.insert(self.buffs, entry)
-  end,
-
-  Remove = function(self, buffName)
-    for i, buff in ipairs(self.buffs) do
-      if buff.name == buffName then
-        table.remove(self.buffs, i)
-        return
-      end
+  for i = 1, count do
+    if isHostile and (i % 2 == 0) then
+      totalXP = totalXP + (baseXP * 2)
+    else
+      totalXP = totalXP + baseXP
     end
-  end,
-}</pre>
+  end
+
+  return totalXP
+end</pre>
     </div>
-    <div class="ak-explain">Things to check in your answer: comma after the <code>Add</code> function's closing <code>end</code>; <code>return</code> after the remove to stop looping; colon syntax used when calling (<code>ACTIVE_BUFFS:Add("Haste", 10)</code>). The <code>Remove</code> function silently does nothing if the buff name isn't found — that's fine and intentional.</div>
+    <div class="ak-explain">This example combines every major concept from the course: external data reads, a for loop, a conditional inside the loop, arithmetic, and a return value. If <code>spawnCount = 6</code> and <code>isHostile = true</code>: enemies 1,3,5 give 50 XP each (150 total), enemies 2,4,6 give 100 XP each (300 total). Total = 450.</div>
   </div>
 
 </div>

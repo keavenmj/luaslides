@@ -3,272 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 6 Worksheet — Reading External Data</title>
+<title>Session 2 Worksheet — Operators &amp; Expressions</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#2a0a4a; --accent2:#7040bb; --accent3:#1a8060; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
-.ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
-.ws-label { font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
-h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
-.ws-meta { font-size:.85rem; color:var(--text-dim); }
-.section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
-.section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:700; flex-shrink:0; }
-h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
-.section-type { font-size:.75rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
-.exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
-.exercise p { font-size:.95rem; color:var(--text-dim); margin-bottom:12px; }
-.exercise p strong { color:var(--text); }
-pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
-.kw{color:#7040bb;font-weight:600} .str{color:#1a8060} .num{color:#b87300} .cmt{color:#999;font-style:italic} .fn{color:#8b30cc} .ext{color:#c06000;font-weight:700} .prop{color:#0055bb}
-.answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
-.answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
-.q-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
-.answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
-.ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:.9rem; }
-.ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
-.ak-q { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
-.ak-answer { font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
-.ak-explain { font-size:.88rem; color:var(--text-dim); line-height:1.6; }
-.ak-explain strong { color:var(--text); }
-code { font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
-.schema-box { background:var(--code-bg); border:1px solid var(--border); border-radius:6px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:2; margin:12px 0; }
-.schema-obj { color:var(--accent2); font-weight:700; }
-.schema-prop { color:#0055bb; padding-left:20px; display:block; }
-.schema-type { color:#999; }
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#2d2d3a; --accent2:#c73d8a; --accent3:#1a8f7a; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+  .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+  .ws-label { font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+  h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+  .ws-meta { font-size:0.85rem; color:var(--text-dim); }
+  .section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+  .section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; flex-shrink:0; }
+  h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .section-type { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+  .exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+  .exercise p { font-size:0.95rem; color:var(--text-dim); margin-bottom:12px; }
+  .exercise p strong { color:var(--text); }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
+  .kw { color:#5b4fcf; font-weight:500; } .str { color:#1a8f7a; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; } .op { color:#c73d8a; font-weight:700; }
+  .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:80px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+  .q-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+  .ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:0.9rem; }
+  .ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+  .ak-q { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .ak-answer { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  .ak-explain { font-size:0.88rem; color:var(--text-dim); line-height:1.6; }
+  .ak-explain strong { color:var(--text); }
+  code { font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
 </style>
 </head>
 <body>
 
 <div class="ws-header">
-  <div class="ws-label">Lua for Game Designers — Session 6 Worksheet</div>
-  <h1>Reading External Data Objects</h1>
-  <div class="ws-meta">Use the data schemas provided to answer each question. Treat them as your engine's documentation.</div>
+  <div class="ws-label">Lua for Game Designers — Session 2 Worksheet</div>
+  <h1>Operators &amp; Expressions</h1>
+  <div class="ws-meta">Trace through expressions manually. Do not run the code to verify.</div>
 </div>
 
-<!-- REFERENCE SCHEMAS -->
-<div style="background:#f5f0ea;border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:32px;">
-  <div style="font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;">Reference — Object Schemas</div>
-  <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:12px;">These are the properties available on each object type in this exercise set. Treat this like your engine's documentation.</p>
-  <div class="schema-box">
-    <span class="schema-obj">player</span>
-    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
-    <span class="schema-prop">level         <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">health        <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">maxHealth     <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">gold          <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">isInCombat    <span class="schema-type">-- boolean</span></span>
-    <span class="schema-prop">guildName     <span class="schema-type">-- string (may be nil if no guild)</span></span>
-    <br>
-    <span class="schema-obj">enemy</span>
-    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
-    <span class="schema-prop">health        <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">maxHealth     <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">level         <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">isBoss        <span class="schema-type">-- boolean</span></span>
-    <span class="schema-prop">xpReward      <span class="schema-type">-- number</span></span>
-    <br>
-    <span class="schema-obj">zone</span>
-    <span class="schema-prop">name          <span class="schema-type">-- string</span></span>
-    <span class="schema-prop">minimumLevel  <span class="schema-type">-- number</span></span>
-    <span class="schema-prop">isHostile     <span class="schema-type">-- boolean</span></span>
-    <span class="schema-prop">spawnCount    <span class="schema-type">-- number</span></span>
-  </div>
-</div>
-
-<!-- SECTION A: READ THE PROPERTIES -->
+<!-- SECTION A: EVALUATE THE EXPRESSION -->
 <div class="section-header">
   <div class="section-num">A</div>
-  <h2>Read the Properties</h2>
-  <span class="section-type">Recognition</span>
+  <h2>Evaluate the Expression</h2>
+  <span class="section-type">Arithmetic</span>
 </div>
 
 <div class="exercise">
-  <p>Given this function and the schemas above, write what each variable holds after the reads. Assume the following object state: <strong>player.name = "Lyria", player.level = 22, player.health = 80, player.maxHealth = 200, player.gold = 340, player.isInCombat = true, player.guildName = nil</strong></p>
-  <pre><span class="kw">function</span> <span class="fn">OnPlayerInspect</span>(<span class="ext">player</span>)
-  <span class="kw">local</span> <span class="var">pName</span>       = <span class="ext">player</span>.<span class="prop">name</span>
-  <span class="kw">local</span> <span class="var">pLevel</span>      = <span class="ext">player</span>.<span class="prop">level</span>
-  <span class="kw">local</span> <span class="var">pHealthPct</span>  = <span class="ext">player</span>.<span class="prop">health</span> / <span class="ext">player</span>.<span class="prop">maxHealth</span> * <span class="num">100</span>
-  <span class="kw">local</span> <span class="var">pGuild</span>      = <span class="ext">player</span>.<span class="prop">guildName</span>
-<span class="kw">end</span></pre>
-  <input type="text" class="answer-line" placeholder="pName =">
-  <input type="text" class="answer-line" placeholder="pLevel =">
-  <input type="text" class="answer-line" placeholder="pHealthPct =  (show your calculation)">
-  <input type="text" class="answer-line" placeholder="pGuild =">
+  <p>Calculate the final value for each expression. Show your working if it helps.</p>
+  <pre>A1.  10 + 3 * 4         = ___
+A2.  (10 + 3) * 4       = ___
+A3.  100 - 30 / 2       = ___
+A4.  17 % 5             = ___
+A5.  2 ^ 4 - 1          = ___</pre>
+  <div class="q-label">Your answers (write the result for each):</div>
+  <input type="text" class="answer-line" placeholder="A1 =">
+  <input type="text" class="answer-line" placeholder="A2 =">
+  <input type="text" class="answer-line" placeholder="A3 =">
+  <input type="text" class="answer-line" placeholder="A4 =">
+  <input type="text" class="answer-line" placeholder="A5 =">
 </div>
 
-<!-- SECTION B: TRACE THE LOGIC -->
+<!-- SECTION B: TRUE OR FALSE -->
 <div class="section-header">
   <div class="section-num">B</div>
-  <h2>Trace the Logic</h2>
-  <span class="section-type">Full trace</span>
+  <h2>True or False?</h2>
+  <span class="section-type">Comparisons</span>
 </div>
 
 <div class="exercise">
-  <p>Assume: <strong>enemy.name = "Vaultkeeper", enemy.level = 18, enemy.isBoss = true, enemy.xpReward = 400, enemy.health = 0</strong></p>
-  <p>Trace through the function and write the final values of all local variables.</p>
-  <pre><span class="kw">function</span> <span class="fn">OnEnemyDefeated</span>(<span class="ext">enemy</span>)
-  <span class="kw">local</span> <span class="var">name</span>       = <span class="ext">enemy</span>.<span class="prop">name</span>
-  <span class="kw">local</span> <span class="var">xp</span>         = <span class="ext">enemy</span>.<span class="prop">xpReward</span>
-  <span class="kw">local</span> <span class="var">isBoss</span>     = <span class="ext">enemy</span>.<span class="prop">isBoss</span>
-  <span class="kw">local</span> <span class="var">bonusXP</span>    = <span class="num">0</span>
-  <span class="kw">local</span> <span class="var">logMessage</span> = <span class="str">""</span>
-
-  <span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>
-    <span class="var">bonusXP</span>    = <span class="var">xp</span> * <span class="num">2</span>
-    <span class="var">logMessage</span> = <span class="str">"Boss defeated: "</span> .. <span class="var">name</span>
-  <span class="kw">else</span>
-    <span class="var">bonusXP</span>    = <span class="var">xp</span>
-    <span class="var">logMessage</span> = <span class="str">"Enemy defeated: "</span> .. <span class="var">name</span>
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <input type="text" class="answer-line" placeholder="name =">
-  <input type="text" class="answer-line" placeholder="xp =">
-  <input type="text" class="answer-line" placeholder="isBoss =">
-  <input type="text" class="answer-line" placeholder="bonusXP =  (show reasoning)">
-  <input type="text" class="answer-line" placeholder="logMessage =">
+  <p>Each expression below produces either <strong>true</strong> or <strong>false</strong>. Write your answer for each.</p>
+  <pre>B1.  10 == 10            = ___
+B2.  10 ~= 10            = ___
+B3.  5 > 3               = ___
+B4.  8 <= 8              = ___
+B5.  100 >= 101          = ___
+B6.  (3 + 2) == 6        = ___</pre>
+  <input type="text" class="answer-line" placeholder="B1 =">
+  <input type="text" class="answer-line" placeholder="B2 =">
+  <input type="text" class="answer-line" placeholder="B3 =">
+  <input type="text" class="answer-line" placeholder="B4 =">
+  <input type="text" class="answer-line" placeholder="B5 =">
+  <input type="text" class="answer-line" placeholder="B6 =">
 </div>
 
-<!-- SECTION C: SPOT THE BUG -->
+<!-- SECTION C: LOGIC EXPRESSIONS -->
 <div class="section-header">
   <div class="section-num">C</div>
-  <h2>Spot the Bug</h2>
-  <span class="section-type">Error Detection</span>
+  <h2>Logic Expressions</h2>
+  <span class="section-type">and / or / not</span>
 </div>
 
 <div class="exercise">
-  <p><strong>C1.</strong> This function is supposed to display a player's guild name. It will crash if the player has no guild. How do you fix it?</p>
-  <pre><span class="kw">function</span> <span class="fn">OnGuildCheck</span>(<span class="ext">player</span>)
-  <span class="kw">local</span> <span class="var">display</span> = <span class="str">"Guild: "</span> .. <span class="ext">player</span>.<span class="prop">guildName</span>
-<span class="kw">end</span></pre>
-  <div class="q-label">What's the risk and how do you fix it?</div>
-  <input type="text" class="answer-line" placeholder="Problem:">
-  <textarea class="answer-area" rows="6" placeholder="Write the fixed version..."></textarea>
+  <p>Given the variables below, evaluate each combined expression:</p>
+  <pre><span class="kw">local</span> level      = <span class="num">20</span>
+<span class="kw">local</span> hasKey     = <span class="kw">true</span>
+<span class="kw">local</span> isDefeated = <span class="kw">false</span>
+<span class="kw">local</span> gold        = <span class="num">150</span></pre>
+
+  <pre>C1.  level >= 10 and hasKey == true           = ___
+C2.  level >= 25 or gold >= 100               = ___
+C3.  not isDefeated                           = ___
+C4.  isDefeated or level < 5                  = ___
+C5.  level >= 20 and gold >= 200              = ___</pre>
+
+  <input type="text" class="answer-line" placeholder="C1 =">
+  <input type="text" class="answer-line" placeholder="C2 =">
+  <input type="text" class="answer-line" placeholder="C3 =">
+  <input type="text" class="answer-line" placeholder="C4 =">
+  <input type="text" class="answer-line" placeholder="C5 =">
 </div>
 
-<div class="exercise">
-  <p><strong>C2.</strong> The designer mixed up two different objects' properties. What went wrong?</p>
-  <pre><span class="kw">function</span> <span class="fn">OnEncounter</span>(<span class="ext">player</span>, <span class="ext">enemy</span>)
-  <span class="kw">local</span> <span class="var">playerHP</span> = <span class="ext">enemy</span>.<span class="prop">health</span>
-  <span class="kw">local</span> <span class="var">enemyHP</span>  = <span class="ext">player</span>.<span class="prop">health</span>
-
-  <span class="kw">if</span> <span class="var">playerHP</span> > <span class="var">enemyHP</span> <span class="kw">then</span>
-    <span class="cmt">-- "Player has more health"</span>
-  <span class="kw">end</span>
-<span class="kw">end</span></pre>
-  <input type="text" class="answer-line" placeholder="What went wrong?">
-  <textarea class="answer-area" rows="5" placeholder="Write the fixed version..."></textarea>
-</div>
-
-<!-- SECTION D: WRITE YOUR OWN -->
+<!-- SECTION D: STRING CONCAT -->
 <div class="section-header">
   <div class="section-num">D</div>
+  <h2>String Concatenation</h2>
+  <span class="section-type">Predict the Output</span>
+</div>
+
+<div class="exercise">
+  <p>What string value does each variable end up holding?</p>
+  <pre><span class="kw">local</span> hero  = <span class="str">"Dawnseeker"</span>
+<span class="kw">local</span> level = <span class="num">12</span>
+<span class="kw">local</span> zone  = <span class="str">"Ashfield"</span>
+
+D1.  local a = hero .. " enters " .. zone
+D2.  local b = "Level " .. level
+D3.  local c = hero .. " [Lv." .. level .. "]"</pre>
+
+  <input type="text" class="answer-line" placeholder="a =">
+  <input type="text" class="answer-line" placeholder="b =">
+  <input type="text" class="answer-line" placeholder="c =">
+</div>
+
+<!-- SECTION E: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">E</div>
   <h2>Write Your Own</h2>
-  <span class="section-type">Application — Full Course Integration</span>
+  <span class="section-type">Application</span>
 </div>
 
 <div class="exercise">
-  <p><strong>D1.</strong> Write a function called <code>OnZoneEnter</code> that receives a <code>player</code> and a <code>zone</code> object. Using the schemas above, check whether the player meets the zone's minimum level. If yes, return <code>true</code> and a welcome message (include the zone name). If not, return <code>false</code> and a message telling the player how many levels they still need.</p>
-  <textarea class="answer-area" rows="14" placeholder="Write your function..."></textarea>
+  <p><strong>E1.</strong> Write an expression that evaluates to <code>true</code> only when a player's health is below 25 AND they are not already in a "low health" state (represented by a boolean variable <code>isLowHealthWarningActive</code>).</p>
+  <textarea class="answer-area" rows="4" placeholder="Write your expression..."></textarea>
 </div>
 
 <div class="exercise">
-  <p><strong>D2.</strong> Write a function called <code>OnWaveComplete</code> that receives a <code>zone</code> object. Loop from 1 to <code>zone.spawnCount</code> and accumulate a total XP value, awarding 50 XP per enemy. If the zone is hostile (<code>zone.isHostile</code>), double the XP for every even-numbered enemy (i % 2 == 0). Return the total.</p>
-  <textarea class="answer-area" rows="16" placeholder="Write your function..."></textarea>
+  <p><strong>E2.</strong> A player has 80 base damage. Write the calculation for their damage after applying a 30% damage buff, then reducing it by a flat 15 armor value. Store the result in a variable called <code>finalDamage</code>.</p>
+  <textarea class="answer-area" rows="5" placeholder="Write your calculation..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E3.</strong> Build a display string that produces: <code>"Grimtusk — Boss (Level 40)"</code> using three separate variables for the name, type label, and level.</p>
+  <textarea class="answer-area" rows="5" placeholder="Declare your variables and write the concatenation..."></textarea>
 </div>
 
 <!-- ANSWER KEY -->
 <div class="answer-key">
-  <div class="ak-header">✓ Answer Key — Session 6</div>
+  <div class="ak-header">✓ Answer Key — Session 2</div>
 
   <div class="ak-item">
-    <div class="ak-q">A — Property Reads</div>
-    <div class="ak-answer">pName = "Lyria" | pLevel = 22 | pHealthPct = 40 | pGuild = nil</div>
+    <div class="ak-q">Section A — Arithmetic</div>
+    <div class="ak-answer">A1: 22 &nbsp;|&nbsp; A2: 52 &nbsp;|&nbsp; A3: 85 &nbsp;|&nbsp; A4: 2 &nbsp;|&nbsp; A5: 15</div>
     <div class="ak-explain">
-      <strong>pHealthPct:</strong> <code>80 / 200 * 100 = 40</code>. The calculation chains directly on the property reads — no need to store them in separate variables first. <strong>pGuild:</strong> The schema says guildName may be nil; with our test data it is nil. Your code shouldn't crash from reading nil, but it will crash if you try to concatenate it into a string without checking first.
+      <strong>A1:</strong> Multiplication runs before addition — <code>3 * 4 = 12</code>, then <code>10 + 12 = 22</code>. &nbsp;
+      <strong>A2:</strong> Parentheses first — <code>10 + 3 = 13</code>, then <code>13 * 4 = 52</code>. &nbsp;
+      <strong>A3:</strong> Division first — <code>30 / 2 = 15</code>, then <code>100 - 15 = 85</code>. &nbsp;
+      <strong>A4:</strong> <code>17 % 5</code> — 5 goes into 17 three times (15), remainder is <strong>2</strong>. &nbsp;
+      <strong>A5:</strong> <code>2^4 = 16</code>, then <code>16 - 1 = 15</code>.
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">B — Enemy Defeated Trace</div>
-    <div class="ak-answer">name = "Vaultkeeper" | xp = 400 | isBoss = true | bonusXP = 800 | logMessage = "Boss defeated: Vaultkeeper"</div>
-    <div class="ak-explain">Because <code>isBoss</code> is true, the first branch runs. <code>bonusXP = 400 * 2 = 800</code>. The log message is built by concatenating the literal string with the name variable. The <code>else</code> branch never runs.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">C1 — Nil Concatenation</div>
-    <div class="ak-answer">Problem: if player.guildName is nil, concatenating it with ".." crashes.</div>
+    <div class="ak-q">Section B — Comparisons</div>
+    <div class="ak-answer">B1: true &nbsp;|&nbsp; B2: false &nbsp;|&nbsp; B3: true &nbsp;|&nbsp; B4: true &nbsp;|&nbsp; B5: false &nbsp;|&nbsp; B6: false</div>
     <div class="ak-explain">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnGuildCheck(player)
-  local guildName = player.guildName
-  local display
-
-  if guildName == nil then
-    display = "No guild"
-  else
-    display = "Guild: " .. guildName
-  end
-end</pre>
-      Always check for nil before using an optional property in string operations or arithmetic.
+      <strong>B6</strong> is the common gotcha: <code>3 + 2 = 5</code>, and <code>5 == 6</code> is <strong>false</strong>. Watch out for <code>~=</code> — it's Lua's "not equal to," not <code>!=</code> like other languages.
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">C2 — Swapped Objects</div>
-    <div class="ak-answer">playerHP reads from enemy.health, and enemyHP reads from player.health — they're backwards.</div>
+    <div class="ak-q">Section C — Logic</div>
+    <div class="ak-answer">C1: true &nbsp;|&nbsp; C2: true &nbsp;|&nbsp; C3: true &nbsp;|&nbsp; C4: false &nbsp;|&nbsp; C5: false</div>
     <div class="ak-explain">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnEncounter(player, enemy)
-  local playerHP = player.health   -- correct
-  local enemyHP  = enemy.health    -- correct
-  if playerHP > enemyHP then
-    -- "Player has more health"
-  end
-end</pre>
-      This is a very easy mistake to make with multiple objects. The fix is to always read carefully: <em>which object</em> does this property belong to?
+      <strong>C2:</strong> <code>level >= 25</code> is false, but <code>gold >= 100</code> is true — and <code>or</code> only needs one side true. &nbsp;
+      <strong>C3:</strong> <code>not false</code> = <strong>true</strong>. &nbsp;
+      <strong>C4:</strong> <code>isDefeated</code> is false and <code>level &lt; 5</code> is false — both false, so the whole <code>or</code> is false. &nbsp;
+      <strong>C5:</strong> <code>gold >= 200</code> fails (gold is 150), so the <code>and</code> is false.
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">D1 — Sample Answer</div>
+    <div class="ak-q">Section D — Concatenation</div>
+    <div class="ak-answer">a: "Dawnseeker enters Ashfield" &nbsp;|&nbsp; b: "Level 12" &nbsp;|&nbsp; c: "Dawnseeker [Lv.12]"</div>
+    <div class="ak-explain">Notice that Lua automatically converts numbers to strings when you use <code>..</code> with them. The <code>..</code> operator does not add spaces — you have to include any spaces explicitly in your string literals.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section E1 — Sample Answer</div>
     <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnZoneEnter(player, zone)
-  local pLevel   = player.level
-  local zMinLvl  = zone.minimumLevel
-  local zName    = zone.name
-
-  if pLevel >= zMinLvl then
-    return true, "Welcome to " .. zName
-  else
-    local needed = zMinLvl - pLevel
-    return false, "Need " .. needed .. " more levels to enter " .. zName
-  end
-end</pre>
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local health = 20
+local isLowHealthWarningActive = false
+local shouldWarn = (health < 25) and (not isLowHealthWarningActive)</pre>
     </div>
-    <div class="ak-explain">Reading properties into local variables first keeps the logic clean. The function returns two values — a boolean and a string — so the caller can act on both.</div>
+    <div class="ak-explain">Using <code>not isLowHealthWarningActive</code> avoids triggering the warning if it's already showing. Both conditions must be true for <code>shouldWarn</code> to be true.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">D2 — Sample Answer</div>
+    <div class="ak-q">Section E2 — Sample Answer</div>
     <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function OnWaveComplete(zone)
-  local count      = zone.spawnCount
-  local isHostile  = zone.isHostile
-  local baseXP     = 50
-  local totalXP    = 0
-
-  for i = 1, count do
-    if isHostile and (i % 2 == 0) then
-      totalXP = totalXP + (baseXP * 2)
-    else
-      totalXP = totalXP + baseXP
-    end
-  end
-
-  return totalXP
-end</pre>
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local baseDamage = 80
+local buffed = baseDamage * 1.30     -- 104
+local finalDamage = buffed - 15      -- 89</pre>
     </div>
-    <div class="ak-explain">This example combines every major concept from the course: external data reads, a for loop, a conditional inside the loop, arithmetic, and a return value. If <code>spawnCount = 6</code> and <code>isHostile = true</code>: enemies 1,3,5 give 50 XP each (150 total), enemies 2,4,6 give 100 XP each (300 total). Total = 450.</div>
+    <div class="ak-explain">A 30% buff means multiplying by 1.30 (the original 100% plus the 30% bonus). Breaking into two lines makes each step easy to read and debug.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section E3 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local name  = "Grimtusk"
+local label = "Boss"
+local level = 40
+local display = name .. " — " .. label .. " (Level " .. level .. ")"</pre>
+    </div>
+    <div class="ak-explain">Notice the spacing: the em dash and spaces around it are literal characters inside the string. Every character in the final output must appear somewhere in the expression.</div>
   </div>
 
 </div>

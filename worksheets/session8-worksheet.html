@@ -1,228 +1,390 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lua for Game Designers — Session 2: Operators &amp; Expressions</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 8 Worksheet — Dictionary Tables</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#0f0f14;--surface:#17171f;--surface2:#1e1e2a;--border:#2a2a38;--accent:#ff7eb3;--accent2:#7b6cff;--accent3:#4ecdc4;--text:#e8e8f0;--text-dim:#888899;--code-bg:#12121a;--panel-w:220px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
-#layout{display:flex;flex:1;overflow:hidden;margin-top:3px;}
-#slide-panel{width:var(--panel-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-#panel-header{padding:18px 16px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
-#panel-session{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
-#panel-title{font-size:.78rem;font-weight:700;color:var(--text);line-height:1.3;}
-#slide-list{flex:1;overflow-y:auto;padding:8px 0;}
-#slide-list::-webkit-scrollbar{width:4px;}#slide-list::-webkit-scrollbar-track{background:transparent;}#slide-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-.panel-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;cursor:pointer;border-left:2px solid transparent;transition:background .15s,border-color .15s;}
-.panel-item:hover{background:var(--surface2);}.panel-item.active{background:var(--surface2);border-left-color:var(--accent);}
-.panel-item-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);margin-top:2px;flex-shrink:0;width:16px;}
-.panel-item.active .panel-item-num{color:var(--accent);}.panel-item-text{flex:1;}
-.panel-item-label{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px;line-height:1.2;}
-.panel-item.active .panel-item-label{color:var(--accent);}
-.panel-item-subtitle{font-size:.74rem;font-weight:600;color:var(--text-dim);line-height:1.35;}
-.panel-item.active .panel-item-subtitle{color:var(--text);}
-#panel-footer{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
-.nav-btn{flex:1;background:none;border:1px solid var(--border);color:var(--text);font-family:'Syne',sans-serif;font-size:.78rem;font-weight:600;padding:8px 0;border-radius:4px;cursor:pointer;transition:all .2s;text-align:center;}
-.nav-btn:hover{background:var(--accent);color:var(--bg);border-color:var(--accent);}
-.nav-btn:disabled{opacity:.2;cursor:not-allowed;}
-.nav-btn:disabled:hover{background:none;color:var(--text);border-color:var(--border);}
-#deck{flex:1;position:relative;overflow:hidden;}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;padding:52px 60px;opacity:0;transform:translateX(40px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;overflow-y:auto;}
-.slide.active{opacity:1;transform:translateX(0);pointer-events:all;}
-.slide.exit{opacity:0;transform:translateX(-40px);}
-.slide-title{text-align:center;align-items:center;justify-content:center;}
-.slide-content{max-width:820px;width:100%;margin:0 auto;}
-.session-label{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;}
-h1{font-size:clamp(2.2rem,4vw,3.6rem);font-weight:800;line-height:1.1;margin-bottom:20px;}
-h2{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:22px;color:var(--text);}
-h3{font-size:.95rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
-p{font-size:1.05rem;line-height:1.7;color:var(--text-dim);margin-bottom:14px;}
-p strong{color:var(--text);font-weight:600;}
-.subtitle{font-size:1.15rem;color:var(--text-dim);max-width:520px;line-height:1.6;}
-pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:.86rem;line-height:1.7;overflow-x:auto;margin:14px 0;}
-.kw{color:#7b6cff;}.str{color:#4ecdc4;}.num{color:#e8c547;}.cmt{color:#555566;font-style:italic;}.fn{color:#ff7eb3;}.var{color:#e8e8f0;}.op{color:#ff7eb3;}
-.callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
-.callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
-.callout p{margin:0;font-size:.97rem;}
-ul.styled{list-style:none;margin-top:8px;}
-ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
-ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
-.big-number{font-size:7rem;font-weight:800;color:var(--surface2);position:absolute;right:50px;bottom:50px;line-height:1;user-select:none;}
-.accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
-.ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
-.recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
-.recap-box strong{color:var(--accent);}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
-th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
-td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
-td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
-</style></head><body>
-<div id="progress-bar"></div>
-<div id="layout">
-<nav id="slide-panel">
-  <div id="panel-header"><div id="panel-session">Session 2 of 8</div><div id="panel-title">Operators &amp;<br>Expressions</div></div>
-  <div id="slide-list"></div>
-  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button></div>
-</nav>
-<div id="deck">
+:root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#200a40; --accent2:#7030b0; --accent3:#1a7a50; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+.ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+.ws-label { font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+.ws-meta { font-size:.85rem; color:var(--text-dim); }
+.section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+.section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:700; flex-shrink:0; }
+h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.section-type { font-size:.75rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+.exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+.exercise p { font-size:.95rem; color:var(--text-dim); margin-bottom:12px; }
+.exercise p strong { color:var(--text); }
+pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:1.75; margin:12px 0; overflow-x:auto; }
+.kw{color:#7030b0;font-weight:600} .str{color:#1a7a50} .num{color:#b87300} .cmt{color:#999;font-style:italic} .fn{color:#c03090} .key{color:#c06000} .prop{color:#0055bb}
+.answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+.answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+.q-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+.answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+.ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:.9rem; }
+.ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+.ak-q { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+.ak-answer { font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+.ak-explain { font-size:.88rem; color:var(--text-dim); line-height:1.6; }
+.ak-explain strong { color:var(--text); }
+code { font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+</style>
+</head>
+<body>
 
-<div class="slide slide-title active" data-index="0" data-label="Intro" data-subtitle="Operators &amp; Expressions">
-  <div class="session-label">Session 2 of 8</div>
-  <h1>Operators &amp;<br>Expressions</h1>
-  <p class="subtitle">Teaching your scripts how to calculate, compare, and combine values.</p>
-  <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
-    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">⏱</span> ~45 minutes</span>
-    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">📄</span> Worksheet included</span>
-  </div>
-  <div class="big-number">02</div>
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 8 Worksheet</div>
+  <h1>Dictionary Tables</h1>
+  <div class="ws-meta">Trace key reads and writes carefully. Remember: dot notation and bracket notation access the same data.</div>
 </div>
 
-<div class="slide slide-content" data-index="1" data-label="Recap" data-subtitle="Session 1 review">
-  <h3>Quick Recap — Session 1</h3><h2>Before we move on</h2>
-  <div class="recap-box"><strong>From last session:</strong> Variables are named containers. They hold a value of a specific type — number, string, boolean, or nil. Always use <code style="font-family:'JetBrains Mono'">local</code>, and name variables descriptively using camelCase.</div>
-  <h3 style="margin-top:8px;">This Session</h3>
-  <ul class="styled">
-    <li><strong>Arithmetic operators</strong> — do math with numbers</li>
-    <li><strong>Comparison operators</strong> — ask yes/no questions about values</li>
-    <li><strong>Logical operators</strong> — combine multiple conditions</li>
-    <li><strong>String concatenation</strong> — join text together</li>
-    <li><strong>Operator precedence</strong> — understanding what runs first</li>
-  </ul>
-  <div class="big-number">02</div>
+<!-- SECTION A: READ THE PROPERTIES -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Read the Properties</h2>
+  <span class="section-type">Recognition</span>
 </div>
 
-<div class="slide slide-content" data-index="2" data-label="Arithmetic" data-subtitle="Math operators">
-  <h3>Math in Lua</h3><h2>Arithmetic operators</h2>
-  <table>
-    <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
-    <tr><td>+</td><td>Addition</td><td>100 + 50</td><td>150</td></tr>
-    <tr><td>-</td><td>Subtraction</td><td>200 - 75</td><td>125</td></tr>
-    <tr><td>*</td><td>Multiplication</td><td>10 * 2.5</td><td>25</td></tr>
-    <tr><td>/</td><td>Division</td><td>100 / 4</td><td>25</td></tr>
-    <tr><td>%</td><td>Modulo (remainder)</td><td>10 % 3</td><td>1</td></tr>
-    <tr><td>^</td><td>Exponent (power)</td><td>2 ^ 8</td><td>256</td></tr>
-  </table>
-  <div class="callout"><div class="callout-label">Modulo — What's it good for?</div><p>Modulo gives you the remainder after division. In game design: "every 5th kill triggers a bonus" — use <span class="ic">killCount % 5 == 0</span></p></div>
+<div class="exercise">
+  <p>Given this table, write the value each variable holds. If a key doesn't exist, write <strong>nil</strong>.</p>
+  <pre><span class="kw">local</span> armor = {
+  <span class="key">name</span>      = <span class="str">"Dragonscale Vest"</span>,
+  <span class="key">defense</span>   = <span class="num">85</span>,
+  <span class="key">isHeavy</span>   = <span class="kw">true</span>,
+  <span class="key">setBonus</span>  = <span class="kw">nil</span>
+}
+
+<span class="kw">local</span> a = armor.name
+<span class="kw">local</span> b = armor.defense * <span class="num">2</span>
+<span class="kw">local</span> c = armor.isHeavy
+<span class="kw">local</span> d = armor.setBonus
+<span class="kw">local</span> e = armor.rarity</pre>
+
+  <input type="text" class="answer-line" placeholder="a =">
+  <input type="text" class="answer-line" placeholder="b =">
+  <input type="text" class="answer-line" placeholder="c =">
+  <input type="text" class="answer-line" placeholder="d =">
+  <input type="text" class="answer-line" placeholder="e =">
 </div>
 
-<div class="slide slide-content" data-index="3" data-label="In Practice" data-subtitle="Arithmetic in context">
-  <h3>In Practice</h3><h2>Arithmetic in a game context</h2>
-  <pre><span class="kw">function</span> <span class="fn">OnAttack</span>()
-  <span class="kw">local</span> <span class="var">baseDamage</span>    = <span class="num">80</span>
-  <span class="kw">local</span> <span class="var">critMultiplier</span> = <span class="num">1.5</span>
-  <span class="kw">local</span> <span class="var">armor</span>          = <span class="num">20</span>
+<!-- SECTION B: TRACE THE MUTATIONS -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>Trace the Mutations</h2>
+  <span class="section-type">Write / Update / Remove</span>
+</div>
 
-  <span class="kw">local</span> <span class="var">critDamage</span>  = <span class="var">baseDamage</span> <span class="op">*</span> <span class="var">critMultiplier</span>
-  <span class="kw">local</span> <span class="var">finalDamage</span> = <span class="var">critDamage</span> <span class="op">-</span> <span class="var">armor</span>
-  <span class="cmt">-- finalDamage = (80 * 1.5) - 20 = 100</span>
+<div class="exercise">
+  <p>Starting from the table below, trace what each key's value is after every operation. Write the full table state at the end.</p>
+  <pre><span class="kw">local</span> enemy = {
+  <span class="key">name</span>    = <span class="str">"Thornback"</span>,
+  <span class="key">health</span>  = <span class="num">300</span>,
+  <span class="key">isAlive</span> = <span class="kw">true</span>
+}
+
+enemy.health   = enemy.health - <span class="num">120</span>
+enemy.isStunned = <span class="kw">true</span>
+enemy.stunTimer = <span class="num">3</span>
+enemy.isAlive  = (enemy.health > <span class="num">0</span>)
+enemy.name     = <span class="kw">nil</span></pre>
+
+  <div class="q-label">Final state of each key:</div>
+  <input type="text" class="answer-line" placeholder="name =">
+  <input type="text" class="answer-line" placeholder="health =">
+  <input type="text" class="answer-line" placeholder="isAlive =">
+  <input type="text" class="answer-line" placeholder="isStunned =">
+  <input type="text" class="answer-line" placeholder="stunTimer =">
+</div>
+
+<!-- SECTION C: SPOT THE BUG -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
+</div>
+
+<div class="exercise">
+  <p><strong>C1.</strong> The designer is trying to read the enemy's name, but they'll get nil. Why?</p>
+  <pre><span class="kw">local</span> enemy = { <span class="key">Name</span> = <span class="str">"Voidclaw"</span>, <span class="key">health</span> = <span class="num">200</span> }
+<span class="kw">local</span> n = enemy.name</pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <input type="text" class="answer-line" placeholder="Fixed read:">
+</div>
+
+<div class="exercise">
+  <p><strong>C2.</strong> This pairs loop is supposed to total up all the stat values, but it will error on one of them. Identify which key causes the problem and explain why.</p>
+  <pre><span class="kw">local</span> stats = {
+  <span class="key">strength</span>  = <span class="num">14</span>,
+  <span class="key">agility</span>   = <span class="num">11</span>,
+  <span class="key">label</span>     = <span class="str">"Warrior Stats"</span>,
+  <span class="key">intellect</span> = <span class="num">8</span>
+}
+
+<span class="kw">local</span> total = <span class="num">0</span>
+<span class="kw">for</span> _, v <span class="kw">in</span> <span class="fn">pairs</span>(stats) <span class="kw">do</span>
+  total = total + v
 <span class="kw">end</span></pre>
-  <p>Reading complex expressions gets easier when you break them into steps. Use intermediate variables to make calculations self-documenting.</p>
+  <input type="text" class="answer-line" placeholder="Which key causes the error?">
+  <input type="text" class="answer-line" placeholder="Why does it error?">
+  <textarea class="answer-area" rows="7" placeholder="Write a fixed version that skips non-number values..."></textarea>
 </div>
 
-<div class="slide slide-content" data-index="4" data-label="Comparisons" data-subtitle="True or false operators">
-  <h3>Asking Questions</h3><h2>Comparison operators</h2>
-  <p>Comparisons always produce a <strong>boolean result</strong> — either <span class="ic">true</span> or <span class="ic">false</span>.</p>
-  <table>
-    <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
-    <tr><td>==</td><td>Equal to</td><td>5 == 5</td><td>true</td></tr>
-    <tr><td>~=</td><td>Not equal to</td><td>5 ~= 3</td><td>true</td></tr>
-    <tr><td>&lt;</td><td>Less than</td><td>3 &lt; 10</td><td>true</td></tr>
-    <tr><td>&gt;</td><td>Greater than</td><td>10 &gt; 20</td><td>false</td></tr>
-    <tr><td>&lt;=</td><td>Less than or equal</td><td>5 &lt;= 5</td><td>true</td></tr>
-    <tr><td>&gt;=</td><td>Greater than or equal</td><td>8 &gt;= 10</td><td>false</td></tr>
-  </table>
-  <div class="callout"><div class="callout-label">Common Mistake</div><p>Don't confuse <span class="ic">==</span> (comparison) with <span class="ic">=</span> (assignment). <span class="ic">health == 0</span> asks "is health zero?" while <span class="ic">health = 0</span> sets health to zero.</p></div>
+<!-- SECTION D: NESTED TABLE READ -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>Nested Table Access</h2>
+  <span class="section-type">Chained access</span>
 </div>
 
-<div class="slide slide-content" data-index="5" data-label="Logic" data-subtitle="and / or / not">
-  <h3>Combining Conditions</h3><h2>Logical operators</h2>
-  <table>
-    <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
-    <tr><td>and</td><td>Both must be true</td><td>level >= 10 and hasKey == true</td></tr>
-    <tr><td>or</td><td>At least one must be true</td><td>isAdmin or hasPermit</td></tr>
-    <tr><td>not</td><td>Flips true to false</td><td>not isDefeated</td></tr>
-  </table>
-  <pre><span class="kw">local</span> <span class="var">playerLevel</span> = <span class="num">15</span>
-<span class="kw">local</span> <span class="var">hasRaidKey</span>  = <span class="kw">true</span>
+<div class="exercise">
+  <p>Given this nested structure, write the value each expression produces.</p>
+  <pre><span class="kw">local</span> quest = {
+  <span class="key">title</span>       = <span class="str">"The Sunken Keep"</span>,
+  <span class="key">isActive</span>    = <span class="kw">true</span>,
+  <span class="key">objectives</span>  = { <span class="str">"Find the key"</span>, <span class="str">"Defeat the warden"</span>, <span class="str">"Escape"</span> },
+  <span class="key">reward</span>      = { <span class="key">gold</span> = <span class="num">500</span>, <span class="key">xp</span> = <span class="num">1200</span> }
+}</pre>
 
-<span class="kw">local</span> <span class="var">canEnter</span> = (<span class="var">playerLevel</span> <span class="op">>=</span> <span class="num">10</span>) <span class="op">and</span> (<span class="var">hasRaidKey</span> <span class="op">==</span> <span class="kw">true</span>)
-<span class="cmt">-- canEnter = true</span></pre>
+  <input type="text" class="answer-line" placeholder="quest.title =">
+  <input type="text" class="answer-line" placeholder="quest.objectives[2] =">
+  <input type="text" class="answer-line" placeholder="#quest.objectives =">
+  <input type="text" class="answer-line" placeholder="quest.reward.xp =">
+  <input type="text" class="answer-line" placeholder="quest.reward.gold + quest.reward.xp =">
 </div>
 
-<div class="slide slide-content" data-index="6" data-label="Concatenation" data-subtitle="Joining text with ..">
-  <h3>Joining Text</h3><h2>String concatenation</h2>
-  <p>The <span class="ic">..</span> operator joins strings together. This is how you build dynamic messages in your scripts.</p>
-  <pre><span class="kw">local</span> <span class="var">playerName</span> = <span class="str">"Varek"</span>
-<span class="kw">local</span> <span class="var">zone</span>        = <span class="str">"Thornwood"</span>
-
-<span class="kw">local</span> <span class="var">message</span> = <span class="var">playerName</span> <span class="op">..</span> <span class="str">" has entered "</span> <span class="op">..</span> <span class="var">zone</span>
-<span class="cmt">-- "Varek has entered Thornwood"</span>
-
-<span class="kw">local</span> <span class="var">level</span>   = <span class="num">24</span>
-<span class="kw">local</span> <span class="var">display</span> = <span class="str">"Level: "</span> <span class="op">..</span> <span class="var">level</span>
-<span class="cmt">-- "Level: 24"</span></pre>
+<!-- SECTION E: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">E</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Full Course Integration</span>
 </div>
 
-<div class="slide slide-content" data-index="7" data-label="Precedence" data-subtitle="Order of operations">
-  <h3>Order of Operations</h3><h2>Operator precedence</h2>
-  <p>When multiple operators appear in one expression, Lua follows a specific order. Use <strong>parentheses to be explicit</strong> when in doubt.</p>
-  <table>
-    <tr><th>Priority</th><th>Operators</th></tr>
-    <tr><td>1 (highest)</td><td>^ (exponent)</td></tr>
-    <tr><td>2</td><td>not, unary minus</td></tr>
-    <tr><td>3</td><td>*, /, %</td></tr>
-    <tr><td>4</td><td>+, -</td></tr>
-    <tr><td>5</td><td>.. (concat)</td></tr>
-    <tr><td>6</td><td>&lt;, &gt;, &lt;=, &gt;=, ==, ~=</td></tr>
-    <tr><td>7</td><td>and</td></tr>
-    <tr><td>8 (lowest)</td><td>or</td></tr>
-  </table>
-  <p>When in doubt: <strong>use parentheses.</strong> <span class="ic">(a + b) * c</span> is always clearer.</p>
+<div class="exercise">
+  <p><strong>E1.</strong> Define a dictionary table called <code>spellData</code> for a spell called <code>"Frostbolt"</code>. It should have at least: a name, a mana cost (number), a damage value (number), a boolean for whether it slows the target, and a cooldown in seconds (number). Then write two lines: one that increases the damage by 20%, and one that sets the cooldown to nil (the spell is now passive).</p>
+  <textarea class="answer-area" rows="12" placeholder="Write your table and the two update lines..."></textarea>
 </div>
 
-<div class="slide slide-content" data-index="8" data-label="Full Example" data-subtitle="Damage formula">
-  <h3>Bringing It Together</h3><h2>A realistic damage formula</h2>
-  <pre><span class="kw">function</span> <span class="fn">CalculateDamage</span>()
-  <span class="kw">local</span> <span class="var">base</span>       = <span class="num">100</span>
-  <span class="kw">local</span> <span class="var">spellPower</span>  = <span class="num">40</span>
-  <span class="kw">local</span> <span class="var">resistance</span> = <span class="num">0.2</span>
-  <span class="kw">local</span> <span class="var">isCrit</span>      = <span class="kw">true</span>
-
-  <span class="kw">local</span> <span class="var">raw</span>   = <span class="var">base</span> <span class="op">+</span> <span class="var">spellPower</span>           <span class="cmt">-- 140</span>
-  <span class="kw">local</span> <span class="var">after</span> = <span class="var">raw</span> <span class="op">*</span> (<span class="num">1</span> <span class="op">-</span> <span class="var">resistance</span>)       <span class="cmt">-- 112</span>
-
-  <span class="kw">local</span> <span class="var">isBigHit</span> = <span class="var">isCrit</span> <span class="op">and</span> (<span class="var">after</span> <span class="op">></span> <span class="num">100</span>) <span class="cmt">-- true</span>
-  <span class="kw">local</span> <span class="var">logMsg</span>   = <span class="str">"Damage dealt: "</span> <span class="op">..</span> <span class="var">after</span>
-<span class="kw">end</span></pre>
+<div class="exercise">
+  <p><strong>E2.</strong> Write a function called <code>SummarizeItem</code> that receives a dictionary table called <code>item</code> with the properties <code>name</code> (string), <code>damage</code> (number), and <code>isMagic</code> (boolean). Return a string in this format:</p>
+  <p><strong><code>"[Magic] Thornblade — 75 dmg"</code></strong> if magic, or <strong><code>"Thornblade — 75 dmg"</code></strong> if not.</p>
+  <textarea class="answer-area" rows="10" placeholder="Write your function..."></textarea>
 </div>
 
-<div class="slide slide-title" data-index="9" data-label="Recap" data-subtitle="What you covered">
-  <div class="accent-line"></div>
-  <h3>Session 2 Complete</h3>
-  <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
-  <ul class="styled" style="max-width:480px;text-align:left;">
-    <li>Arithmetic operators: <strong>+, -, *, /, %, ^</strong></li>
-    <li>Comparison operators return <strong>true or false</strong></li>
-    <li><strong>and / or / not</strong> combine conditions logically</li>
-    <li><span class="ic">..</span> joins strings together</li>
-    <li>When in doubt about order, <strong>use parentheses</strong></li>
+<div class="exercise">
+  <p><strong>E3.</strong> Write a function called <code>ApplyStatBuffs</code> that receives a <code>character</code> dictionary table and a <code>buffs</code> dictionary table. For every key in <code>buffs</code>, add its value to the matching key in <code>character</code>. For example, if <code>buffs = { strength = 5, agility = 3 }</code>, then <code>character.strength</code> should increase by 5 and <code>character.agility</code> by 3. Return the modified character table.</p>
+  <textarea class="answer-area" rows="12" placeholder="Write your function..."></textarea>
+</div>
+
+<!-- SECTION F: TABLE MANIPULATION FUNCTIONS -->
+<div class="section-header">
+  <div class="section-num">F</div>
+  <h2>Table Manipulation Functions</h2>
+  <span class="section-type">self / colon syntax / dynamic keys</span>
+</div>
+
+<div class="exercise">
+  <p><strong>F1.</strong> These two calls do the same thing. Rewrite the first as the second, filling in the blank to make them equivalent:</p>
+  <pre>-- Call A (colon syntax)
+RELICS_LABYRINTH:Register(thisUnit)
+
+-- Call B (explicit, no colon)
+RELICS_LABYRINTH.Register( _______________, thisUnit )</pre>
+  <div class="q-label">Fill in the blank:</div>
+  <input type="text" class="answer-line" placeholder="RELICS_LABYRINTH.Register( ___ , thisUnit )">
+  <div class="q-label" style="margin-top:12px;">In your own words, what is "self" inside the Register function?</div>
+  <input type="text" class="answer-line" placeholder="self is ...">
+</div>
+
+<div class="exercise">
+  <p><strong>F2.</strong> A designer wrote this Edit function, but the property update line is wrong. Explain why, and write the correct version.</p>
+  <pre>Edit = function(self, relicName, propKey, newValue)
+  for _, relic in ipairs(self.relics) do
+    if relic.relicName == relicName then
+      relic.propKey = newValue    -- is this correct?
+      return
+    end
+  end
+end,</pre>
+  <div class="q-label">What's wrong with <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">relic.propKey = newValue</code>?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Correct line:">
+</div>
+
+<div class="exercise">
+  <p><strong>F3.</strong> This Remove function has a subtle bug that will cause it to sometimes skip entries or behave unpredictably. Spot it and explain why it happens.</p>
+  <pre>Remove = function(self, relicName)
+  for i, relic in ipairs(self.relics) do
+    if relic.relicName == relicName then
+      table.remove(self.relics, i)
+    end
+  end
+end,</pre>
+  <div class="q-label">What's the bug?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Fix:">
+</div>
+
+<div class="exercise">
+  <p><strong>F4.</strong> Build a self-managing table called <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">ACTIVE_BUFFS</code> that tracks buffs on a player. It should have:</p>
+  <ul style="font-size:.9rem;color:var(--text-dim);margin:10px 0 14px 20px;line-height:2.2;">
+    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffs</code> array to hold entries</li>
+    <li>An <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Add</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> (string) and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code> (number) and inserts a record</li>
+    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Remove</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> and removes the matching entry</li>
   </ul>
-  <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
-    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 2 Worksheet</strong> before moving to Session 3.</p>
-  </div>
-  <div class="big-number">02</div>
+  <p>Each buff record should store <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">name</code> and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code>. Don't forget your commas.</p>
+  <textarea class="answer-area" rows="20" placeholder="Write your table..."></textarea>
 </div>
 
-</div></div>
-<script>
-let current=0;const slides=document.querySelectorAll('.slide');const total=slides.length;
-const list=document.getElementById('slide-list');
-slides.forEach((slide,i)=>{const item=document.createElement('div');item.className='panel-item'+(i===0?' active':'');item.innerHTML=`<div class="panel-item-num">${String(i+1).padStart(2,'0')}</div><div class="panel-item-text"><div class="panel-item-label">${slide.dataset.label||''}</div><div class="panel-item-subtitle">${slide.dataset.subtitle||''}</div></div>`;item.addEventListener('click',()=>jumpTo(i));list.appendChild(item);});
-function updatePanel(idx){document.querySelectorAll('.panel-item').forEach((el,i)=>el.classList.toggle('active',i===idx));const a=list.children[idx];if(a)a.scrollIntoView({block:'nearest',behavior:'smooth'});}
-function updateProgress(idx){document.getElementById('progress-bar').style.width=`${((idx+1)/total)*100}%`;document.getElementById('prevBtn').disabled=idx===0;document.getElementById('nextBtn').disabled=idx===total-1;}
-function jumpTo(idx){if(idx===current)return;slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),350);current=idx;slides[current].classList.add('active');updatePanel(current);updateProgress(current);}
-function navigate(dir){jumpTo(Math.max(0,Math.min(total-1,current+dir)));}
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')navigate(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')navigate(-1);});
-updateProgress(0);
-</script>
-</body></html>
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 8</div>
+
+  <div class="ak-item">
+    <div class="ak-q">A — Property Reads</div>
+    <div class="ak-answer">a = "Dragonscale Vest" | b = 170 | c = true | d = nil | e = nil</div>
+    <div class="ak-explain"><strong>b:</strong> <code>85 * 2 = 170</code> — arithmetic works directly on a read property. <strong>d:</strong> <code>setBonus</code> exists as a key but its value is <code>nil</code>. <strong>e:</strong> <code>rarity</code> doesn't exist at all — also returns <code>nil</code>. Both behave identically when read.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B — Mutation Trace</div>
+    <div class="ak-answer">name = nil | health = 180 | isAlive = true | isStunned = true | stunTimer = 3</div>
+    <div class="ak-explain">
+      <strong>health:</strong> <code>300 - 120 = 180</code>.<br>
+      <strong>isAlive:</strong> <code>180 > 0</code> is <code>true</code> — the comparison result is stored directly.<br>
+      <strong>isStunned / stunTimer:</strong> These are new keys created by assignment — they didn't exist in the original table.<br>
+      <strong>name:</strong> Set to <code>nil</code>, so the key is effectively removed.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C1 — Key Case Mismatch</div>
+    <div class="ak-answer">Problem: the key is "Name" (capital N) but the read uses "name" (lowercase). Lua keys are case-sensitive.</div>
+    <div class="ak-explain">Fixed read: <code>local n = enemy.Name</code>. Better practice: standardize all your keys to camelCase (<code>name</code>, <code>health</code>) and be consistent.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C2 — String in Numeric Loop</div>
+    <div class="ak-answer">The "label" key holds a string. Adding a string to a number with + causes an error.</div>
+    <div class="ak-explain">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local total = 0
+for _, v in pairs(stats) do
+  if type(v) == "number" then
+    total = total + v
+  end
+end</pre>
+      The built-in <code>type()</code> function returns the type of a value as a string. Using it as a guard lets the loop safely skip non-numeric values.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">D — Nested Access</div>
+    <div class="ak-answer">title = "The Sunken Keep" | objectives[2] = "Defeat the warden" | #objectives = 3 | reward.xp = 1200 | gold + xp = 1700</div>
+    <div class="ak-explain">Chain notation drills into nested tables one level at a time. <code>quest.reward.gold</code> means: get the <code>quest</code> table, get its <code>reward</code> key (another table), then get <em>that</em> table's <code>gold</code> key.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local spellData = {
+  name      = "Frostbolt",
+  manaCost  = 40,
+  damage    = 60,
+  slows     = true,
+  cooldown  = 8
+}
+
+spellData.damage   = spellData.damage * 1.2
+spellData.cooldown = nil</pre>
+    </div>
+    <div class="ak-explain">After the damage update: <code>60 * 1.2 = 72</code>. Setting <code>cooldown</code> to nil removes the key entirely — reading <code>spellData.cooldown</code> afterwards returns nil.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E2 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function SummarizeItem(item)
+  local base = item.name .. " — " .. item.damage .. " dmg"
+  if item.isMagic then
+    return "[Magic] " .. base
+  else
+    return base
+  end
+end</pre>
+    </div>
+    <div class="ak-explain">Building <code>base</code> first and then conditionally prepending the tag keeps the two branches clean and avoids duplicating the damage string logic.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E3 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function ApplyStatBuffs(character, buffs)
+  for statName, buffValue in pairs(buffs) do
+    if character[statName] ~= nil then
+      character[statName] = character[statName] + buffValue
+    end
+  end
+  return character
+end</pre>
+    </div>
+    <div class="ak-explain">
+      Using <code>pairs</code> on the buffs table visits each buff key. Bracket notation — <code>character[statName]</code> — is required here because <code>statName</code> is a variable, not a literal key name. The nil check ensures we only buff stats that already exist on the character rather than creating new unexpected keys.
+    </div>
+  </div>
+  <div class="ak-item">
+    <div class="ak-q">F1 — The colon syntax / self</div>
+    <div class="ak-answer">RELICS_LABYRINTH.Register( RELICS_LABYRINTH, thisUnit )</div>
+    <div class="ak-explain">The colon is shorthand that automatically passes the table itself as the first argument. So <code>self</code> inside <code>Register</code> is the <code>RELICS_LABYRINTH</code> table — not the unit, and not some special keyword. It's just a regular parameter that Lua fills in silently. That's how <code>self.relics</code> inside the function reaches back into the table's own data.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F2 — Dot vs. bracket notation</div>
+    <div class="ak-answer">Correct line: relic[propKey] = newValue</div>
+    <div class="ak-explain"><code>relic.propKey</code> tells Lua to look for a key literally named <code>"propKey"</code> on the relic — which almost certainly doesn't exist. What we want is to use the <em>value</em> of the variable <code>propKey</code> as the key name. Bracket notation does exactly that: <code>relic[propKey]</code> reads the variable, gets its string value (e.g. <code>"altarPoint"</code>), and uses that as the key. This is the core reason bracket notation exists.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F3 — Missing return after remove</div>
+    <div class="ak-answer">Problem: after table.remove shifts all entries left, the loop continues with a stale index and may skip the entry that shifted into position i, or run off the end of the table.</div>
+    <div class="ak-explain">Fix: add <code>return</code> immediately after <code>table.remove</code>. Once you've found and removed the target, there's no reason to keep looping — and continuing is actively dangerous because the table's contents have just shifted.
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">if relic.relicName == relicName then
+  table.remove(self.relics, i)
+  return   -- stop immediately
+end</pre>
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F4 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">ACTIVE_BUFFS = {
+  buffs = {},
+
+  Add = function(self, buffName, duration)
+    local entry = {
+      name     = buffName,
+      duration = duration
+    }
+    table.insert(self.buffs, entry)
+  end,
+
+  Remove = function(self, buffName)
+    for i, buff in ipairs(self.buffs) do
+      if buff.name == buffName then
+        table.remove(self.buffs, i)
+        return
+      end
+    end
+  end,
+}</pre>
+    </div>
+    <div class="ak-explain">Things to check in your answer: comma after the <code>Add</code> function's closing <code>end</code>; <code>return</code> after the remove to stop looping; colon syntax used when calling (<code>ACTIVE_BUFFS:Add("Haste", 10)</code>). The <code>Remove</code> function silently does nothing if the buff name isn't found — that's fine and intentional.</div>
+  </div>
+
+</div>
+</body>
+</html>

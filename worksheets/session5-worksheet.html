@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 2 Worksheet — Operators &amp; Expressions</title>
+<title>Session 5 Worksheet — Functions</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#2d2d3a; --accent2:#c73d8a; --accent3:#1a8f7a; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#0f1f3d; --accent2:#2a5cbf; --accent3:#1a8060; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
   .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
@@ -21,9 +21,9 @@
   .exercise p { font-size:0.95rem; color:var(--text-dim); margin-bottom:12px; }
   .exercise p strong { color:var(--text); }
   pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
-  .kw { color:#5b4fcf; font-weight:500; } .str { color:#1a8f7a; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; } .op { color:#c73d8a; font-weight:700; }
+  .kw { color:#2a5cbf; font-weight:600; } .str { color:#1a8060; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; } .fn { color:#7040aa; } .param { color:#c73d8a; }
   .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
-  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:80px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
   .q-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
   .answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
   .ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:0.9rem; }
@@ -38,103 +38,123 @@
 <body>
 
 <div class="ws-header">
-  <div class="ws-label">Lua for Game Designers — Session 2 Worksheet</div>
-  <h1>Operators &amp; Expressions</h1>
-  <div class="ws-meta">Trace through expressions manually. Do not run the code to verify.</div>
+  <div class="ws-label">Lua for Game Designers — Session 5 Worksheet</div>
+  <h1>Functions</h1>
+  <div class="ws-meta">Trace function calls by hand — follow the arguments in and the return value out.</div>
 </div>
 
-<!-- SECTION A: EVALUATE THE EXPRESSION -->
+<!-- SECTION A: LABEL THE PARTS -->
 <div class="section-header">
   <div class="section-num">A</div>
-  <h2>Evaluate the Expression</h2>
-  <span class="section-type">Arithmetic</span>
+  <h2>Label the Parts</h2>
+  <span class="section-type">Recognition</span>
 </div>
 
 <div class="exercise">
-  <p>Calculate the final value for each expression. Show your working if it helps.</p>
-  <pre>A1.  10 + 3 * 4         = ___
-A2.  (10 + 3) * 4       = ___
-A3.  100 - 30 / 2       = ___
-A4.  17 % 5             = ___
-A5.  2 ^ 4 - 1          = ___</pre>
-  <div class="q-label">Your answers (write the result for each):</div>
-  <input type="text" class="answer-line" placeholder="A1 =">
-  <input type="text" class="answer-line" placeholder="A2 =">
-  <input type="text" class="answer-line" placeholder="A3 =">
-  <input type="text" class="answer-line" placeholder="A4 =">
-  <input type="text" class="answer-line" placeholder="A5 =">
+  <p>For the function below, identify each part using the labels: <strong>function name, parameter, local variable, return value</strong></p>
+  <pre><span class="kw">function</span> <span class="fn">ScaleDamage</span>(<span class="param">baseDamage</span>, <span class="param">scaleFactor</span>)
+  <span class="kw">local</span> result = baseDamage * scaleFactor
+  <span class="kw">return</span> result
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="ScaleDamage is the: ___">
+  <input type="text" class="answer-line" placeholder="baseDamage and scaleFactor are: ___">
+  <input type="text" class="answer-line" placeholder="result is a: ___">
+  <input type="text" class="answer-line" placeholder="The value after 'return' is: ___">
 </div>
 
-<!-- SECTION B: TRUE OR FALSE -->
+<!-- SECTION B: TRACE THE CALL -->
 <div class="section-header">
   <div class="section-num">B</div>
-  <h2>True or False?</h2>
-  <span class="section-type">Comparisons</span>
+  <h2>Trace the Function Call</h2>
+  <span class="section-type">Trace</span>
 </div>
 
 <div class="exercise">
-  <p>Each expression below produces either <strong>true</strong> or <strong>false</strong>. Write your answer for each.</p>
-  <pre>B1.  10 == 10            = ___
-B2.  10 ~= 10            = ___
-B3.  5 > 3               = ___
-B4.  8 <= 8              = ___
-B5.  100 >= 101          = ___
-B6.  (3 + 2) == 6        = ___</pre>
-  <input type="text" class="answer-line" placeholder="B1 =">
-  <input type="text" class="answer-line" placeholder="B2 =">
-  <input type="text" class="answer-line" placeholder="B3 =">
-  <input type="text" class="answer-line" placeholder="B4 =">
-  <input type="text" class="answer-line" placeholder="B5 =">
-  <input type="text" class="answer-line" placeholder="B6 =">
+  <p>Given this function, trace through the two calls and write what each returns.</p>
+  <pre><span class="kw">function</span> <span class="fn">GetHealAmount</span>(<span class="param">baseHeal</span>, <span class="param">isBlessed</span>)
+  <span class="kw">local</span> amount = baseHeal
+  <span class="kw">if</span> isBlessed <span class="kw">then</span>
+    amount = amount * <span class="num">2</span>
+  <span class="kw">end</span>
+  <span class="kw">return</span> amount
+<span class="kw">end</span>
+
+<span class="kw">local</span> healA = GetHealAmount(<span class="num">40</span>, <span class="kw">false</span>)
+<span class="kw">local</span> healB = GetHealAmount(<span class="num">40</span>, <span class="kw">true</span>)</pre>
+
+  <input type="text" class="answer-line" placeholder="healA = ___   (explain your reasoning)">
+  <input type="text" class="answer-line" placeholder="healB = ___   (explain your reasoning)">
 </div>
 
-<!-- SECTION C: LOGIC EXPRESSIONS -->
+<div class="exercise">
+  <p>Now trace this more complex call:</p>
+  <pre><span class="kw">function</span> <span class="fn">RollEncounter</span>(<span class="param">playerLevel</span>, <span class="param">zoneDifficulty</span>)
+  <span class="kw">local</span> encounterLevel = zoneDifficulty + (playerLevel / <span class="num">2</span>)
+  <span class="kw">local</span> isTough        = encounterLevel > <span class="num">20</span>
+  <span class="kw">return</span> encounterLevel, isTough
+<span class="kw">end</span>
+
+<span class="kw">local</span> lvl, tough = RollEncounter(<span class="num">24</span>, <span class="num">10</span>)</pre>
+
+  <input type="text" class="answer-line" placeholder="lvl = ___">
+  <input type="text" class="answer-line" placeholder="tough = ___  (show your reasoning)">
+</div>
+
+<!-- SECTION C: SPOT THE BUG -->
 <div class="section-header">
   <div class="section-num">C</div>
-  <h2>Logic Expressions</h2>
-  <span class="section-type">and / or / not</span>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
 </div>
 
 <div class="exercise">
-  <p>Given the variables below, evaluate each combined expression:</p>
-  <pre><span class="kw">local</span> level      = <span class="num">20</span>
-<span class="kw">local</span> hasKey     = <span class="kw">true</span>
-<span class="kw">local</span> isDefeated = <span class="kw">false</span>
-<span class="kw">local</span> gold        = <span class="num">150</span></pre>
-
-  <pre>C1.  level >= 10 and hasKey == true           = ___
-C2.  level >= 25 or gold >= 100               = ___
-C3.  not isDefeated                           = ___
-C4.  isDefeated or level < 5                  = ___
-C5.  level >= 20 and gold >= 200              = ___</pre>
-
-  <input type="text" class="answer-line" placeholder="C1 =">
-  <input type="text" class="answer-line" placeholder="C2 =">
-  <input type="text" class="answer-line" placeholder="C3 =">
-  <input type="text" class="answer-line" placeholder="C4 =">
-  <input type="text" class="answer-line" placeholder="C5 =">
+  <p><strong>C1.</strong> This function is supposed to return the damage after applying resistance, but it always returns 0. What's wrong?</p>
+  <pre><span class="kw">function</span> <span class="fn">ApplyResistance</span>(<span class="param">damage</span>, <span class="param">resistance</span>)
+  <span class="kw">local</span> result = <span class="num">0</span>
+  damage = damage * (<span class="num">1</span> - resistance)
+  <span class="kw">return</span> result
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <textarea class="answer-area" rows="6" placeholder="Write the fixed version..."></textarea>
 </div>
 
-<!-- SECTION D: STRING CONCAT -->
+<div class="exercise">
+  <p><strong>C2.</strong> The designer wants to call this function and use its result, but it's not working as expected. What's the problem?</p>
+  <pre><span class="kw">function</span> <span class="fn">GetBossName</span>()
+  <span class="kw">local</span> name = <span class="str">"Wraithguard"</span>
+<span class="kw">end</span>
+
+<span class="kw">local</span> bossName = GetBossName()
+<span class="cmt">-- bossName is nil — why?</span></pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <textarea class="answer-area" rows="5" placeholder="Write the fixed version..."></textarea>
+</div>
+
+<!-- SECTION D: FILL IN THE PARAMETERS -->
 <div class="section-header">
   <div class="section-num">D</div>
-  <h2>String Concatenation</h2>
-  <span class="section-type">Predict the Output</span>
+  <h2>Fill in the Parameters</h2>
+  <span class="section-type">Completion</span>
 </div>
 
 <div class="exercise">
-  <p>What string value does each variable end up holding?</p>
-  <pre><span class="kw">local</span> hero  = <span class="str">"Dawnseeker"</span>
-<span class="kw">local</span> level = <span class="num">12</span>
-<span class="kw">local</span> zone  = <span class="str">"Ashfield"</span>
+  <p>Each function below has a blank parameter list and a blank return. Fill them in based on the body logic and the comments.</p>
 
-D1.  local a = hero .. " enters " .. zone
-D2.  local b = "Level " .. level
-D3.  local c = hero .. " [Lv." .. level .. "]"</pre>
+  <p><strong>D1.</strong> A function that checks whether a player meets a level requirement:</p>
+  <pre><span class="kw">function</span> <span class="fn">MeetsLevelRequirement</span>( ___________ )
+  <span class="kw">local</span> qualifies = playerLevel >= requiredLevel
+  <span class="kw">return</span> ___________
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Parameters: ___">
+  <input type="text" class="answer-line" placeholder="Return value: ___">
 
-  <input type="text" class="answer-line" placeholder="a =">
-  <input type="text" class="answer-line" placeholder="b =">
-  <input type="text" class="answer-line" placeholder="c =">
+  <p style="margin-top:20px;"><strong>D2.</strong> A function that builds a death message string:</p>
+  <pre><span class="kw">function</span> <span class="fn">BuildDeathMessage</span>( ___________ )
+  <span class="kw">local</span> msg = attackerName .. " defeated " .. victimName
+  <span class="kw">return</span> ___________
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Parameters: ___">
+  <input type="text" class="answer-line" placeholder="Return value: ___">
 </div>
 
 <!-- SECTION E: WRITE YOUR OWN -->
@@ -145,90 +165,94 @@ D3.  local c = hero .. " [Lv." .. level .. "]"</pre>
 </div>
 
 <div class="exercise">
-  <p><strong>E1.</strong> Write an expression that evaluates to <code>true</code> only when a player's health is below 25 AND they are not already in a "low health" state (represented by a boolean variable <code>isLowHealthWarningActive</code>).</p>
-  <textarea class="answer-area" rows="4" placeholder="Write your expression..."></textarea>
+  <p><strong>E1.</strong> Write a function called <code>GetArmorClass</code> that takes a <code>baseArmor</code> value and a boolean <code>isShieldEquipped</code>. If the shield is equipped, add 15 to the armor. Return the final armor class value.</p>
+  <textarea class="answer-area" rows="10" placeholder="Write your function..."></textarea>
 </div>
 
 <div class="exercise">
-  <p><strong>E2.</strong> A player has 80 base damage. Write the calculation for their damage after applying a 30% damage buff, then reducing it by a flat 15 armor value. Store the result in a variable called <code>finalDamage</code>.</p>
-  <textarea class="answer-area" rows="5" placeholder="Write your calculation..."></textarea>
-</div>
-
-<div class="exercise">
-  <p><strong>E3.</strong> Build a display string that produces: <code>"Grimtusk — Boss (Level 40)"</code> using three separate variables for the name, type label, and level.</p>
-  <textarea class="answer-area" rows="5" placeholder="Declare your variables and write the concatenation..."></textarea>
+  <p><strong>E2.</strong> Write a function called <code>CheckQuestCompletion</code> that takes three parameters: <code>killCount</code>, <code>killGoal</code>, and <code>hasDeliveredItem</code>. The quest is complete when kills meet the goal AND the item has been delivered. Return a boolean indicating whether the quest is done, and a string message: either <code>"Quest Complete!"</code> or <code>"Keep going."</code></p>
+  <textarea class="answer-area" rows="12" placeholder="Write your function..."></textarea>
 </div>
 
 <!-- ANSWER KEY -->
 <div class="answer-key">
-  <div class="ak-header">✓ Answer Key — Session 2</div>
+  <div class="ak-header">✓ Answer Key — Session 5</div>
 
   <div class="ak-item">
-    <div class="ak-q">Section A — Arithmetic</div>
-    <div class="ak-answer">A1: 22 &nbsp;|&nbsp; A2: 52 &nbsp;|&nbsp; A3: 85 &nbsp;|&nbsp; A4: 2 &nbsp;|&nbsp; A5: 15</div>
+    <div class="ak-q">A — Label the Parts</div>
+    <div class="ak-answer">ScaleDamage = function name &nbsp;|&nbsp; baseDamage, scaleFactor = parameters &nbsp;|&nbsp; result = local variable &nbsp;|&nbsp; result (after return) = return value</div>
+    <div class="ak-explain">Note that <code>result</code> appears in two roles here: it's a local variable <em>and</em> it becomes the return value. The function could also be written as <code>return baseDamage * scaleFactor</code> directly — same result, slightly more compact.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B1 — GetHealAmount Trace</div>
+    <div class="ak-answer">healA = 40 &nbsp;|&nbsp; healB = 80</div>
+    <div class="ak-explain">First call: <code>isBlessed</code> is false, so the if block doesn't run. <code>amount</code> stays 40. Second call: <code>isBlessed</code> is true, so <code>amount = 40 * 2 = 80</code>. Same function, different outcome based on input.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B2 — RollEncounter Trace</div>
+    <div class="ak-answer">lvl = 22 &nbsp;|&nbsp; tough = true</div>
+    <div class="ak-explain"><code>encounterLevel = 10 + (24 / 2) = 10 + 12 = 22</code>. Then <code>isTough = 22 > 20 = true</code>. Both values are returned and captured. The left variable <code>lvl</code> gets the first return value (22), and <code>tough</code> gets the second (true).</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C1 — Returns 0</div>
+    <div class="ak-answer">The function returns <code>result</code>, which is initialized to 0 and never updated. The calculation is done into <code>damage</code> (the parameter), but that's never stored back.</div>
     <div class="ak-explain">
-      <strong>A1:</strong> Multiplication runs before addition — <code>3 * 4 = 12</code>, then <code>10 + 12 = 22</code>. &nbsp;
-      <strong>A2:</strong> Parentheses first — <code>10 + 3 = 13</code>, then <code>13 * 4 = 52</code>. &nbsp;
-      <strong>A3:</strong> Division first — <code>30 / 2 = 15</code>, then <code>100 - 15 = 85</code>. &nbsp;
-      <strong>A4:</strong> <code>17 % 5</code> — 5 goes into 17 three times (15), remainder is <strong>2</strong>. &nbsp;
-      <strong>A5:</strong> <code>2^4 = 16</code>, then <code>16 - 1 = 15</code>.
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function ApplyResistance(damage, resistance)
+  local result = damage * (1 - resistance)
+  return result
+end</pre>
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">Section B — Comparisons</div>
-    <div class="ak-answer">B1: true &nbsp;|&nbsp; B2: false &nbsp;|&nbsp; B3: true &nbsp;|&nbsp; B4: true &nbsp;|&nbsp; B5: false &nbsp;|&nbsp; B6: false</div>
+    <div class="ak-q">C2 — Missing Return</div>
+    <div class="ak-answer">The function never returns anything. <code>name</code> is assigned inside the function but the value is never sent back with <code>return</code>.</div>
     <div class="ak-explain">
-      <strong>B6</strong> is the common gotcha: <code>3 + 2 = 5</code>, and <code>5 == 6</code> is <strong>false</strong>. Watch out for <code>~=</code> — it's Lua's "not equal to," not <code>!=</code> like other languages.
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function GetBossName()
+  local name = "Wraithguard"
+  return name
+end</pre>
     </div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">Section C — Logic</div>
-    <div class="ak-answer">C1: true &nbsp;|&nbsp; C2: true &nbsp;|&nbsp; C3: true &nbsp;|&nbsp; C4: false &nbsp;|&nbsp; C5: false</div>
-    <div class="ak-explain">
-      <strong>C2:</strong> <code>level >= 25</code> is false, but <code>gold >= 100</code> is true — and <code>or</code> only needs one side true. &nbsp;
-      <strong>C3:</strong> <code>not false</code> = <strong>true</strong>. &nbsp;
-      <strong>C4:</strong> <code>isDefeated</code> is false and <code>level &lt; 5</code> is false — both false, so the whole <code>or</code> is false. &nbsp;
-      <strong>C5:</strong> <code>gold >= 200</code> fails (gold is 150), so the <code>and</code> is false.
-    </div>
+    <div class="ak-q">D — Fill in Parameters</div>
+    <div class="ak-answer">D1: params = playerLevel, requiredLevel &nbsp;/&nbsp; return = qualifies &nbsp;|&nbsp; D2: params = attackerName, victimName &nbsp;/&nbsp; return = msg</div>
+    <div class="ak-explain">The parameters must match exactly what the function body uses — if the body references <code>playerLevel</code> and <code>requiredLevel</code>, those are the parameter names. The return value should be the variable that holds the computed result.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">Section D — Concatenation</div>
-    <div class="ak-answer">a: "Dawnseeker enters Ashfield" &nbsp;|&nbsp; b: "Level 12" &nbsp;|&nbsp; c: "Dawnseeker [Lv.12]"</div>
-    <div class="ak-explain">Notice that Lua automatically converts numbers to strings when you use <code>..</code> with them. The <code>..</code> operator does not add spaces — you have to include any spaces explicitly in your string literals.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">Section E1 — Sample Answer</div>
+    <div class="ak-q">E1 — Sample Answer</div>
     <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local health = 20
-local isLowHealthWarningActive = false
-local shouldWarn = (health < 25) and (not isLowHealthWarningActive)</pre>
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function GetArmorClass(baseArmor, isShieldEquipped)
+  local armor = baseArmor
+  if isShieldEquipped then
+    armor = armor + 15
+  end
+  return armor
+end</pre>
     </div>
-    <div class="ak-explain">Using <code>not isLowHealthWarningActive</code> avoids triggering the warning if it's already showing. Both conditions must be true for <code>shouldWarn</code> to be true.</div>
+    <div class="ak-explain">Note: <code>local armor = baseArmor</code> creates a copy so we're not directly modifying the parameter. This is good practice — treat parameters as read-only inputs.</div>
   </div>
 
   <div class="ak-item">
-    <div class="ak-q">Section E2 — Sample Answer</div>
+    <div class="ak-q">E2 — Sample Answer</div>
     <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local baseDamage = 80
-local buffed = baseDamage * 1.30     -- 104
-local finalDamage = buffed - 15      -- 89</pre>
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function CheckQuestCompletion(killCount, killGoal, hasDeliveredItem)
+  local isComplete = (killCount >= killGoal) and hasDeliveredItem
+  local message
+  if isComplete then
+    message = "Quest Complete!"
+  else
+    message = "Keep going."
+  end
+  return isComplete, message
+end</pre>
     </div>
-    <div class="ak-explain">A 30% buff means multiplying by 1.30 (the original 100% plus the 30% bonus). Breaking into two lines makes each step easy to read and debug.</div>
-  </div>
-
-  <div class="ak-item">
-    <div class="ak-q">Section E3 — Sample Answer</div>
-    <div class="ak-answer">
-      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local name  = "Grimtusk"
-local label = "Boss"
-local level = 40
-local display = name .. " — " .. label .. " (Level " .. level .. ")"</pre>
-    </div>
-    <div class="ak-explain">Notice the spacing: the em dash and spaces around it are literal characters inside the string. Every character in the final output must appear somewhere in the expression.</div>
+    <div class="ak-explain">Both return values flow naturally from the logic. The caller can use both: <code>local done, msg = CheckQuestCompletion(5, 5, true)</code>. If the caller only needs one value, they can capture just the first: <code>local done = CheckQuestCompletion(5, 5, true)</code>.</div>
   </div>
 
 </div>
