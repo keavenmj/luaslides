@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2 Worksheet — Operators &amp; Expressions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#2d2d3a; --accent2:#c73d8a; --accent3:#1a8f7a; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+  .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+  .ws-label { font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+  h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+  .ws-meta { font-size:0.85rem; color:var(--text-dim); }
+  .section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+  .section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; flex-shrink:0; }
+  h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .section-type { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+  .exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+  .exercise p { font-size:0.95rem; color:var(--text-dim); margin-bottom:12px; }
+  .exercise p strong { color:var(--text); }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
+  .kw { color:#5b4fcf; font-weight:500; } .str { color:#1a8f7a; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; } .op { color:#c73d8a; font-weight:700; }
+  .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:80px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+  .q-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+  .ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:0.9rem; }
+  .ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+  .ak-q { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .ak-answer { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  .ak-explain { font-size:0.88rem; color:var(--text-dim); line-height:1.6; }
+  .ak-explain strong { color:var(--text); }
+  code { font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 2 Worksheet</div>
+  <h1>Operators &amp; Expressions</h1>
+  <div class="ws-meta">Trace through expressions manually. Do not run the code to verify.</div>
+</div>
+
+<!-- SECTION A: EVALUATE THE EXPRESSION -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Evaluate the Expression</h2>
+  <span class="section-type">Arithmetic</span>
+</div>
+
+<div class="exercise">
+  <p>Calculate the final value for each expression. Show your working if it helps.</p>
+  <pre>A1.  10 + 3 * 4         = ___
+A2.  (10 + 3) * 4       = ___
+A3.  100 - 30 / 2       = ___
+A4.  17 % 5             = ___
+A5.  2 ^ 4 - 1          = ___</pre>
+  <div class="q-label">Your answers (write the result for each):</div>
+  <input type="text" class="answer-line" placeholder="A1 =">
+  <input type="text" class="answer-line" placeholder="A2 =">
+  <input type="text" class="answer-line" placeholder="A3 =">
+  <input type="text" class="answer-line" placeholder="A4 =">
+  <input type="text" class="answer-line" placeholder="A5 =">
+</div>
+
+<!-- SECTION B: TRUE OR FALSE -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>True or False?</h2>
+  <span class="section-type">Comparisons</span>
+</div>
+
+<div class="exercise">
+  <p>Each expression below produces either <strong>true</strong> or <strong>false</strong>. Write your answer for each.</p>
+  <pre>B1.  10 == 10            = ___
+B2.  10 ~= 10            = ___
+B3.  5 > 3               = ___
+B4.  8 <= 8              = ___
+B5.  100 >= 101          = ___
+B6.  (3 + 2) == 6        = ___</pre>
+  <input type="text" class="answer-line" placeholder="B1 =">
+  <input type="text" class="answer-line" placeholder="B2 =">
+  <input type="text" class="answer-line" placeholder="B3 =">
+  <input type="text" class="answer-line" placeholder="B4 =">
+  <input type="text" class="answer-line" placeholder="B5 =">
+  <input type="text" class="answer-line" placeholder="B6 =">
+</div>
+
+<!-- SECTION C: LOGIC EXPRESSIONS -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Logic Expressions</h2>
+  <span class="section-type">and / or / not</span>
+</div>
+
+<div class="exercise">
+  <p>Given the variables below, evaluate each combined expression:</p>
+  <pre><span class="kw">local</span> level      = <span class="num">20</span>
+<span class="kw">local</span> hasKey     = <span class="kw">true</span>
+<span class="kw">local</span> isDefeated = <span class="kw">false</span>
+<span class="kw">local</span> gold        = <span class="num">150</span></pre>
+
+  <pre>C1.  level >= 10 and hasKey == true           = ___
+C2.  level >= 25 or gold >= 100               = ___
+C3.  not isDefeated                           = ___
+C4.  isDefeated or level < 5                  = ___
+C5.  level >= 20 and gold >= 200              = ___</pre>
+
+  <input type="text" class="answer-line" placeholder="C1 =">
+  <input type="text" class="answer-line" placeholder="C2 =">
+  <input type="text" class="answer-line" placeholder="C3 =">
+  <input type="text" class="answer-line" placeholder="C4 =">
+  <input type="text" class="answer-line" placeholder="C5 =">
+</div>
+
+<!-- SECTION D: STRING CONCAT -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>String Concatenation</h2>
+  <span class="section-type">Predict the Output</span>
+</div>
+
+<div class="exercise">
+  <p>What string value does each variable end up holding?</p>
+  <pre><span class="kw">local</span> hero  = <span class="str">"Dawnseeker"</span>
+<span class="kw">local</span> level = <span class="num">12</span>
+<span class="kw">local</span> zone  = <span class="str">"Ashfield"</span>
+
+D1.  local a = hero .. " enters " .. zone
+D2.  local b = "Level " .. level
+D3.  local c = hero .. " [Lv." .. level .. "]"</pre>
+
+  <input type="text" class="answer-line" placeholder="a =">
+  <input type="text" class="answer-line" placeholder="b =">
+  <input type="text" class="answer-line" placeholder="c =">
+</div>
+
+<!-- SECTION E: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">E</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Application</span>
+</div>
+
+<div class="exercise">
+  <p><strong>E1.</strong> Write an expression that evaluates to <code>true</code> only when a player's health is below 25 AND they are not already in a "low health" state (represented by a boolean variable <code>isLowHealthWarningActive</code>).</p>
+  <textarea class="answer-area" rows="4" placeholder="Write your expression..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E2.</strong> A player has 80 base damage. Write the calculation for their damage after applying a 30% damage buff, then reducing it by a flat 15 armor value. Store the result in a variable called <code>finalDamage</code>.</p>
+  <textarea class="answer-area" rows="5" placeholder="Write your calculation..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E3.</strong> Build a display string that produces: <code>"Grimtusk — Boss (Level 40)"</code> using three separate variables for the name, type label, and level.</p>
+  <textarea class="answer-area" rows="5" placeholder="Declare your variables and write the concatenation..."></textarea>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 2</div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section A — Arithmetic</div>
+    <div class="ak-answer">A1: 22 &nbsp;|&nbsp; A2: 52 &nbsp;|&nbsp; A3: 85 &nbsp;|&nbsp; A4: 2 &nbsp;|&nbsp; A5: 15</div>
+    <div class="ak-explain">
+      <strong>A1:</strong> Multiplication runs before addition — <code>3 * 4 = 12</code>, then <code>10 + 12 = 22</code>. &nbsp;
+      <strong>A2:</strong> Parentheses first — <code>10 + 3 = 13</code>, then <code>13 * 4 = 52</code>. &nbsp;
+      <strong>A3:</strong> Division first — <code>30 / 2 = 15</code>, then <code>100 - 15 = 85</code>. &nbsp;
+      <strong>A4:</strong> <code>17 % 5</code> — 5 goes into 17 three times (15), remainder is <strong>2</strong>. &nbsp;
+      <strong>A5:</strong> <code>2^4 = 16</code>, then <code>16 - 1 = 15</code>.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section B — Comparisons</div>
+    <div class="ak-answer">B1: true &nbsp;|&nbsp; B2: false &nbsp;|&nbsp; B3: true &nbsp;|&nbsp; B4: true &nbsp;|&nbsp; B5: false &nbsp;|&nbsp; B6: false</div>
+    <div class="ak-explain">
+      <strong>B6</strong> is the common gotcha: <code>3 + 2 = 5</code>, and <code>5 == 6</code> is <strong>false</strong>. Watch out for <code>~=</code> — it's Lua's "not equal to," not <code>!=</code> like other languages.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section C — Logic</div>
+    <div class="ak-answer">C1: true &nbsp;|&nbsp; C2: true &nbsp;|&nbsp; C3: true &nbsp;|&nbsp; C4: false &nbsp;|&nbsp; C5: false</div>
+    <div class="ak-explain">
+      <strong>C2:</strong> <code>level >= 25</code> is false, but <code>gold >= 100</code> is true — and <code>or</code> only needs one side true. &nbsp;
+      <strong>C3:</strong> <code>not false</code> = <strong>true</strong>. &nbsp;
+      <strong>C4:</strong> <code>isDefeated</code> is false and <code>level &lt; 5</code> is false — both false, so the whole <code>or</code> is false. &nbsp;
+      <strong>C5:</strong> <code>gold >= 200</code> fails (gold is 150), so the <code>and</code> is false.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section D — Concatenation</div>
+    <div class="ak-answer">a: "Dawnseeker enters Ashfield" &nbsp;|&nbsp; b: "Level 12" &nbsp;|&nbsp; c: "Dawnseeker [Lv.12]"</div>
+    <div class="ak-explain">Notice that Lua automatically converts numbers to strings when you use <code>..</code> with them. The <code>..</code> operator does not add spaces — you have to include any spaces explicitly in your string literals.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section E1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local health = 20
+local isLowHealthWarningActive = false
+local shouldWarn = (health < 25) and (not isLowHealthWarningActive)</pre>
+    </div>
+    <div class="ak-explain">Using <code>not isLowHealthWarningActive</code> avoids triggering the warning if it's already showing. Both conditions must be true for <code>shouldWarn</code> to be true.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section E2 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local baseDamage = 80
+local buffed = baseDamage * 1.30     -- 104
+local finalDamage = buffed - 15      -- 89</pre>
+    </div>
+    <div class="ak-explain">A 30% buff means multiplying by 1.30 (the original 100% plus the 30% bonus). Breaking into two lines makes each step easy to read and debug.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">Section E3 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local name  = "Grimtusk"
+local label = "Boss"
+local level = 40
+local display = name .. " — " .. label .. " (Level " .. level .. ")"</pre>
+    </div>
+    <div class="ak-explain">Notice the spacing: the em dash and spaces around it are literal characters inside the string. Every character in the final output must appear somewhere in the expression.</div>
+  </div>
+
+</div>
+</body>
+</html>

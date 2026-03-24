@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lua for Game Designers — Session 3: Conditional Logic</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --accent:#3fb950;--accent2:#79c0ff;--accent3:#ffa657;
+  --text:#e6edf3;--text-dim:#8b949e;--code-bg:#0d1117;--panel-w:220px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width 0.4s ease;z-index:200;box-shadow:0 0 12px var(--accent);}
+#layout{display:flex;flex:1;overflow:hidden;margin-top:3px;}
+#slide-panel{width:var(--panel-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+#panel-header{padding:18px 16px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+#panel-session{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+#panel-title{font-size:.78rem;font-weight:700;color:var(--text);line-height:1.3;}
+#slide-list{flex:1;overflow-y:auto;padding:8px 0;}
+#slide-list::-webkit-scrollbar{width:4px;}#slide-list::-webkit-scrollbar-track{background:transparent;}#slide-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.panel-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;cursor:pointer;border-left:2px solid transparent;transition:background .15s,border-color .15s;}
+.panel-item:hover{background:var(--surface2);}.panel-item.active{background:var(--surface2);border-left-color:var(--accent);}
+.panel-item-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);margin-top:2px;flex-shrink:0;width:16px;}
+.panel-item.active .panel-item-num{color:var(--accent);}.panel-item-text{flex:1;}
+.panel-item-label{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px;line-height:1.2;}
+.panel-item.active .panel-item-label{color:var(--accent);}
+.panel-item-subtitle{font-size:.74rem;font-weight:600;color:var(--text-dim);line-height:1.35;}
+.panel-item.active .panel-item-subtitle{color:var(--text);}
+#panel-footer{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+.nav-btn{flex:1;background:none;border:1px solid var(--border);color:var(--text);font-family:'Syne',sans-serif;font-size:.78rem;font-weight:600;padding:8px 0;border-radius:4px;cursor:pointer;transition:all .2s;text-align:center;}
+.nav-btn:hover{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+.nav-btn:disabled{opacity:.2;cursor:not-allowed;}
+.nav-btn:disabled:hover{background:none;color:var(--text);border-color:var(--border);}
+#deck{flex:1;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;padding:52px 60px;opacity:0;transform:translateX(40px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;overflow-y:auto;}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all;}
+.slide.exit{opacity:0;transform:translateX(-40px);}
+.slide-title{text-align:center;align-items:center;justify-content:center;}
+.slide-content{max-width:820px;width:100%;margin:0 auto;}
+.session-label{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;}
+h1{font-size:clamp(2.2rem,4vw,3.6rem);font-weight:800;line-height:1.1;margin-bottom:20px;}
+h2{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:22px;color:var(--text);}
+h3{font-size:.95rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+p{font-size:1.05rem;line-height:1.7;color:var(--text-dim);margin-bottom:14px;}
+p strong{color:var(--text);font-weight:600;}
+.subtitle{font-size:1.15rem;color:var(--text-dim);max-width:520px;line-height:1.6;}
+pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:.86rem;line-height:1.7;overflow-x:auto;margin:14px 0;}
+.callout{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:18px 22px;margin-top:14px;}
+.callout-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.callout p{margin:0;font-size:.97rem;}
+.callout.warn{border-color:var(--accent2);}.callout.warn .callout-label{color:var(--accent2);}
+ul.styled{list-style:none;margin-top:8px;}
+ul.styled li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.97rem;color:var(--text-dim);display:flex;align-items:baseline;gap:12px;}
+ul.styled li:last-child{border-bottom:none;}ul.styled li::before{content:'▸';color:var(--accent);font-size:.75rem;flex-shrink:0;}ul.styled li strong{color:var(--text);}
+.big-number{font-size:7rem;font-weight:800;color:var(--surface2);position:absolute;right:50px;bottom:50px;line-height:1;user-select:none;}
+.accent-line{width:60px;height:4px;background:var(--accent);margin-bottom:24px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.ic{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
+.inline-code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--code-bg);border:1px solid var(--border);padding:1px 7px;border-radius:3px;color:var(--accent3);}
+.tag{display:inline-block;background:var(--accent);color:var(--bg);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-right:8px;}
+.tag.purple{background:var(--accent2);color:white;}.tag.teal{background:var(--accent3);color:var(--bg);}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
+th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.83rem;}
+td:first-child{color:var(--accent);font-weight:700;}tr:last-child td{border-bottom:none;}
+.recap-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.9rem;color:var(--text-dim);}
+.recap-box strong{color:var(--accent);}
+.array-vis{display:flex;gap:0;margin:16px 0;font-family:'JetBrains Mono',monospace;}
+.array-cell{border:1px solid var(--border);padding:10px 16px;text-align:center;background:var(--surface2);}
+.array-cell:first-child{border-radius:6px 0 0 6px;}.array-cell:last-child{border-radius:0 6px 6px 0;}
+.array-cell .idx-label{font-size:.68rem;color:var(--accent2);display:block;margin-bottom:4px;}
+.array-cell .val{font-size:.88rem;color:var(--accent3);}
+.flow-row{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap;}
+.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-size:.88rem;font-weight:600;text-align:center;}
+.flow-arrow{color:var(--accent);font-size:1.2rem;}
+.flow-yes{border-color:var(--accent);color:var(--accent);}.flow-no{border-color:#ff7b72;color:#ff7b72;}
+.kw{color:#ff7b72;}.str{color:#a5d6ff;}.num{color:#ffa657;}.cmt{color:#484f58;font-style:italic;}.fn{color:#d2a8ff;}.var{color:#e6edf3;}.op{color:#3fb950;}
+</style></head><body>
+<div id="progress-bar"></div>
+<div id="layout">
+<nav id="slide-panel">
+  <div id="panel-header"><div id="panel-session">Session 3 of 8</div><div id="panel-title">Conditional<br>Logic</div></div>
+  <div id="slide-list"></div>
+  <div id="panel-footer"><button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button><button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next &rarr;</button></div>
+</nav>
+<div id="deck">
+
+<div class="slide slide-title active" data-label="Intro" data-subtitle="Conditional Logic">
+  <div class="session-label">Session 3 of 8</div><h1>Conditional<br>Logic</h1>
+  <p class="subtitle">Giving your scripts the ability to make decisions and respond to different situations.</p>
+  <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">⏱</span> ~45 minutes</span>
+    <span style="font-size:.85rem;color:var(--text-dim)"><span style="color:var(--accent)">📄</span> Worksheet included</span>
+  </div><div class="big-number">03</div>
+</div>
+<div class="slide slide-content" data-label="Recap" data-subtitle="Sessions 1 &amp; 2 review">
+  <h3>Quick Recap — Sessions 1 &amp; 2</h3><h2>What we've built so far</h2>
+  <div class="recap-box"><strong>Session 1:</strong> Variables store values. Types: number, string, boolean, nil. Always use <code style="font-family:'JetBrains Mono'">local</code>.<br><br><strong>Session 2:</strong> Operators let you calculate, compare, and combine logic. Comparisons return booleans.</div>
+  <h3 style="margin-top:8px;">This Session</h3>
+  <ul class="styled">
+    <li>The <strong>if / then / end</strong> structure</li>
+    <li>Adding <strong>else</strong> for the fallback case</li>
+    <li>Using <strong>elseif</strong> to test multiple conditions</li>
+    <li>Nested conditionals and when to use them</li>
+    <li>Boolean shortcuts for cleaner code</li>
+  </ul><div class="big-number">03</div>
+</div>
+<div class="slide slide-content" data-label="if statement" data-subtitle="The basic decision block">
+  <h3>The Foundation</h3><h2>The if statement</h2>
+  <p>An <span class="ic">if</span> block runs code <em>only</em> when a condition is true. If false, the block is skipped entirely.</p>
+  <pre><span class="kw">if</span> condition <span class="kw">then</span>
+  <span class="cmt">-- code that runs when condition is true</span>
+<span class="kw">end</span></pre>
+  <pre><span class="kw">local</span> <span class="var">enemyHealth</span> = <span class="num">0</span>
+<span class="kw">if</span> <span class="var">enemyHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Award loot, play death animation, remove from world</span>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Structure Rule</div><p>Every <span class="ic">if</span> must close with <span class="ic">end</span>. Forgetting this is one of the most common Lua syntax errors.</p></div>
+</div>
+<div class="slide slide-content" data-label="if / else" data-subtitle="Adding the fallback">
+  <h3>The Fallback</h3><h2>Adding else</h2>
+  <p>The <span class="ic">else</span> block runs when the condition is false. One or the other always runs — never both, never neither.</p>
+  <pre><span class="kw">local</span> <span class="var">playerHealth</span> = <span class="num">45</span>
+<span class="kw">if</span> <span class="var">playerHealth</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Player is dead</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Player is still alive</span>
+<span class="kw">end</span></pre>
+  <div class="flow-row">
+    <div class="flow-box">playerHealth &lt;= 0</div><div class="flow-arrow">→</div>
+    <div class="flow-box flow-yes">TRUE → death logic</div><div class="flow-arrow" style="color:var(--text-dim)">|</div>
+    <div class="flow-box flow-no">FALSE → alive logic</div>
+  </div>
+</div>
+<div class="slide slide-content" data-label="elseif" data-subtitle="Multiple conditions">
+  <h3>Multiple Conditions</h3><h2>Using elseif</h2>
+  <p>Chain conditions with <span class="ic">elseif</span>. Lua checks them <em>in order</em> and stops at the first true one.</p>
+  <pre><span class="kw">local</span> <span class="var">health</span> = <span class="num">60</span>
+<span class="kw">if</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- Dead</span>
+<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- Critical</span>
+<span class="kw">elseif</span> <span class="var">health</span> <span class="op">&lt;=</span> <span class="num">50</span> <span class="kw">then</span>
+  <span class="cmt">-- Hurt</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Healthy</span>
+<span class="kw">end</span></pre>
+  <p>With <span class="ic">health = 60</span>, only the <span class="ic">else</span> block runs. The first three conditions are all false.</p>
+</div>
+<div class="slide slide-content" data-label="Order Matters" data-subtitle="Specific before broad">
+  <h3>A Common Pitfall</h3><h2>Order matters with elseif</h2>
+  <p>Lua stops at the first true condition. <strong>More specific checks must come before broader ones.</strong></p>
+  <div class="two-col">
+    <div><h3 style="color:#ff7b72;font-size:.8rem;">✗ Wrong Order</h3>
+    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- catches everything</span>
+<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- NEVER REACHED</span>
+<span class="kw">end</span></pre></div>
+    <div><h3 style="color:var(--accent);font-size:.8rem;">✓ Correct Order</h3>
+    <pre style="font-size:.8rem;"><span class="kw">if</span> health <span class="op">&lt;</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- Critical</span>
+<span class="kw">elseif</span> health <span class="op">&lt;</span> <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- Damaged</span>
+<span class="kw">else</span>
+  <span class="cmt">-- Full health</span>
+<span class="kw">end</span></pre></div>
+  </div>
+</div>
+<div class="slide slide-content" data-label="Nested" data-subtitle="if inside if">
+  <h3>Going Deeper</h3><h2>Nested conditionals</h2>
+  <p>You can place an <span class="ic">if</span> inside another <span class="ic">if</span> to check a secondary condition only after confirming the first.</p>
+  <pre><span class="kw">local</span> <span class="var">enemyLevel</span> = <span class="num">30</span>
+<span class="kw">local</span> <span class="var">isBoss</span>     = <span class="kw">true</span>
+<span class="kw">if</span> <span class="var">enemyLevel</span> <span class="op">>=</span> <span class="num">25</span> <span class="kw">then</span>
+  <span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>
+    <span class="cmt">-- High-level AND a boss — raid warning</span>
+  <span class="kw">else</span>
+    <span class="cmt">-- High-level but not a boss — elite behavior</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  <div class="callout"><div class="callout-label">Keep It Readable</div><p>Avoid nesting more than two or three levels deep. Deeply nested code is hard to scan quickly.</p></div>
+</div>
+<div class="slide slide-content" data-label="Full Example" data-subtitle="Zone entry gate check">
+  <h3>Full Example</h3><h2>Zone entry gate check</h2>
+  <pre><span class="kw">function</span> <span class="fn">OnPlayerEnterZone</span>()
+  <span class="kw">local</span> <span class="var">playerLevel</span>  = <span class="num">18</span>
+  <span class="kw">local</span> <span class="var">hasQuestItem</span> = <span class="kw">true</span>
+  <span class="kw">local</span> <span class="var">zoneMinLevel</span> = <span class="num">20</span>
+  <span class="kw">if</span> <span class="var">playerLevel</span> <span class="op">>=</span> <span class="var">zoneMinLevel</span> <span class="kw">then</span>
+    <span class="cmt">-- Level requirement met</span>
+  <span class="kw">elseif</span> <span class="var">hasQuestItem</span> <span class="kw">then</span>
+    <span class="cmt">-- Under-leveled but has the pass</span>
+  <span class="kw">else</span>
+    <span class="cmt">-- Block entry</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  <p>With <span class="ic">playerLevel = 18</span> and <span class="ic">hasQuestItem = true</span>: first condition fails, second succeeds — entry allowed via quest item.</p>
+</div>
+<div class="slide slide-content" data-label="Boolean Shortcuts" data-subtitle="Cleaner conditions">
+  <h3>Cleaner Code</h3><h2>Boolean shortcuts</h2>
+  <p>When your variable is already a boolean, skip <span class="ic">== true</span>. These are identical:</p>
+  <pre><span class="kw">if</span> <span class="var">isBoss</span> <span class="op">==</span> <span class="kw">true</span> <span class="kw">then</span>   <span class="cmt">-- verbose</span>
+<span class="kw">if</span> <span class="var">isBoss</span> <span class="kw">then</span>             <span class="cmt">-- preferred</span>
+
+<span class="kw">if</span> <span class="var">isAlive</span> <span class="op">==</span> <span class="kw">false</span> <span class="kw">then</span>  <span class="cmt">-- verbose</span>
+<span class="kw">if</span> <span class="op">not</span> <span class="var">isAlive</span> <span class="kw">then</span>        <span class="cmt">-- preferred</span></pre>
+</div>
+<div class="slide slide-title" data-label="Recap" data-subtitle="What you covered">
+  <div class="accent-line"></div><h3>Session 3 Complete</h3>
+  <h2 style="font-size:1.9rem;margin-bottom:22px;">What you covered</h2>
+  <ul class="styled" style="max-width:480px;text-align:left;">
+    <li><strong>if / then / end</strong> — the basic decision block</li>
+    <li><strong>else</strong> handles the "otherwise" case</li>
+    <li><strong>elseif</strong> chains multiple checks in order</li>
+    <li>Order matters — specific checks before broad ones</li>
+    <li><strong>if isBoss then</strong> is cleaner than <strong>if isBoss == true then</strong></li>
+  </ul>
+  <div style="margin-top:28px;padding:18px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;max-width:480px;">
+    <p style="margin:0;font-size:.92rem;color:var(--text-dim);">Complete <strong style="color:var(--accent)">Session 3 Worksheet</strong> before moving to Session 4.</p>
+  </div><div class="big-number">03</div>
+</div>
+</div></div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide');const total=slides.length;
+const list=document.getElementById('slide-list');
+slides.forEach((slide,i)=>{const item=document.createElement('div');item.className='panel-item'+(i===0?' active':'');item.innerHTML=`<div class="panel-item-num">${String(i+1).padStart(2,'0')}</div><div class="panel-item-text"><div class="panel-item-label">${slide.dataset.label||''}</div><div class="panel-item-subtitle">${slide.dataset.subtitle||''}</div></div>`;item.addEventListener('click',()=>jumpTo(i));list.appendChild(item);});
+function updatePanel(idx){document.querySelectorAll('.panel-item').forEach((el,i)=>el.classList.toggle('active',i===idx));const a=list.children[idx];if(a)a.scrollIntoView({block:'nearest',behavior:'smooth'});}
+function updateProgress(idx){document.getElementById('progress-bar').style.width=`${((idx+1)/total)*100}%`;document.getElementById('prevBtn').disabled=idx===0;document.getElementById('nextBtn').disabled=idx===total-1;}
+function jumpTo(idx){if(idx===current)return;slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),350);current=idx;slides[current].classList.add('active');updatePanel(current);updateProgress(current);}
+function navigate(dir){jumpTo(Math.max(0,Math.min(total-1,current+dir)));}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')navigate(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')navigate(-1);});
+updateProgress(0);
+</script>
+</body></html>

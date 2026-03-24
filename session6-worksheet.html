@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 8 Worksheet — Dictionary Tables</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#200a40; --accent2:#7030b0; --accent3:#1a7a50; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+.ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+.ws-label { font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+.ws-meta { font-size:.85rem; color:var(--text-dim); }
+.section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+.section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:700; flex-shrink:0; }
+h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+.section-type { font-size:.75rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+.exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+.exercise p { font-size:.95rem; color:var(--text-dim); margin-bottom:12px; }
+.exercise p strong { color:var(--text); }
+pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:.82rem; line-height:1.75; margin:12px 0; overflow-x:auto; }
+.kw{color:#7030b0;font-weight:600} .str{color:#1a7a50} .num{color:#b87300} .cmt{color:#999;font-style:italic} .fn{color:#c03090} .key{color:#c06000} .prop{color:#0055bb}
+.answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+.answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+.q-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+.answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+.ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:.9rem; }
+.ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+.ak-q { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+.ak-answer { font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+.ak-explain { font-size:.88rem; color:var(--text-dim); line-height:1.6; }
+.ak-explain strong { color:var(--text); }
+code { font-family:'JetBrains Mono',monospace; font-size:.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 8 Worksheet</div>
+  <h1>Dictionary Tables</h1>
+  <div class="ws-meta">Trace key reads and writes carefully. Remember: dot notation and bracket notation access the same data.</div>
+</div>
+
+<!-- SECTION A: READ THE PROPERTIES -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Read the Properties</h2>
+  <span class="section-type">Recognition</span>
+</div>
+
+<div class="exercise">
+  <p>Given this table, write the value each variable holds. If a key doesn't exist, write <strong>nil</strong>.</p>
+  <pre><span class="kw">local</span> armor = {
+  <span class="key">name</span>      = <span class="str">"Dragonscale Vest"</span>,
+  <span class="key">defense</span>   = <span class="num">85</span>,
+  <span class="key">isHeavy</span>   = <span class="kw">true</span>,
+  <span class="key">setBonus</span>  = <span class="kw">nil</span>
+}
+
+<span class="kw">local</span> a = armor.name
+<span class="kw">local</span> b = armor.defense * <span class="num">2</span>
+<span class="kw">local</span> c = armor.isHeavy
+<span class="kw">local</span> d = armor.setBonus
+<span class="kw">local</span> e = armor.rarity</pre>
+
+  <input type="text" class="answer-line" placeholder="a =">
+  <input type="text" class="answer-line" placeholder="b =">
+  <input type="text" class="answer-line" placeholder="c =">
+  <input type="text" class="answer-line" placeholder="d =">
+  <input type="text" class="answer-line" placeholder="e =">
+</div>
+
+<!-- SECTION B: TRACE THE MUTATIONS -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>Trace the Mutations</h2>
+  <span class="section-type">Write / Update / Remove</span>
+</div>
+
+<div class="exercise">
+  <p>Starting from the table below, trace what each key's value is after every operation. Write the full table state at the end.</p>
+  <pre><span class="kw">local</span> enemy = {
+  <span class="key">name</span>    = <span class="str">"Thornback"</span>,
+  <span class="key">health</span>  = <span class="num">300</span>,
+  <span class="key">isAlive</span> = <span class="kw">true</span>
+}
+
+enemy.health   = enemy.health - <span class="num">120</span>
+enemy.isStunned = <span class="kw">true</span>
+enemy.stunTimer = <span class="num">3</span>
+enemy.isAlive  = (enemy.health > <span class="num">0</span>)
+enemy.name     = <span class="kw">nil</span></pre>
+
+  <div class="q-label">Final state of each key:</div>
+  <input type="text" class="answer-line" placeholder="name =">
+  <input type="text" class="answer-line" placeholder="health =">
+  <input type="text" class="answer-line" placeholder="isAlive =">
+  <input type="text" class="answer-line" placeholder="isStunned =">
+  <input type="text" class="answer-line" placeholder="stunTimer =">
+</div>
+
+<!-- SECTION C: SPOT THE BUG -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
+</div>
+
+<div class="exercise">
+  <p><strong>C1.</strong> The designer is trying to read the enemy's name, but they'll get nil. Why?</p>
+  <pre><span class="kw">local</span> enemy = { <span class="key">Name</span> = <span class="str">"Voidclaw"</span>, <span class="key">health</span> = <span class="num">200</span> }
+<span class="kw">local</span> n = enemy.name</pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <input type="text" class="answer-line" placeholder="Fixed read:">
+</div>
+
+<div class="exercise">
+  <p><strong>C2.</strong> This pairs loop is supposed to total up all the stat values, but it will error on one of them. Identify which key causes the problem and explain why.</p>
+  <pre><span class="kw">local</span> stats = {
+  <span class="key">strength</span>  = <span class="num">14</span>,
+  <span class="key">agility</span>   = <span class="num">11</span>,
+  <span class="key">label</span>     = <span class="str">"Warrior Stats"</span>,
+  <span class="key">intellect</span> = <span class="num">8</span>
+}
+
+<span class="kw">local</span> total = <span class="num">0</span>
+<span class="kw">for</span> _, v <span class="kw">in</span> <span class="fn">pairs</span>(stats) <span class="kw">do</span>
+  total = total + v
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Which key causes the error?">
+  <input type="text" class="answer-line" placeholder="Why does it error?">
+  <textarea class="answer-area" rows="7" placeholder="Write a fixed version that skips non-number values..."></textarea>
+</div>
+
+<!-- SECTION D: NESTED TABLE READ -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>Nested Table Access</h2>
+  <span class="section-type">Chained access</span>
+</div>
+
+<div class="exercise">
+  <p>Given this nested structure, write the value each expression produces.</p>
+  <pre><span class="kw">local</span> quest = {
+  <span class="key">title</span>       = <span class="str">"The Sunken Keep"</span>,
+  <span class="key">isActive</span>    = <span class="kw">true</span>,
+  <span class="key">objectives</span>  = { <span class="str">"Find the key"</span>, <span class="str">"Defeat the warden"</span>, <span class="str">"Escape"</span> },
+  <span class="key">reward</span>      = { <span class="key">gold</span> = <span class="num">500</span>, <span class="key">xp</span> = <span class="num">1200</span> }
+}</pre>
+
+  <input type="text" class="answer-line" placeholder="quest.title =">
+  <input type="text" class="answer-line" placeholder="quest.objectives[2] =">
+  <input type="text" class="answer-line" placeholder="#quest.objectives =">
+  <input type="text" class="answer-line" placeholder="quest.reward.xp =">
+  <input type="text" class="answer-line" placeholder="quest.reward.gold + quest.reward.xp =">
+</div>
+
+<!-- SECTION E: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">E</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Full Course Integration</span>
+</div>
+
+<div class="exercise">
+  <p><strong>E1.</strong> Define a dictionary table called <code>spellData</code> for a spell called <code>"Frostbolt"</code>. It should have at least: a name, a mana cost (number), a damage value (number), a boolean for whether it slows the target, and a cooldown in seconds (number). Then write two lines: one that increases the damage by 20%, and one that sets the cooldown to nil (the spell is now passive).</p>
+  <textarea class="answer-area" rows="12" placeholder="Write your table and the two update lines..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E2.</strong> Write a function called <code>SummarizeItem</code> that receives a dictionary table called <code>item</code> with the properties <code>name</code> (string), <code>damage</code> (number), and <code>isMagic</code> (boolean). Return a string in this format:</p>
+  <p><strong><code>"[Magic] Thornblade — 75 dmg"</code></strong> if magic, or <strong><code>"Thornblade — 75 dmg"</code></strong> if not.</p>
+  <textarea class="answer-area" rows="10" placeholder="Write your function..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E3.</strong> Write a function called <code>ApplyStatBuffs</code> that receives a <code>character</code> dictionary table and a <code>buffs</code> dictionary table. For every key in <code>buffs</code>, add its value to the matching key in <code>character</code>. For example, if <code>buffs = { strength = 5, agility = 3 }</code>, then <code>character.strength</code> should increase by 5 and <code>character.agility</code> by 3. Return the modified character table.</p>
+  <textarea class="answer-area" rows="12" placeholder="Write your function..."></textarea>
+</div>
+
+<!-- SECTION F: TABLE MANIPULATION FUNCTIONS -->
+<div class="section-header">
+  <div class="section-num">F</div>
+  <h2>Table Manipulation Functions</h2>
+  <span class="section-type">self / colon syntax / dynamic keys</span>
+</div>
+
+<div class="exercise">
+  <p><strong>F1.</strong> These two calls do the same thing. Rewrite the first as the second, filling in the blank to make them equivalent:</p>
+  <pre>-- Call A (colon syntax)
+RELICS_LABYRINTH:Register(thisUnit)
+
+-- Call B (explicit, no colon)
+RELICS_LABYRINTH.Register( _______________, thisUnit )</pre>
+  <div class="q-label">Fill in the blank:</div>
+  <input type="text" class="answer-line" placeholder="RELICS_LABYRINTH.Register( ___ , thisUnit )">
+  <div class="q-label" style="margin-top:12px;">In your own words, what is "self" inside the Register function?</div>
+  <input type="text" class="answer-line" placeholder="self is ...">
+</div>
+
+<div class="exercise">
+  <p><strong>F2.</strong> A designer wrote this Edit function, but the property update line is wrong. Explain why, and write the correct version.</p>
+  <pre>Edit = function(self, relicName, propKey, newValue)
+  for _, relic in ipairs(self.relics) do
+    if relic.relicName == relicName then
+      relic.propKey = newValue    -- is this correct?
+      return
+    end
+  end
+end,</pre>
+  <div class="q-label">What's wrong with <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">relic.propKey = newValue</code>?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Correct line:">
+</div>
+
+<div class="exercise">
+  <p><strong>F3.</strong> This Remove function has a subtle bug that will cause it to sometimes skip entries or behave unpredictably. Spot it and explain why it happens.</p>
+  <pre>Remove = function(self, relicName)
+  for i, relic in ipairs(self.relics) do
+    if relic.relicName == relicName then
+      table.remove(self.relics, i)
+    end
+  end
+end,</pre>
+  <div class="q-label">What's the bug?</div>
+  <input type="text" class="answer-line" placeholder="Problem:">
+  <input type="text" class="answer-line" placeholder="Fix:">
+</div>
+
+<div class="exercise">
+  <p><strong>F4.</strong> Build a self-managing table called <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">ACTIVE_BUFFS</code> that tracks buffs on a player. It should have:</p>
+  <ul style="font-size:.9rem;color:var(--text-dim);margin:10px 0 14px 20px;line-height:2.2;">
+    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffs</code> array to hold entries</li>
+    <li>An <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Add</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> (string) and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code> (number) and inserts a record</li>
+    <li>A <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">Remove</code> function that takes a <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">buffName</code> and removes the matching entry</li>
+  </ul>
+  <p>Each buff record should store <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">name</code> and <code style="font-family:'JetBrains Mono';background:var(--code-bg);padding:1px 5px;border-radius:3px;">duration</code>. Don't forget your commas.</p>
+  <textarea class="answer-area" rows="20" placeholder="Write your table..."></textarea>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 8</div>
+
+  <div class="ak-item">
+    <div class="ak-q">A — Property Reads</div>
+    <div class="ak-answer">a = "Dragonscale Vest" | b = 170 | c = true | d = nil | e = nil</div>
+    <div class="ak-explain"><strong>b:</strong> <code>85 * 2 = 170</code> — arithmetic works directly on a read property. <strong>d:</strong> <code>setBonus</code> exists as a key but its value is <code>nil</code>. <strong>e:</strong> <code>rarity</code> doesn't exist at all — also returns <code>nil</code>. Both behave identically when read.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B — Mutation Trace</div>
+    <div class="ak-answer">name = nil | health = 180 | isAlive = true | isStunned = true | stunTimer = 3</div>
+    <div class="ak-explain">
+      <strong>health:</strong> <code>300 - 120 = 180</code>.<br>
+      <strong>isAlive:</strong> <code>180 > 0</code> is <code>true</code> — the comparison result is stored directly.<br>
+      <strong>isStunned / stunTimer:</strong> These are new keys created by assignment — they didn't exist in the original table.<br>
+      <strong>name:</strong> Set to <code>nil</code>, so the key is effectively removed.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C1 — Key Case Mismatch</div>
+    <div class="ak-answer">Problem: the key is "Name" (capital N) but the read uses "name" (lowercase). Lua keys are case-sensitive.</div>
+    <div class="ak-explain">Fixed read: <code>local n = enemy.Name</code>. Better practice: standardize all your keys to camelCase (<code>name</code>, <code>health</code>) and be consistent.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C2 — String in Numeric Loop</div>
+    <div class="ak-answer">The "label" key holds a string. Adding a string to a number with + causes an error.</div>
+    <div class="ak-explain">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local total = 0
+for _, v in pairs(stats) do
+  if type(v) == "number" then
+    total = total + v
+  end
+end</pre>
+      The built-in <code>type()</code> function returns the type of a value as a string. Using it as a guard lets the loop safely skip non-numeric values.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">D — Nested Access</div>
+    <div class="ak-answer">title = "The Sunken Keep" | objectives[2] = "Defeat the warden" | #objectives = 3 | reward.xp = 1200 | gold + xp = 1700</div>
+    <div class="ak-explain">Chain notation drills into nested tables one level at a time. <code>quest.reward.gold</code> means: get the <code>quest</code> table, get its <code>reward</code> key (another table), then get <em>that</em> table's <code>gold</code> key.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local spellData = {
+  name      = "Frostbolt",
+  manaCost  = 40,
+  damage    = 60,
+  slows     = true,
+  cooldown  = 8
+}
+
+spellData.damage   = spellData.damage * 1.2
+spellData.cooldown = nil</pre>
+    </div>
+    <div class="ak-explain">After the damage update: <code>60 * 1.2 = 72</code>. Setting <code>cooldown</code> to nil removes the key entirely — reading <code>spellData.cooldown</code> afterwards returns nil.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E2 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function SummarizeItem(item)
+  local base = item.name .. " — " .. item.damage .. " dmg"
+  if item.isMagic then
+    return "[Magic] " .. base
+  else
+    return base
+  end
+end</pre>
+    </div>
+    <div class="ak-explain">Building <code>base</code> first and then conditionally prepending the tag keeps the two branches clean and avoids duplicating the damage string logic.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E3 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">function ApplyStatBuffs(character, buffs)
+  for statName, buffValue in pairs(buffs) do
+    if character[statName] ~= nil then
+      character[statName] = character[statName] + buffValue
+    end
+  end
+  return character
+end</pre>
+    </div>
+    <div class="ak-explain">
+      Using <code>pairs</code> on the buffs table visits each buff key. Bracket notation — <code>character[statName]</code> — is required here because <code>statName</code> is a variable, not a literal key name. The nil check ensures we only buff stats that already exist on the character rather than creating new unexpected keys.
+    </div>
+  </div>
+  <div class="ak-item">
+    <div class="ak-q">F1 — The colon syntax / self</div>
+    <div class="ak-answer">RELICS_LABYRINTH.Register( RELICS_LABYRINTH, thisUnit )</div>
+    <div class="ak-explain">The colon is shorthand that automatically passes the table itself as the first argument. So <code>self</code> inside <code>Register</code> is the <code>RELICS_LABYRINTH</code> table — not the unit, and not some special keyword. It's just a regular parameter that Lua fills in silently. That's how <code>self.relics</code> inside the function reaches back into the table's own data.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F2 — Dot vs. bracket notation</div>
+    <div class="ak-answer">Correct line: relic[propKey] = newValue</div>
+    <div class="ak-explain"><code>relic.propKey</code> tells Lua to look for a key literally named <code>"propKey"</code> on the relic — which almost certainly doesn't exist. What we want is to use the <em>value</em> of the variable <code>propKey</code> as the key name. Bracket notation does exactly that: <code>relic[propKey]</code> reads the variable, gets its string value (e.g. <code>"altarPoint"</code>), and uses that as the key. This is the core reason bracket notation exists.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F3 — Missing return after remove</div>
+    <div class="ak-answer">Problem: after table.remove shifts all entries left, the loop continues with a stale index and may skip the entry that shifted into position i, or run off the end of the table.</div>
+    <div class="ak-explain">Fix: add <code>return</code> immediately after <code>table.remove</code>. Once you've found and removed the target, there's no reason to keep looping — and continuing is actively dangerous because the table's contents have just shifted.
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">if relic.relicName == relicName then
+  table.remove(self.relics, i)
+  return   -- stop immediately
+end</pre>
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">F4 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">ACTIVE_BUFFS = {
+  buffs = {},
+
+  Add = function(self, buffName, duration)
+    local entry = {
+      name     = buffName,
+      duration = duration
+    }
+    table.insert(self.buffs, entry)
+  end,
+
+  Remove = function(self, buffName)
+    for i, buff in ipairs(self.buffs) do
+      if buff.name == buffName then
+        table.remove(self.buffs, i)
+        return
+      end
+    end
+  end,
+}</pre>
+    </div>
+    <div class="ak-explain">Things to check in your answer: comma after the <code>Add</code> function's closing <code>end</code>; <code>return</code> after the remove to stop looping; colon syntax used when calling (<code>ACTIVE_BUFFS:Add("Haste", 10)</code>). The <code>Remove</code> function silently does nothing if the buff name isn't found — that's fine and intentional.</div>
+  </div>
+
+</div>
+</body>
+</html>

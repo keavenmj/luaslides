@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 4 Worksheet — Loops</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#3a2010; --accent2:#c47820; --accent3:#1a8060; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+  .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+  .ws-label { font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+  h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+  .ws-meta { font-size:0.85rem; color:var(--text-dim); }
+  .section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+  .section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; flex-shrink:0; }
+  h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .section-type { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+  .exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+  .exercise p { font-size:0.95rem; color:var(--text-dim); margin-bottom:12px; }
+  .exercise p strong { color:var(--text); }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
+  .kw { color:#c47820; font-weight:600; } .str { color:#1a8060; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; }
+  .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+  .q-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+  .ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:0.9rem; }
+  .ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+  .ak-q { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .ak-answer { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  .ak-explain { font-size:0.88rem; color:var(--text-dim); line-height:1.6; }
+  .ak-explain strong { color:var(--text); }
+  code { font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 4 Worksheet</div>
+  <h1>Loops</h1>
+  <div class="ws-meta">Trace the loop iterations by hand. Write out what changes each time the loop runs.</div>
+</div>
+
+<!-- SECTION A: COUNT THE ITERATIONS -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Count the Iterations</h2>
+  <span class="section-type">for loop tracing</span>
+</div>
+
+<div class="exercise">
+  <p>For each for loop, write: (1) how many times it runs, and (2) the values of the loop variable on each iteration.</p>
+
+  <p><strong>A1.</strong></p>
+  <pre><span class="kw">for</span> i = <span class="num">1</span>, <span class="num">5</span> <span class="kw">do</span> <span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="How many iterations? i values:">
+
+  <p style="margin-top:16px;"><strong>A2.</strong></p>
+  <pre><span class="kw">for</span> i = <span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span> <span class="kw">do</span> <span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="How many iterations? i values:">
+
+  <p style="margin-top:16px;"><strong>A3.</strong></p>
+  <pre><span class="kw">for</span> i = <span class="num">5</span>, <span class="num">1</span>, -<span class="num">1</span> <span class="kw">do</span> <span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="How many iterations? i values:">
+
+  <p style="margin-top:16px;"><strong>A4.</strong></p>
+  <pre><span class="kw">for</span> i = <span class="num">3</span>, <span class="num">3</span> <span class="kw">do</span> <span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="How many iterations? i values:">
+</div>
+
+<!-- SECTION B: TRACE THE WHILE -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>Trace the While Loop</h2>
+  <span class="section-type">While loop tracing</span>
+</div>
+
+<div class="exercise">
+  <p>Trace through this while loop step by step. Fill in the table showing what <code>mana</code> equals at the <strong>start</strong> of each iteration, and what it is after the loop ends.</p>
+  <pre><span class="kw">local</span> mana = <span class="num">80</span>
+
+<span class="kw">while</span> mana >= <span class="num">25</span> <span class="kw">do</span>
+  mana = mana - <span class="num">25</span>
+<span class="kw">end</span></pre>
+
+  <div class="q-label">Trace each iteration:</div>
+  <input type="text" class="answer-line" placeholder="Before iteration 1: mana =">
+  <input type="text" class="answer-line" placeholder="Before iteration 2: mana =">
+  <input type="text" class="answer-line" placeholder="Before iteration 3: mana =">
+  <input type="text" class="answer-line" placeholder="Before iteration 4: mana =">
+  <input type="text" class="answer-line" placeholder="Loop ends. Final value of mana =">
+  <input type="text" class="answer-line" placeholder="Why did the loop stop?">
+</div>
+
+<!-- SECTION C: SPOT THE BUG -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
+</div>
+
+<div class="exercise">
+  <p><strong>C1.</strong> This loop will never stop. Identify the problem and write a fixed version.</p>
+  <pre><span class="kw">local</span> health = <span class="num">100</span>
+
+<span class="kw">while</span> health > <span class="num">0</span> <span class="kw">do</span>
+  <span class="cmt">-- Show low health warning</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <textarea class="answer-area" rows="6" placeholder="Write the fixed version..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>C2.</strong> This for loop is supposed to count down from 10 to 1, but it doesn't run at all. Why not? Write the corrected loop.</p>
+  <pre><span class="kw">for</span> i = <span class="num">10</span>, <span class="num">1</span> <span class="kw">do</span>
+  <span class="cmt">-- Countdown display</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="What's wrong?">
+  <textarea class="answer-area" rows="4" placeholder="Write the fixed version..."></textarea>
+</div>
+
+<!-- SECTION D: PREDICT THE FINAL VALUE -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>Predict the Final Value</h2>
+  <span class="section-type">Trace &amp; Reason</span>
+</div>
+
+<div class="exercise">
+  <p>What is the value of <code>total</code> after this function runs?</p>
+  <pre><span class="kw">function</span> OnWaveScore()
+  <span class="kw">local</span> total     = <span class="num">0</span>
+  <span class="kw">local</span> waveSize  = <span class="num">6</span>
+  <span class="kw">local</span> pointsPer = <span class="num">10</span>
+
+  <span class="kw">for</span> i = <span class="num">1</span>, waveSize <span class="kw">do</span>
+    <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span> <span class="kw">then</span>
+      total = total + (pointsPer * <span class="num">2</span>)  <span class="cmt">-- double points on even kills</span>
+    <span class="kw">else</span>
+      total = total + pointsPer
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  <div class="q-label">Trace each iteration, then give the final total:</div>
+  <input type="text" class="answer-line" placeholder="i=1: total becomes...">
+  <input type="text" class="answer-line" placeholder="i=2: total becomes...">
+  <input type="text" class="answer-line" placeholder="i=3: total becomes...">
+  <input type="text" class="answer-line" placeholder="i=4: total becomes...">
+  <input type="text" class="answer-line" placeholder="i=5: total becomes...">
+  <input type="text" class="answer-line" placeholder="i=6: total becomes...">
+  <input type="text" class="answer-line" placeholder="Final value of total =">
+</div>
+
+<!-- SECTION E: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">E</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Application</span>
+</div>
+
+<div class="exercise">
+  <p><strong>E1.</strong> Write a <code>for</code> loop that simulates applying a 5-tick damage-over-time effect. Each tick deals 12 damage. Track the total damage dealt in a variable called <code>dotDamage</code>.</p>
+  <textarea class="answer-area" rows="8" placeholder="Write your loop..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E2.</strong> Write a <code>while</code> loop that simulates an NPC searching for a valid spawn point. Each search attempt adds 1 to a counter called <code>attempts</code>. The loop should stop when <code>attempts</code> reaches 10 (the maximum number of tries). Don't worry about what happens inside — just model the search attempts and stopping condition.</p>
+  <textarea class="answer-area" rows="8" placeholder="Write your loop..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>E3.</strong> In your own words: when would you choose a <code>while</code> loop over a <code>for</code> loop? Give a game design example for each.</p>
+  <textarea class="answer-area" rows="5" placeholder="Your explanation..."></textarea>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 4</div>
+
+  <div class="ak-item">
+    <div class="ak-q">A — Iteration Counts</div>
+    <div class="ak-answer">A1: 5 times, i = 1,2,3,4,5 &nbsp;|&nbsp; A2: 6 times, i = 0,2,4,6,8,10 &nbsp;|&nbsp; A3: 5 times, i = 5,4,3,2,1 &nbsp;|&nbsp; A4: 1 time, i = 3</div>
+    <div class="ak-explain"><strong>A4</strong> is the interesting one — when start equals stop, the loop runs exactly once. <strong>A3</strong> requires the <code>-1</code> step; without it, the loop wouldn't run at all (Lua won't count up from 5 to 1 automatically).</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B — While Trace</div>
+    <div class="ak-answer">Iter 1: 80 → 55 &nbsp;|&nbsp; Iter 2: 55 → 30 &nbsp;|&nbsp; Iter 3: 30 → 5 &nbsp;|&nbsp; Loop ends. Final: mana = 5</div>
+    <div class="ak-explain">After iteration 3, mana is 5. The condition <code>mana >= 25</code> is checked again: <code>5 >= 25</code> is false, so the loop ends. The loop ran <strong>3 times</strong>, not 4.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C1 — Infinite Loop</div>
+    <div class="ak-answer">Problem: health is never modified inside the loop, so the condition never becomes false.</div>
+    <div class="ak-explain">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local health = 100
+while health > 0 do
+  health = health - 10   -- must decrease for loop to end
+end</pre>
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C2 — Missing Step</div>
+    <div class="ak-answer">Problem: counting from 10 to 1 requires a negative step. Without it, Lua defaults to +1, and since 10 is already past 1, the loop runs 0 times.</div>
+    <div class="ak-explain">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">for i = 10, 1, -1 do
+  -- Countdown display
+end</pre>
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">D — Wave Score Trace</div>
+    <div class="ak-answer">i=1 (odd): +10 = 10 &nbsp;|&nbsp; i=2 (even): +20 = 30 &nbsp;|&nbsp; i=3 (odd): +10 = 40 &nbsp;|&nbsp; i=4 (even): +20 = 60 &nbsp;|&nbsp; i=5 (odd): +10 = 70 &nbsp;|&nbsp; i=6 (even): +20 = 90</div>
+    <div class="ak-explain"><strong>Final total = 90.</strong> The <code>% 2 == 0</code> check identifies even numbers (2, 4, 6) and awards double points. There are 3 odd iterations (10 each = 30) and 3 even iterations (20 each = 60), for a total of 90.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local dotDamage = 0
+local tickDamage = 12
+
+for i = 1, 5 do
+  dotDamage = dotDamage + tickDamage
+end
+-- dotDamage = 60 after 5 ticks</pre>
+    </div>
+    <div class="ak-explain">A <code>for</code> loop is the right choice here because the number of ticks (5) is known in advance.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E2 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local attempts = 0
+local maxAttempts = 10
+
+while attempts < maxAttempts do
+  attempts = attempts + 1
+  -- Check spawn point validity...
+end</pre>
+    </div>
+    <div class="ak-explain">The <code>while</code> loop is appropriate when we don't know how many valid checks will be needed, only when to stop. Note: the loop could also stop early with a <code>break</code> statement (covered in advanced sessions).</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">E3 — Sample Answer</div>
+    <div class="ak-answer">Use <strong>for</strong> when the count is fixed; use <strong>while</strong> when the count depends on something that changes at runtime.</div>
+    <div class="ak-explain"><strong>for example:</strong> Applying a buff to exactly 4 party members. You know the count. &nbsp; <strong>while example:</strong> Keeping a door locked until a player's score crosses a threshold. You don't know how many rounds it will take.</div>
+  </div>
+
+</div>
+</body>
+</html>

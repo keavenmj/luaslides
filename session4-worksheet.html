@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 3 Worksheet — Conditional Logic</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root { --bg:#faf8f4; --surface:#fff; --border:#e0dbd0; --border-dark:#c0b8a8; --accent:#1a3a2a; --accent2:#1a7a4a; --accent3:#1a7a4a; --text:#1a1a24; --text-dim:#666677; --code-bg:#f0ede6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; max-width:800px; margin:0 auto; padding:48px 32px; line-height:1.6; }
+  .ws-header { border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:40px; }
+  .ws-label { font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+  h1 { font-size:2rem; font-weight:800; color:var(--accent); margin-bottom:8px; }
+  .ws-meta { font-size:0.85rem; color:var(--text-dim); }
+  .section-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; margin-top:48px; }
+  .section-num { background:var(--accent); color:white; width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; flex-shrink:0; }
+  h2 { font-size:1.2rem; font-weight:700; color:var(--accent); }
+  .section-type { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); margin-left:auto; }
+  .exercise { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; margin-bottom:16px; }
+  .exercise p { font-size:0.95rem; color:var(--text-dim); margin-bottom:12px; }
+  .exercise p strong { color:var(--text); }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:4px; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; margin:12px 0; overflow-x:auto; }
+  .kw { color:#1a7a4a; font-weight:600; } .str { color:#0066aa; } .num { color:#b87300; } .cmt { color:#999; font-style:italic; }
+  .answer-line { display:block; width:100%; border:none; border-bottom:1px solid var(--border-dark); background:transparent; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--text); padding:8px 4px; margin:8px 0; outline:none; }
+  .answer-area { border:1px solid var(--border); border-radius:4px; padding:12px; min-height:100px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--surface); margin-top:8px; resize:vertical; width:100%; color:var(--text); outline:none; }
+  .q-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .answer-key { margin-top:64px; border-top:2px dashed var(--border-dark); padding-top:40px; }
+  .ak-header { background:var(--accent); color:white; padding:12px 20px; border-radius:4px; margin-bottom:24px; font-weight:700; font-size:0.9rem; }
+  .ak-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:4px; padding:16px 20px; margin-bottom:12px; }
+  .ak-q { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .ak-answer { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  .ak-explain { font-size:0.88rem; color:var(--text-dim); line-height:1.6; }
+  .ak-explain strong { color:var(--text); }
+  code { font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--code-bg); padding:1px 6px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="ws-header">
+  <div class="ws-label">Lua for Game Designers — Session 3 Worksheet</div>
+  <h1>Conditional Logic</h1>
+  <div class="ws-meta">Trace through conditions mentally. Write which branch runs, not what the code "should" do.</div>
+</div>
+
+<!-- SECTION A: WHICH BRANCH RUNS? -->
+<div class="section-header">
+  <div class="section-num">A</div>
+  <h2>Which Branch Runs?</h2>
+  <span class="section-type">Trace</span>
+</div>
+
+<div class="exercise">
+  <p>For each block below, identify which comment label describes what actually runs.</p>
+
+  <p><strong>A1.</strong></p>
+  <pre><span class="kw">local</span> gold = <span class="num">80</span>
+
+<span class="kw">if</span> gold <span class="kw">>=</span> <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH A] Purchase allowed</span>
+<span class="kw">else</span>
+  <span class="cmt">-- [BRANCH B] Insufficient gold</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Which branch runs? (A or B) And why?">
+
+  <p style="margin-top:20px;"><strong>A2.</strong></p>
+  <pre><span class="kw">local</span> health = <span class="num">20</span>
+
+<span class="kw">if</span> health <= <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH A] Dead</span>
+<span class="kw">elseif</span> health <= <span class="num">25</span> <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH B] Critical</span>
+<span class="kw">elseif</span> health <= <span class="num">50</span> <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH C] Hurt</span>
+<span class="kw">else</span>
+  <span class="cmt">-- [BRANCH D] Healthy</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Which branch runs? (A, B, C, or D) And why?">
+
+  <p style="margin-top:20px;"><strong>A3.</strong></p>
+  <pre><span class="kw">local</span> level   = <span class="num">30</span>
+<span class="kw">local</span> hasKey  = <span class="kw">false</span>
+
+<span class="kw">if</span> level >= <span class="num">30</span> <span class="kw">and</span> hasKey <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH A] Enter dungeon</span>
+<span class="kw">elseif</span> level >= <span class="num">30</span> <span class="kw">then</span>
+  <span class="cmt">-- [BRANCH B] Right level, missing key</span>
+<span class="kw">else</span>
+  <span class="cmt">-- [BRANCH C] Too low level</span>
+<span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="Which branch runs? (A, B, or C) And why?">
+</div>
+
+<!-- SECTION B: SPOT THE BUG -->
+<div class="section-header">
+  <div class="section-num">B</div>
+  <h2>Spot the Bug</h2>
+  <span class="section-type">Error Detection</span>
+</div>
+
+<div class="exercise">
+  <p><strong>B1.</strong> This block has a structural error. What's missing?</p>
+  <pre><span class="kw">local</span> isAlive = <span class="kw">true</span>
+
+<span class="kw">if</span> isAlive <span class="kw">then</span>
+  <span class="cmt">-- Run alive logic</span></pre>
+  <input type="text" class="answer-line" placeholder="What's missing?">
+</div>
+
+<div class="exercise">
+  <p><strong>B2.</strong> The order of conditions here will cause a logic problem. Explain what goes wrong and rewrite the block correctly.</p>
+  <pre><span class="kw">local</span> damage = <span class="num">85</span>
+
+<span class="kw">if</span> damage > <span class="num">0</span> <span class="kw">then</span>
+  <span class="cmt">-- "Some damage"</span>
+<span class="kw">elseif</span> damage > <span class="num">50</span> <span class="kw">then</span>
+  <span class="cmt">-- "Heavy damage"</span>
+<span class="kw">elseif</span> damage > <span class="num">100</span> <span class="kw">then</span>
+  <span class="cmt">-- "Massive damage"</span>
+<span class="kw">end</span></pre>
+  <div class="q-label">Explain the problem:</div>
+  <input type="text" class="answer-line" placeholder="What goes wrong?">
+  <div class="q-label" style="margin-top:12px;">Rewrite correctly:</div>
+  <textarea class="answer-area" rows="8" placeholder="Write the fixed version..."></textarea>
+</div>
+
+<!-- SECTION C: FILL IN THE BLANK -->
+<div class="section-header">
+  <div class="section-num">C</div>
+  <h2>Fill in the Blank</h2>
+  <span class="section-type">Completion</span>
+</div>
+
+<div class="exercise">
+  <p>Complete the condition expressions so each comment accurately describes the outcome.</p>
+  <pre><span class="kw">local</span> playerLevel = <span class="num">15</span>
+<span class="kw">local</span> gold         = <span class="num">200</span>
+<span class="kw">local</span> isInGuild    = <span class="kw">true</span>
+
+<span class="cmt">-- C1: Runs when playerLevel is exactly 15</span>
+<span class="kw">if</span> __________________ <span class="kw">then</span> <span class="kw">end</span>
+
+<span class="cmt">-- C2: Runs when gold is between 100 and 300 (inclusive)</span>
+<span class="kw">if</span> __________________ <span class="kw">then</span> <span class="kw">end</span>
+
+<span class="cmt">-- C3: Runs when the player is NOT in a guild</span>
+<span class="kw">if</span> __________________ <span class="kw">then</span> <span class="kw">end</span>
+
+<span class="cmt">-- C4: Runs when level >= 10 OR gold >= 500</span>
+<span class="kw">if</span> __________________ <span class="kw">then</span> <span class="kw">end</span></pre>
+  <input type="text" class="answer-line" placeholder="C1 condition:">
+  <input type="text" class="answer-line" placeholder="C2 condition:">
+  <input type="text" class="answer-line" placeholder="C3 condition:">
+  <input type="text" class="answer-line" placeholder="C4 condition:">
+</div>
+
+<!-- SECTION D: WRITE YOUR OWN -->
+<div class="section-header">
+  <div class="section-num">D</div>
+  <h2>Write Your Own</h2>
+  <span class="section-type">Application</span>
+</div>
+
+<div class="exercise">
+  <p><strong>D1.</strong> Write a conditional block that checks an NPC's relationship value (a number from -100 to 100) and sets a string variable called <code>attitude</code> to one of three values: <code>"Hostile"</code> (below 0), <code>"Neutral"</code> (0 to 49), or <code>"Friendly"</code> (50 and above).</p>
+  <textarea class="answer-area" rows="12" placeholder="Write your if/elseif/else block..."></textarea>
+</div>
+
+<div class="exercise">
+  <p><strong>D2.</strong> A spell can only be cast when: the player has enough mana AND the spell is not on cooldown. Write this as a single <code>if</code> condition and a comment describing what happens in each branch.</p>
+  <textarea class="answer-area" rows="8" placeholder="Write your solution..."></textarea>
+</div>
+
+<!-- ANSWER KEY -->
+<div class="answer-key">
+  <div class="ak-header">✓ Answer Key — Session 3</div>
+
+  <div class="ak-item">
+    <div class="ak-q">A1</div>
+    <div class="ak-answer">Branch B runs</div>
+    <div class="ak-explain"><code>gold = 80</code>, so <code>gold >= 100</code> is false. The <code>else</code> block is the fallback and always runs when the <code>if</code> condition fails.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">A2</div>
+    <div class="ak-answer">Branch B runs</div>
+    <div class="ak-explain"><code>health = 20</code>. Branch A requires <code>health &lt;= 0</code> — false. Branch B requires <code>health &lt;= 25</code> — true. Lua stops here and runs Branch B. Branch C and D are never checked.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">A3</div>
+    <div class="ak-answer">Branch B runs</div>
+    <div class="ak-explain">Branch A requires both <code>level >= 30</code> AND <code>hasKey</code>. Level passes but <code>hasKey</code> is false, so the <code>and</code> fails. Branch B only requires <code>level >= 30</code> — that's true. Branch B runs.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B1</div>
+    <div class="ak-answer">Missing "end" to close the if block</div>
+    <div class="ak-explain">Every <code>if</code> in Lua must be closed with <code>end</code>. Without it, Lua will throw a syntax error because it doesn't know where the block finishes.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B2 — Problem</div>
+    <div class="ak-answer">The first condition (damage > 0) catches everything — "Heavy damage" and "Massive damage" branches are unreachable.</div>
+    <div class="ak-explain">Any damage above 50 or 100 also satisfies <code>damage > 0</code>, so Lua stops there and never evaluates the later branches.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">B2 — Fixed Version</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">if damage > 100 then
+  -- "Massive damage"
+elseif damage > 50 then
+  -- "Heavy damage"
+elseif damage > 0 then
+  -- "Some damage"
+end</pre>
+    </div>
+    <div class="ak-explain">Specific (most restrictive) conditions first, general last.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">C — Fill in the Blank</div>
+    <div class="ak-answer">C1: playerLevel == 15 &nbsp;|&nbsp; C2: gold >= 100 and gold <= 300 &nbsp;|&nbsp; C3: not isInGuild &nbsp;|&nbsp; C4: playerLevel >= 10 or gold >= 500</div>
+    <div class="ak-explain">
+      <strong>C2:</strong> You need two conditions joined with <code>and</code> to form a range. Neither <code>&gt; 100</code> alone nor <code>&lt; 300</code> alone captures the "between" requirement. &nbsp;
+      <strong>C3:</strong> <code>not isInGuild</code> is the cleanest way to check for a false boolean — no need for <code>isInGuild == false</code>.
+    </div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">D1 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local relationship = 65
+local attitude
+
+if relationship < 0 then
+  attitude = "Hostile"
+elseif relationship < 50 then
+  attitude = "Neutral"
+else
+  attitude = "Friendly"
+end</pre>
+    </div>
+    <div class="ak-explain">Declaring <code>attitude</code> before the block and then assigning inside each branch is valid and clean. The final <code>else</code> handles 50 and above without needing an explicit <code>&gt;= 50</code> check.</div>
+  </div>
+
+  <div class="ak-item">
+    <div class="ak-q">D2 — Sample Answer</div>
+    <div class="ak-answer">
+      <pre style="font-family:'JetBrains Mono';font-size:0.8rem;background:var(--code-bg);padding:12px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">local mana = 80
+local manaCost = 60
+local isOnCooldown = false
+
+if mana >= manaCost and not isOnCooldown then
+  -- Cast the spell
+else
+  -- Cannot cast: show error message
+end</pre>
+    </div>
+    <div class="ak-explain">Using <code>not isOnCooldown</code> is cleaner than <code>isOnCooldown == false</code>. The <code>and</code> requires both conditions to be satisfied simultaneously.</div>
+  </div>
+
+</div>
+</body>
+</html>
